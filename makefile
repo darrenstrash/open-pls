@@ -6,6 +6,7 @@ BIN_DIR   = bin
 CFLAGS = -Winline -O2 -std=c++0x -g
 #CFLAGS = -Winline -DDEBUG_MESSAGE -O0 -std=c++0x -g
 
+SOURCES_TMP += PhasedLocalSearch.cpp
 SOURCES_TMP += Tools.cpp
 
 SOURCES=$(addprefix $(SOURCES_DIR)/, $(SOURCES_TMP))

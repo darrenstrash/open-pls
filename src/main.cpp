@@ -1,4 +1,5 @@
 // local includes
+#include "PhasedLocalSearch.h"
 #include "Algorithm.h"
 #include "Tools.h"
 
@@ -122,12 +123,6 @@ int main(int argc, char** argv)
         // return 1; // TODO/DS
     }
 
-    if (!bRunExperiment && algorithm.empty()) {
-        cout << "ERROR: Missing algorithm" << endl;
-        // ShowUsageMessage();
-        // return 1; // TODO/DS
-    }
-
     if (argc <= 1) {
         cout << "usage: " << argv[0] << " --input-file=<filename> [--latex] [--header]" << endl;
     }
@@ -161,6 +156,20 @@ int main(int argc, char** argv)
         }
         adjacencyList.clear(); // does this free up memory? probably some...
     }
+
+    vector<double> vVertexWeights(adjacencyArray.size());
+    for (size_t i = 0; i < vVertexWeights.size(); ++i) {
+        vVertexWeights[i] = (i+1)%200 + 1;
+    }
+
+    pAlgorithm = new PhasedLocalSearch(adjacencyArray, vVertexWeights);
+    bool const bAlgorithmStatus(pAlgorithm->Run());
+
+    if (!bAlgorithmStatus) {
+        std::cout << pAlgorithm->GetName() << " reported a failure. Quitting." << std::endl << std::flush;
+    }
+
+    delete pAlgorithm; pAlgorithm = nullptr;
 
     if (bRunExperiment) {
         return 0;
