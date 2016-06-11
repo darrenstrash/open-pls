@@ -20,6 +20,7 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 , m_NotAdjacentToZero(vAdjacencyArray.size())
 , m_IndependentSetWeight(0.0)
 , m_SelectionPhase(SelectionPhase::RANDOM_SELECTION)
+, m_ScratchSpace(vAdjacencyArray.size())
 {
     for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
         m_NotAdjacentToZero.Insert(vertex);
@@ -28,6 +29,7 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 
 void PhasedLocalSearch::Perturb()
 {
+cout << "Perturb..." << endl << flush;
 }
 
 void PhasedLocalSearch::UpdatePenalties()
@@ -52,7 +54,43 @@ int PhasedLocalSearch::SelectDegree() const
 // TODO/DS: select vertex from C_0(K)
 int PhasedLocalSearch::SelectFromZero() const
 {
-    return 0;
+    cout << "Selecting from C_0..." << endl << flush;
+    assert(!m_NotAdjacentToZero.Empty());
+    switch (m_SelectionPhase) {
+        // random vertex in set.
+        case SelectionPhase::RANDOM_SELECTION:
+            {
+            return *(m_NotAdjacentToZero.begin() + rand()%m_NotAdjacentToZero.Size());
+            }
+        case SelectionPhase::DEGREE_SELECTION:
+            {
+            size_t maxDegree(0);
+            size_t maxDegreeCount(0);
+            m_ScratchSpace.Clear();
+            for (int const vertex : m_NotAdjacentToZero) {
+                if (m_vAdjacencyArray[vertex].size() > maxDegree) {
+                    m_ScratchSpace.Clear();
+                    maxDegree = m_vAdjacencyArray[vertex].size();
+                    m_ScratchSpace.Insert(vertex);
+                } else if (m_vAdjacencyArray[vertex].size() == maxDegree) {
+                    maxDegreeCount++;
+                    m_ScratchSpace.Insert(vertex);
+                }
+            }
+
+            int const vertexToReturn = *(m_ScratchSpace.begin() + rand()%m_ScratchSpace.Size());
+            m_ScratchSpace.Clear();
+            return vertexToReturn;
+            }
+
+        case SelectionPhase::PENALTY_SELECTION:
+            {
+            assert(0);
+            return -1;
+            }
+    };
+    assert(0);
+    return -1;
 }
 
 // TODO/DS: select vertex from C_1(K)\U
@@ -87,14 +125,26 @@ void PhasedLocalSearch::AddToIndependentSet(int const vertex)
     m_IndependentSet.Insert(vertex);
 
     // were already neighbors of $K$, now must be neighbors of vertex too
-    vector<int> diffVertices;
-    m_NotAdjacentToZero.IntersectInPlace(m_vAdjacencyArray[vertex], diffVertices);
+    vector<int> zeroDiffVertices;
+    m_NotAdjacentToZero.IntersectInPlace(m_vAdjacencyArray[vertex], zeroDiffVertices);
 
-    m_NotAdjacentToOne.IntersectInPlace(m_vAdjacencyArray[vertex]);
-    for (int const newVertex : diffVertices) {
+    // if previously adjacent to all but one, and neighbor of newly added vertex
+    // then still adjacent to all but one.
+    vector<int> oneDiffVertices;
+    m_NotAdjacentToOne.IntersectInPlace(m_vAdjacencyArray[vertex], oneDiffVertices);
+    for (int const newVertex : zeroDiffVertices) {
+////        if (newVertex == 18) {
+////            cout << "Moving " << newVertex << " from C_0 to C_1" << endl << flush;
+////        }
         m_NotAdjacentToOne.Insert(newVertex);
     }
 
+////    cout << "Eject from C_1:";
+////    for (int const vertex : oneDiffVertices) {
+////        cout << " " << vertex;
+////    }
+////    cout << endl;
+////
     m_IndependentSetWeight += m_vVertexWeights[vertex];
 
     if (!IsConsistent()) {
@@ -104,6 +154,7 @@ void PhasedLocalSearch::AddToIndependentSet(int const vertex)
 
 bool PhasedLocalSearch::IsConsistent() const
 {
+    cout << "Checking Consistency..." << endl << flush;
     bool bConsistent(true);
     // check weight
     double weight(0.0);
@@ -118,7 +169,8 @@ bool PhasedLocalSearch::IsConsistent() const
     // check all-neighbors and all-but-one-neighbors
     for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
 
-        bool const bDebug(false);//vertex == 24);
+        bool const bDebug(false);
+////        bool const bDebug(vertex == 18);
         size_t neighborCount(0);
         for (int const neighbor : m_vAdjacencyArray[vertex]) {
             if (m_IndependentSet.Contains(neighbor)) neighborCount++;
@@ -131,8 +183,8 @@ bool PhasedLocalSearch::IsConsistent() const
             }
             cout << endl;
 
-            cout << 130 << ":";
-            for (int const neighbor : m_vAdjacencyArray[130]) {
+            cout << 176 << ":";
+            for (int const neighbor : m_vAdjacencyArray[176]) {
                 cout << neighbor << " ";
             }
             cout << endl;
@@ -179,7 +231,7 @@ bool PhasedLocalSearch::Run()
     size_t uIterations = 50;
 
     // initial weight, TODO/DS: change.
-    size_t uTargetSize(0);
+    size_t uTargetSize(ULONG_MAX);
 
     set<int> U;
 
@@ -191,17 +243,16 @@ bool PhasedLocalSearch::Run()
     int const randomVertex(rand()%m_vAdjacencyArray.size());
     AddToIndependentSet(randomVertex);
 
-/*
     m_vVertexPenalties.clear();
     m_vVertexPenalties.resize(m_vAdjacencyArray.size(), 0.0);
 
     while (uSelections < m_uMaxSelections) {
-        while (!m_NotAdjacentToZero.Empty() || !DiffIsEmpty(m_NotAdjacentToZero, m_U)) {
+        while (!m_NotAdjacentToZero.Empty() || !DiffIsEmpty(m_NotAdjacentToOne, m_U)) {
             // select
             while (!DiffIsEmpty(m_NotAdjacentToZero, m_U)) {
                 int const vertex = SelectFromZero();
-                m_IndependentSet.Insert(vertex);
-                m_IndependentSetWeight += m_vVertexWeights[vertex];
+                cout << "Selected vertex " << vertex << " from C_0" << endl << flush;
+                AddToIndependentSet(vertex);
                 uSelections++;
 
                 // done! independent set weight reached target size
@@ -209,28 +260,31 @@ bool PhasedLocalSearch::Run()
                 m_U.Clear();
             }
 
+/*
+            TODO/DS: put back
             if (!DiffIsEmpty(m_NotAdjacentToOne, m_U)) {
 
                 // TODO: different select from above, select from C_1(K)\U
                 int const vertex = SelectFromOne();
-                
-                m_IndependentSet.Insert(vertex);
-                m_IndependentSetWeight += m_vVertexWeights[vertex];
 
+                // first remove non-neighbors
                 // TODO/DS: Remove K \ N(v) rather than N(v)? Bad pseudocode.
                 for (int const neighbor : m_vAdjacencyArray[vertex]) {
                     m_IndependentSet.Remove(neighbor);
                     m_IndependentSetWeight -= m_vVertexWeights[neighbor];
                     m_U.Insert(neighbor);
                 }
+
+                // then add vertex.
+                AddToIndependentSet(vertex);
                 uSelections++;
             }
+*/
         }
         uIterations--; // unused in algorithm?
         UpdatePenalties();
         Perturb();
     }
-*/
 
     return true;
 }

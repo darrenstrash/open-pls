@@ -55,6 +55,7 @@ protected:
     double                               m_IndependentSetWeight;
 
     enum SelectionPhase                  m_SelectionPhase;
+    mutable ArraySet                     m_ScratchSpace;
 
 };
 
