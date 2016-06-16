@@ -26,7 +26,7 @@ public:
 ////    void RunPhase(int const iterations, SelectionPhase selectionPhase);
 
     int SelectFromZero() const;
-    int SelectFromOne()  const;
+    int SelectFromOne();
 
     virtual bool Run();
     std::string GetName() const { return m_sName; }
@@ -39,13 +39,15 @@ public:
 
     void AddToIndependentSet(int const vertex);
 
+    void InitializeFromIndependentSet();
+
     bool IsConsistent() const;
 
 protected:
     std::string m_sName;
     std::vector<std::vector<int>> const &m_vAdjacencyArray;
     std::vector<double>           const &m_vVertexWeights;
-    std::vector<double>                  m_vVertexPenalties;
+    std::vector<int>                     m_vVertexPenalties;
     size_t                               m_uTargetSize;
     size_t                               m_uMaxSelections;
     ArraySet                             m_IndependentSet;

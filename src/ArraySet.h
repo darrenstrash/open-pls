@@ -123,8 +123,19 @@ public:
             }
         }
 
-        m_iEnd = iPutValueHere;
+        m_iEnd = iPutValueHere-1;;
     }
+
+    void DiffInPlace(ArraySet const &other) {
+        // if we have the same value as the other set, then we remove it.
+        for (int const valueOther : other) {
+            if (Contains(valueOther)) Remove(valueOther);
+        }
+    }
+
+////    void ForAllInDiff()
+////    {
+////    }
 
     size_t Size()  const { return m_iEnd - m_iBegin + 1; }
     bool   Empty() const { return m_iEnd < m_iBegin; }

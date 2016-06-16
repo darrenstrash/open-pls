@@ -96,6 +96,7 @@ int main(int argc, char** argv)
     bool   const bPrintHeader(mapCommandLineArgs.find("--header") != mapCommandLineArgs.end());
     string const sTimeout(mapCommandLineArgs.find("--timeout") != mapCommandLineArgs.end() ? mapCommandLineArgs["--timeout"] : "");
     bool   const bRunUnitTests(mapCommandLineArgs.find("--run-tests") != mapCommandLineArgs.end());
+    size_t const uMaxSelections(mapCommandLineArgs.find("--max-selections") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--max-selections"]) : 100000000);
     double dTimeout(0.0);
     if (!sTimeout.empty()) {
         try {
@@ -161,8 +162,10 @@ int main(int argc, char** argv)
     for (size_t i = 0; i < vVertexWeights.size(); ++i) {
         vVertexWeights[i] = (i+1)%200 + 1;
     }
+    PhasedLocalSearch *pPLS = new PhasedLocalSearch(adjacencyArray, vVertexWeights);
+    pPLS->SetMaxSelections(uMaxSelections);
+    pAlgorithm = pPLS;
 
-    pAlgorithm = new PhasedLocalSearch(adjacencyArray, vVertexWeights);
     bool const bAlgorithmStatus(pAlgorithm->Run());
 
     if (!bAlgorithmStatus) {
