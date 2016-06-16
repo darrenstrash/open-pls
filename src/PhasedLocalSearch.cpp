@@ -6,22 +6,37 @@
 #include <iostream>
 #include <cstdlib>
 
+#define ALLOW_OVERLAP
+////#define CHECK_CONSISTENCY
+
 using namespace std;
 
 PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray, vector<double> const &vVertexWeights)
 : Algorithm("PLS")
 , m_vAdjacencyArray(vAdjacencyArray)
 , m_vVertexWeights(vVertexWeights)
+
+// Penalty variables
+, m_vVertexPenalties(0, vAdjacencyArray.size())
+, m_uPenaltyDelay(2)
+, m_uNumZeroPenaltyVertices(vAdjacencyArray.size())
+, m_uTargetZeroPenaltyVertices(0.75*vAdjacencyArray.size())
+, m_uIterationsSinceLastPenaltyUpdate(0)
+
 , m_uTargetSize(vAdjacencyArray.size())
 , m_uMaxSelections(100000000)
-, m_vVertexPenalties(0, vAdjacencyArray.size())
+
+// Sets
 , m_IndependentSet(vAdjacencyArray.size())
 , m_U(vAdjacencyArray.size())
 , m_NotAdjacentToOne(vAdjacencyArray.size())
 , m_NotAdjacentToZero(vAdjacencyArray.size())
-, m_IndependentSetWeight(0.0)
-, m_SelectionPhase(SelectionPhase::RANDOM_SELECTION)
 , m_ScratchSpace(vAdjacencyArray.size())
+
+// Progress Tracking
+, m_SelectionPhase(SelectionPhase::RANDOM_SELECTION)
+, m_IndependentSetWeight(0.0)
+, m_uBestWeight(0)
 {
     for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
         m_NotAdjacentToZero.Insert(vertex);
@@ -30,7 +45,9 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 
 void PhasedLocalSearch::Perturb()
 {
+#ifdef DEBUG
     cout << "Perturbing..." << endl << flush;
+#endif // DEBUG
 
     m_IndependentSet.Clear();
     int const randomVertex(rand()%m_vAdjacencyArray.size());
@@ -50,114 +67,143 @@ void PhasedLocalSearch::Perturb()
 
 void PhasedLocalSearch::UpdatePenalties()
 {
+    if (m_uPenaltyDelay > m_uIterationsSinceLastPenaltyUpdate) {
+        m_uIterationsSinceLastPenaltyUpdate++;
+        return;
+    }
+
+    m_uIterationsSinceLastPenaltyUpdate = 0;
+    m_uNumZeroPenaltyVertices = 0;
+
+
+    // TODO/DS: Don't actually store penalties.
+    // store in array, ordered by penalty, with separator indices
+    // in another array. Updates change separator indices (easy)
+    // Just need to be careful about updating clique vertices
+    // Idea: Somehow update clique vertices after?
+
+    // All items in clique have penalty increased by one
+    // All others have penalty decreased by one.
+    for (size_t vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
+        if (m_IndependentSet.Contains(vertex)) {
+            m_vVertexPenalties[vertex]++;
+        } else {
+            if (m_vVertexPenalties[vertex] > 0)
+                m_vVertexPenalties[vertex]--;
+            if (m_vVertexPenalties[vertex]==0) {
+                m_uNumZeroPenaltyVertices++;
+            }
+        }
+    }
+
+    for (int const independentVertex : m_IndependentSet) {
+        m_vVertexPenalties[independentVertex]++;
+    }
+
+    //// Update the Penalty Delay.
+    //// TODO/DS: Should update happen before or after penalties update?
+
+    // if < 75% of vertices have penalty > 0, increase penalty delay by one
+    // otherwise, penalty delay goes down by one.
+    if (m_uNumZeroPenaltyVertices < m_uTargetZeroPenaltyVertices) {
+        m_uPenaltyDelay++;
+    } else if (m_uPenaltyDelay > 0) {
+        m_uPenaltyDelay--;
+    }
 }
 
-int PhasedLocalSearch::SelectRandom() const
+int PhasedLocalSearch::RandomSelect(ArraySet const &vertexSet) const
 {
-    return 0;
+    return *(vertexSet.begin() + rand()%vertexSet.Size());
 }
 
-int PhasedLocalSearch::SelectPenalty() const
+int PhasedLocalSearch::PenaltySelect(ArraySet const &vertexSet) const
 {
-    return 0;
+    // don't select vertex with penalty 10?
+    size_t minPenalty(0);
+    m_ScratchSpace.Clear();
+    for (int const vertex : vertexSet) {
+        if (m_vVertexPenalties[vertex] < minPenalty) {
+            m_ScratchSpace.Clear();
+            minPenalty = m_vVertexPenalties[vertex];
+            m_ScratchSpace.Insert(vertex);
+        } else if (m_vVertexPenalties[vertex] == minPenalty) {
+            m_ScratchSpace.Insert(vertex);
+        }
+    }
+
+    int const vertexToReturn = *(m_ScratchSpace.begin() + rand()%m_ScratchSpace.Size());
+    m_ScratchSpace.Clear();
+    return vertexToReturn;
 }
 
-int PhasedLocalSearch::SelectDegree() const
+int PhasedLocalSearch::DegreeSelect(ArraySet const &vertexSet) const
 {
-    return 0;
+    size_t maxDegree(0);
+    m_ScratchSpace.Clear();
+    for (int const vertex : vertexSet) {
+        if (m_vAdjacencyArray[vertex].size() > maxDegree) {
+            m_ScratchSpace.Clear();
+            maxDegree = m_vAdjacencyArray[vertex].size();
+            m_ScratchSpace.Insert(vertex);
+        } else if (m_vAdjacencyArray[vertex].size() == maxDegree) {
+            m_ScratchSpace.Insert(vertex);
+        }
+    }
+
+    int const vertexToReturn = *(m_ScratchSpace.begin() + rand()%m_ScratchSpace.Size());
+    m_ScratchSpace.Clear();
+    return vertexToReturn;
 }
 
 // TODO/DS: select vertex from C_0(K)
 int PhasedLocalSearch::SelectFromZero() const
 {
+#ifdef DEBUG
     cout << "Selecting from C_0..." << endl << flush;
-    assert(!m_NotAdjacentToZero.Empty());
+#endif // DEBUG
+    int const vertexToSelect(SelectFrom(m_NotAdjacentToZero));
+    assert(vertexToSelect != -1);
+    return vertexToSelect;
+}
+
+int PhasedLocalSearch::SelectFrom(ArraySet const &vertexSet) const
+{
     switch (m_SelectionPhase) {
         // random vertex in set.
         case SelectionPhase::RANDOM_SELECTION:
-            {
-            return *(m_NotAdjacentToZero.begin() + rand()%m_NotAdjacentToZero.Size());
-            }
+            return RandomSelect(vertexSet);
         case SelectionPhase::DEGREE_SELECTION:
-            {
-            size_t maxDegree(0);
-            size_t maxDegreeCount(0);
-            m_ScratchSpace.Clear();
-            for (int const vertex : m_NotAdjacentToZero) {
-                if (m_vAdjacencyArray[vertex].size() > maxDegree) {
-                    m_ScratchSpace.Clear();
-                    maxDegree = m_vAdjacencyArray[vertex].size();
-                    m_ScratchSpace.Insert(vertex);
-                } else if (m_vAdjacencyArray[vertex].size() == maxDegree) {
-                    maxDegreeCount++;
-                    m_ScratchSpace.Insert(vertex);
-                }
-            }
-
-            int const vertexToReturn = *(m_ScratchSpace.begin() + rand()%m_ScratchSpace.Size());
-            m_ScratchSpace.Clear();
-            return vertexToReturn;
-            }
-
+            return RandomSelect(vertexSet);
         case SelectionPhase::PENALTY_SELECTION:
-            {
+            return PenaltySelect(vertexSet);
+        default:
             assert(0);
             return -1;
-            }
-    };
+    }
     assert(0);
     return -1;
 }
 
-// TODO/DS: select vertex from C_1(K)\U
+
+// Not const because we perform difference.
+// TODO/DS: optimize so that we don't perform the difference?
 int PhasedLocalSearch::SelectFromOne()
 {
+#ifdef DEBUG
     cout << "Selecting from C_1 \\ U..." << endl << flush;
-    switch (m_SelectionPhase) {
-        // random vertex in set.
-        case SelectionPhase::RANDOM_SELECTION:
-            {
-            m_NotAdjacentToOne.SaveState();
-            m_NotAdjacentToOne.DiffInPlace(m_U);
-            assert(!m_NotAdjacentToOne.Empty());
-            int const vertexFromDiff(*(m_NotAdjacentToOne.begin() + rand()%m_NotAdjacentToOne.Size()));
-            m_NotAdjacentToOne.RestoreState();
-            return vertexFromDiff;
-            }
-        case SelectionPhase::DEGREE_SELECTION:
-            {
-            m_NotAdjacentToOne.SaveState();
-            m_NotAdjacentToOne.DiffInPlace(m_U);
-            assert(!m_NotAdjacentToOne.Empty());
-            size_t maxDegree(0);
-            size_t maxDegreeCount(0);
-            m_ScratchSpace.Clear();
-            for (int const vertex : m_NotAdjacentToOne) {
-                if (m_vAdjacencyArray[vertex].size() > maxDegree) {
-                    m_ScratchSpace.Clear();
-                    maxDegree = m_vAdjacencyArray[vertex].size();
-                    m_ScratchSpace.Insert(vertex);
-                } else if (m_vAdjacencyArray[vertex].size() == maxDegree) {
-                    maxDegreeCount++;
-                    m_ScratchSpace.Insert(vertex);
-                }
-            }
+#endif // DEBUG
 
-            m_NotAdjacentToOne.RestoreState();
+    m_NotAdjacentToOne.SaveState();
+    m_NotAdjacentToOne.DiffInPlace(m_U);
+    assert(!m_NotAdjacentToOne.Empty());
 
-            int const vertexToReturn = *(m_ScratchSpace.begin() + rand()%m_ScratchSpace.Size());
-            m_ScratchSpace.Clear();
-            return vertexToReturn;
-            }
+    int const vertexToReturn(SelectFrom(m_NotAdjacentToOne));
 
-        case SelectionPhase::PENALTY_SELECTION:
-            {
-            assert(0);
-            return -1;
-            }
-    };
-    assert(0);
-    return -1;
+    m_NotAdjacentToOne.RestoreState();
+
+    assert(vertexToReturn != -1);
+    return vertexToReturn;
 }
 
 
@@ -180,16 +226,19 @@ bool PhasedLocalSearch::DiffIsEmpty(ArraySet const A, ArraySet const B) const
 
 void PhasedLocalSearch::AddToIndependentSet(int const vertex)
 {
+#ifdef DEBUG
     cout << "Adding " << vertex << " to $K$" << endl << flush;
+#endif // DEBUG
     if (m_IndependentSet.Contains(vertex)) return;
 
     m_IndependentSet.Insert(vertex);
-
+#ifndef ALLOW_OVERLAP
     // Should they be mutually exclusive from $K$?
     m_NotAdjacentToOne.Remove(vertex);
 
     // definitely mutually exclusive, by definition
     m_NotAdjacentToZero.Remove(vertex);
+#endif // ALLOW_OVERLAP
 
     // were already neighbors of $K$, now must be neighbors of vertex too
     vector<int> zeroDiffVertices;
@@ -197,7 +246,7 @@ void PhasedLocalSearch::AddToIndependentSet(int const vertex)
 
     // if previously adjacent to all but one, and neighbor of newly added vertex
     // then still adjacent to all but one.
-    // TODO/DS: Remove
+    // TODO/DS: Remove?
     vector<int> oneDiffVertices;
     m_NotAdjacentToOne.IntersectInPlace(m_vAdjacencyArray[vertex], oneDiffVertices);
     for (int const newVertex : zeroDiffVertices) {
@@ -215,9 +264,11 @@ void PhasedLocalSearch::AddToIndependentSet(int const vertex)
 ////
     m_IndependentSetWeight += m_vVertexWeights[vertex];
 
+#ifdef CHECK_CONSISTENCY
     if (!IsConsistent()) {
         cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
     }
+#endif // CHECK_CONSISTENCY
 }
 
 void PhasedLocalSearch::InitializeFromIndependentSet()
@@ -234,7 +285,9 @@ void PhasedLocalSearch::InitializeFromIndependentSet()
     // check all-neighbors and all-but-one-neighbors
     for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
         // C_0 and C_1 don't contain vertices from K
+#ifndef ALLOW_OVERLAP
         if (m_IndependentSet.Contains(vertex)) continue;
+#endif // ALLOW_OVERLAP
         size_t neighborCount(0);
         for (int const neighbor : m_vAdjacencyArray[vertex]) {
             if (m_IndependentSet.Contains(neighbor)) neighborCount++;
@@ -249,9 +302,11 @@ void PhasedLocalSearch::InitializeFromIndependentSet()
         }
     }
 
+#ifdef CHECK_CONSISTENCY
     if (!IsConsistent()) {
         cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
     }
+#endif // CHECK_CONSISTENCY
 }
 
 
@@ -306,6 +361,7 @@ bool PhasedLocalSearch::IsConsistent() const
         }
 
 
+#ifndef ALLOW_OVERLAP
         if (m_IndependentSet.Contains(vertex) && m_NotAdjacentToZero.Contains(vertex)) {
             cout << "Consistency Error!: vertex " << vertex << " is in K and C_0, but they are mutually exclusive (should only be in K?)" << endl << flush;
         }
@@ -316,6 +372,7 @@ bool PhasedLocalSearch::IsConsistent() const
 
         bool dontRunCountCheck(m_IndependentSet.Contains(vertex));
         if (dontRunCountCheck) continue;
+#endif // ALLOW_OVERLAP
 
         if (neighborCount != m_IndependentSet.Size() && m_NotAdjacentToZero.Contains(vertex)) {
             cout << "Consistency Error!: vertex " << vertex << " is in C_0, but does not belong in C_0" << endl << flush;
@@ -351,7 +408,6 @@ bool PhasedLocalSearch::Run()
 
     size_t uSelections(0);
     size_t pu = 0;
-    size_t pd = 2;
     size_t sa = 0; //= random;
     size_t uIterations = 50;
 
@@ -373,26 +429,49 @@ bool PhasedLocalSearch::Run()
 
     //// TODO/DS: optimization opportunity: Can we maintain a flag that detects if C_1 \ U is empty?
     while (uSelections < m_uMaxSelections) {
+#ifdef DEBUG
         cout << "Outer Loop... Selections=" << uSelections << endl << flush;
-        while (!m_NotAdjacentToZero.Empty() || !DiffIsEmpty(m_NotAdjacentToOne, m_U)) {
+#endif // DEBUG
+
+        // TODO/DS: understand why $U\superseteq C_0$, which can cause no selections.
+        bool bNoSelectionWasMade(false);
+        while ((!m_NotAdjacentToZero.Empty() || !DiffIsEmpty(m_NotAdjacentToOne, m_U)) && !bNoSelectionWasMade) {
+            bNoSelectionWasMade = true;
+#ifdef DEBUG
             cout << "Inner Loop... Selections=" << uSelections << endl << flush;
-            // select
+            cout << "C_0 \    is " << (m_NotAdjacentToZero.Empty()           ? "empty" : "not empty") << endl << flush;
+            cout << "C_0 \\ U is " << (DiffIsEmpty(m_NotAdjacentToZero, m_U) ? "empty" : "not empty") << endl << flush;
+            cout << "C_1 \\ U is " << (DiffIsEmpty(m_NotAdjacentToOne, m_U)  ? "empty" : "not empty") << endl << flush;
+#endif // DEBUG
+
+            // select from C_0
             while (!DiffIsEmpty(m_NotAdjacentToZero, m_U)) {
-                int const vertex = SelectFromZero();
+                bNoSelectionWasMade = false;
+
+                int const vertex(SelectFromZero());
+#ifdef DEBUG
                 cout << "Selected vertex " << vertex << " from C_0" << endl << flush;
+#endif // DEBUG
                 AddToIndependentSet(vertex);
                 uSelections++;
 
                 // done! independent set weight reached target size
+                if (m_IndependentSetWeight > m_uBestWeight) {
+                    m_uBestWeight = m_IndependentSetWeight;
+                    cout << "Best MWIS weight=" << m_uBestWeight << endl << flush;
+                }
                 if (m_IndependentSetWeight == uTargetSize) return true;
                 m_U.Clear();
             }
 
+            // select from C_1 \ U
             if (!DiffIsEmpty(m_NotAdjacentToOne, m_U)) {
+                bNoSelectionWasMade = false;
 
-                // TODO: different select from above, select from C_1(K)\U
                 int const vertex = SelectFromOne();
+#ifdef DEBUG
                 cout << "Selected vertex " << vertex << " from C_1 \\ U" << endl << flush;
+#endif // DEBUG
 
                 // first restrict to neighborhood of $v$
                 vector<int> diffSet;

@@ -19,12 +19,13 @@ public:
 
     void UpdatePenalties();
 
-    int SelectRandom() const;
-    int SelectPenalty() const;
-    int SelectDegree() const;
+    int RandomSelect (ArraySet const &vertexSet) const;
+    int PenaltySelect(ArraySet const &vertexSet) const;
+    int DegreeSelect (ArraySet const &vertexSet) const;
 
 ////    void RunPhase(int const iterations, SelectionPhase selectionPhase);
 
+    int SelectFrom(ArraySet const &vertexSet) const;
     int SelectFromZero() const;
     int SelectFromOne();
 
@@ -45,19 +46,32 @@ public:
 
 protected:
     std::string m_sName;
+
+// Inputs.
     std::vector<std::vector<int>> const &m_vAdjacencyArray;
     std::vector<double>           const &m_vVertexWeights;
+
+// Penalty variables.
     std::vector<int>                     m_vVertexPenalties;
+    size_t                               m_uPenaltyDelay;
+    size_t                               m_uNumZeroPenaltyVertices;
+    size_t                               m_uTargetZeroPenaltyVertices;
+    size_t                               m_uIterationsSinceLastPenaltyUpdate;
+
     size_t                               m_uTargetSize;
     size_t                               m_uMaxSelections;
+
+// Sets
     ArraySet                             m_IndependentSet;
     ArraySet                             m_U;
     ArraySet                             m_NotAdjacentToOne;
     ArraySet                             m_NotAdjacentToZero;
-    double                               m_IndependentSetWeight;
-
-    enum SelectionPhase                  m_SelectionPhase;
     mutable ArraySet                     m_ScratchSpace;
+
+// Progress Tracking
+    enum SelectionPhase                  m_SelectionPhase;
+    size_t                               m_IndependentSetWeight;
+    size_t                               m_uBestWeight;
 
 };
 
