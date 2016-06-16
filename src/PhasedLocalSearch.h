@@ -29,6 +29,8 @@ public:
     int SelectFromZero() const;
     int SelectFromOne();
 
+    bool Phase(size_t iterations, SelectionPhase const selectionPhase);
+
     virtual bool Run();
     std::string GetName() const { return m_sName; }
 
@@ -54,12 +56,14 @@ protected:
 // Penalty variables.
     std::vector<int>                     m_vVertexPenalties;
     size_t                               m_uPenaltyDelay;
-    size_t                               m_uNumZeroPenaltyVertices;
-    size_t                               m_uTargetZeroPenaltyVertices;
+    size_t                               m_uNumPenalizedVertices;
+    size_t                               m_uTargetPenalizedVertices;
     size_t                               m_uIterationsSinceLastPenaltyUpdate;
 
     size_t                               m_uTargetSize;
+    size_t                               m_uTargetWeight;
     size_t                               m_uMaxSelections;
+    size_t                               m_uSelections;
 
 // Sets
     ArraySet                             m_IndependentSet;
@@ -72,7 +76,7 @@ protected:
     enum SelectionPhase                  m_SelectionPhase;
     size_t                               m_IndependentSetWeight;
     size_t                               m_uBestWeight;
-
+    size_t                               m_uBestSize;
 };
 
 #endif //PLS_H

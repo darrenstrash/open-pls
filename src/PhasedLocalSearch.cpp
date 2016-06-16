@@ -7,7 +7,8 @@
 #include <cstdlib>
 
 #define ALLOW_OVERLAP
-////#define CHECK_CONSISTENCY
+#define CHECK_CONSISTENCY
+////#define DEBUG
 
 using namespace std;
 
@@ -17,14 +18,17 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 , m_vVertexWeights(vVertexWeights)
 
 // Penalty variables
-, m_vVertexPenalties(0, vAdjacencyArray.size())
+, m_vVertexPenalties(vAdjacencyArray.size(), 0)
 , m_uPenaltyDelay(2)
-, m_uNumZeroPenaltyVertices(vAdjacencyArray.size())
-, m_uTargetZeroPenaltyVertices(0.75*vAdjacencyArray.size())
+, m_uNumPenalizedVertices(vAdjacencyArray.size())
+, m_uTargetPenalizedVertices(0.75*vAdjacencyArray.size())
 , m_uIterationsSinceLastPenaltyUpdate(0)
 
 , m_uTargetSize(vAdjacencyArray.size())
+// initial weight, TODO/DS: change.
+, m_uTargetWeight(ULONG_MAX)
 , m_uMaxSelections(100000000)
+, m_uSelections(0)
 
 // Sets
 , m_IndependentSet(vAdjacencyArray.size())
@@ -37,6 +41,7 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 , m_SelectionPhase(SelectionPhase::RANDOM_SELECTION)
 , m_IndependentSetWeight(0.0)
 , m_uBestWeight(0)
+, m_uBestSize(0)
 {
     for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
         m_NotAdjacentToZero.Insert(vertex);
@@ -72,8 +77,12 @@ void PhasedLocalSearch::UpdatePenalties()
         return;
     }
 
+#ifdef DEBUG
+    cout << "Updating penalties..." << flush;
+#endif // DEBUG
+
     m_uIterationsSinceLastPenaltyUpdate = 0;
-    m_uNumZeroPenaltyVertices = 0;
+    m_uNumPenalizedVertices = 0;
 
 
     // TODO/DS: Don't actually store penalties.
@@ -88,11 +97,12 @@ void PhasedLocalSearch::UpdatePenalties()
         if (m_IndependentSet.Contains(vertex)) {
             m_vVertexPenalties[vertex]++;
         } else {
-            if (m_vVertexPenalties[vertex] > 0)
+            if (m_vVertexPenalties[vertex] > 0) {
                 m_vVertexPenalties[vertex]--;
-            if (m_vVertexPenalties[vertex]==0) {
-                m_uNumZeroPenaltyVertices++;
             }
+        }
+        if (m_vVertexPenalties[vertex] != 0) {
+            m_uNumPenalizedVertices++;
         }
     }
 
@@ -105,11 +115,15 @@ void PhasedLocalSearch::UpdatePenalties()
 
     // if < 75% of vertices have penalty > 0, increase penalty delay by one
     // otherwise, penalty delay goes down by one.
-    if (m_uNumZeroPenaltyVertices < m_uTargetZeroPenaltyVertices) {
+    if (m_uNumPenalizedVertices < m_uTargetPenalizedVertices) {
         m_uPenaltyDelay++;
     } else if (m_uPenaltyDelay > 0) {
         m_uPenaltyDelay--;
     }
+
+#ifdef DEBUG
+    cout << "Done!" << endl << flush;
+#endif // DEBBUG
 }
 
 int PhasedLocalSearch::RandomSelect(ArraySet const &vertexSet) const
@@ -119,8 +133,12 @@ int PhasedLocalSearch::RandomSelect(ArraySet const &vertexSet) const
 
 int PhasedLocalSearch::PenaltySelect(ArraySet const &vertexSet) const
 {
+    assert(!vertexSet.Empty());
+#ifdef DEBUG
+    cout << "PenaltySelect..." << flush;
+#endif // DEBUG
     // don't select vertex with penalty 10?
-    size_t minPenalty(0);
+    size_t minPenalty(ULONG_MAX);
     m_ScratchSpace.Clear();
     for (int const vertex : vertexSet) {
         if (m_vVertexPenalties[vertex] < minPenalty) {
@@ -131,9 +149,17 @@ int PhasedLocalSearch::PenaltySelect(ArraySet const &vertexSet) const
             m_ScratchSpace.Insert(vertex);
         }
     }
+    assert(!m_ScratchSpace.Empty());
 
+////    cout << "vertex-set-size=" << vertexSet.Size() << ", scratch-space-size=" << m_ScratchSpace.Size() << endl << flush;
+////    if (vertexSet.Size() == 2 && m_ScratchSpace.Size() == 0) {
+////        cout << "vs={" << *(vertexSet.begin()) << "," << *(vertexSet.begin() + 1) << "}" << endl << flush;
+////    }
     int const vertexToReturn = *(m_ScratchSpace.begin() + rand()%m_ScratchSpace.Size());
     m_ScratchSpace.Clear();
+#ifdef DEBUG
+    cout << "Done!" << endl << flush;
+#endif // DEBUG
     return vertexToReturn;
 }
 
@@ -398,39 +424,13 @@ bool PhasedLocalSearch::IsConsistent() const
     return bConsistent;
 }
 
-bool PhasedLocalSearch::Run()
+bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selectionPhase)
 {
-    cout << "Executing algorithm " << GetName() << "..." << endl << flush;
-    cout << "Graph has : " << m_vAdjacencyArray.size() << " vertices " << endl;
-
-    size_t uSampleVertex(1);
-    cout << "Vertex " << uSampleVertex << " has weight " << m_vVertexWeights[uSampleVertex] << endl;
-
-    size_t uSelections(0);
-    size_t pu = 0;
-    size_t sa = 0; //= random;
-    size_t uIterations = 50;
-
-    // initial weight, TODO/DS: change.
-    size_t uTargetSize(ULONG_MAX);
-
-    set<int> U;
-
-    // initialize random number generator with seed;
-    int const seed(0);
-    srand(seed);
-
-    // initialize independent set
-    int const randomVertex(rand()%m_vAdjacencyArray.size());
-    AddToIndependentSet(randomVertex);
-
-    m_vVertexPenalties.clear();
-    m_vVertexPenalties.resize(m_vAdjacencyArray.size(), 0.0);
-
+    m_SelectionPhase = selectionPhase;
     //// TODO/DS: optimization opportunity: Can we maintain a flag that detects if C_1 \ U is empty?
-    while (uSelections < m_uMaxSelections) {
+    while (uIterations > 0 && m_uSelections < m_uMaxSelections) {
 #ifdef DEBUG
-        cout << "Outer Loop... Selections=" << uSelections << endl << flush;
+        cout << "Outer Loop... Selections=" << m_uSelections << endl << flush;
 #endif // DEBUG
 
         // TODO/DS: understand why $U\superseteq C_0$, which can cause no selections.
@@ -438,7 +438,7 @@ bool PhasedLocalSearch::Run()
         while ((!m_NotAdjacentToZero.Empty() || !DiffIsEmpty(m_NotAdjacentToOne, m_U)) && !bNoSelectionWasMade) {
             bNoSelectionWasMade = true;
 #ifdef DEBUG
-            cout << "Inner Loop... Selections=" << uSelections << endl << flush;
+            cout << "Inner Loop... Selections=" << m_uSelections << endl << flush;
             cout << "C_0 \    is " << (m_NotAdjacentToZero.Empty()           ? "empty" : "not empty") << endl << flush;
             cout << "C_0 \\ U is " << (DiffIsEmpty(m_NotAdjacentToZero, m_U) ? "empty" : "not empty") << endl << flush;
             cout << "C_1 \\ U is " << (DiffIsEmpty(m_NotAdjacentToOne, m_U)  ? "empty" : "not empty") << endl << flush;
@@ -453,14 +453,22 @@ bool PhasedLocalSearch::Run()
                 cout << "Selected vertex " << vertex << " from C_0" << endl << flush;
 #endif // DEBUG
                 AddToIndependentSet(vertex);
-                uSelections++;
+                m_uSelections++;
 
                 // done! independent set weight reached target size
                 if (m_IndependentSetWeight > m_uBestWeight) {
                     m_uBestWeight = m_IndependentSetWeight;
-                    cout << "Best MWIS weight=" << m_uBestWeight << endl << flush;
+                    cout << "Best MWIS weight=" << m_uBestWeight << " has size " << m_IndependentSet.Size() << endl << flush;
                 }
-                if (m_IndependentSetWeight == uTargetSize) return true;
+
+                if (m_IndependentSet.Size() > m_uBestSize) {
+                    m_uBestSize = m_IndependentSet.Size();
+                    cout << "Best MWIS Size=" << m_uBestSize << endl << flush;
+                }
+
+                if (m_IndependentSetWeight == m_uTargetWeight) {
+                    return true;
+                }
                 m_U.Clear();
             }
 
@@ -485,7 +493,7 @@ bool PhasedLocalSearch::Run()
                 m_IndependentSet.Insert(vertex);
                 InitializeFromIndependentSet();
 
-                uSelections++;
+                m_uSelections++;
             }
         }
         uIterations--; // unused in algorithm?
@@ -493,7 +501,36 @@ bool PhasedLocalSearch::Run()
         Perturb();
     }
 
-    return true;
+    return false;
+}
+
+bool PhasedLocalSearch::Run()
+{
+    cout << "Executing algorithm " << GetName() << "..." << endl << flush;
+    cout << "Graph has : " << m_vAdjacencyArray.size() << " vertices " << endl;
+
+    size_t uSampleVertex(1);
+    cout << "Vertex " << uSampleVertex << " has weight " << m_vVertexWeights[uSampleVertex] << endl;
+
+    // initialize random number generator with seed;
+    int const seed(0);
+    srand(seed);
+
+    // initialize independent set
+    int const randomVertex(rand()%m_vAdjacencyArray.size());
+    AddToIndependentSet(randomVertex);
+
+    bool foundSolution(false);
+    while (m_uSelections < m_uMaxSelections) {
+        foundSolution = Phase(50,  SelectionPhase::RANDOM_SELECTION);
+        if (foundSolution) return true;
+        foundSolution = Phase(50, SelectionPhase::PENALTY_SELECTION);
+        if (foundSolution) return true;
+        foundSolution = Phase(100, SelectionPhase::DEGREE_SELECTION);
+        if (foundSolution) return true;
+    }
+
+    return false;
 }
 
 void PhasedLocalSearch::SetTargetSize(size_t const uTargetSize)
