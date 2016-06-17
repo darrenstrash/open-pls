@@ -54,17 +54,17 @@ void PrintDebugWarning()
 
 void PrintExperimentalWarning()
 {
-    cout << "WARNING: Phased Local Search v0.1alpha. (Experimental)" << endl;
-    cout << "WARNING: " << endl;
-    cout << "WARNING: Proceed with caution: this software is currently in an experimental state." << endl;
-    cout << "WARNING: This software may be slow, the algorithm may be unstable and the results may be incorrect." << endl;
-    cout << "WARNING: If you care about this sort of thing, don't use it." << endl;
+    cout << "#WARNING: Phased Local Search v0.1alpha. (Experimental)" << endl;
+    cout << "#WARNING: " << endl;
+    cout << "#WARNING: Proceed with caution: this software is currently in an experimental state." << endl;
+    cout << "#WARNING: This software may be slow, the algorithm may be unstable and the results may be incorrect." << endl;
+    cout << "#WARNING: If you care about this sort of thing, don't use it." << endl;
 }
 
 void RunUnitTests()
 {
-    std::cout << "Running unit tests...";
-    std::cout << "Done!" << std::endl;
+    std::cout << "#Running unit tests...";
+    std::cout << "#Done!" << std::endl;
 }
 
 
@@ -150,10 +150,10 @@ int main(int argc, char** argv)
 
     vector<list<int>> adjacencyList;
     if (inputFile.find(".graph") != string::npos) {
-        if (!bTableMode) cout << "Reading .graph file format. " << endl << flush;
+        if (!bTableMode) cout << "#Reading .graph file format. " << endl << flush;
         adjacencyList = readInGraphAdjListEdgesPerLine(n, m, inputFile);
     } else {
-        if (!bTableMode) cout << "Reading .edges file format. " << endl << flush;
+        if (!bTableMode) cout << "#Reading .edges file format. " << endl << flush;
         adjacencyList = readInGraphAdjList(n, m, inputFile);
     }
 
@@ -190,13 +190,13 @@ int main(int argc, char** argv)
 
     // if did not reach target (non-infinite) weight, then it's a failure...
     if (!bAlgorithmStatus && uTargetWeight != ULONG_MAX) {
-        std::cout << pAlgorithm->GetName() << " reported a failure. Quitting." << std::endl << std::flush;
+        std::cout << "#" << pAlgorithm->GetName() << " reported a failure. Quitting." << std::endl << std::flush;
     }
 
     // TODO/DS: output run statistics.
     if (!bTableMode) {
-        cout << "OUTPUT     : " << endl << flush;
-        cout << "-----------"   << endl << flush;
+        cout << "#OUTPUT     : " << endl << flush;
+        cout << "#-----------"   << endl << flush;
         cout << "git-commit : " << GIT_COMMIT_STRING << endl << flush;
         cout << "git-status : " << GIT_STATUS_STRING << endl << flush;
         cout << "graph-name : " << basename(inputFile) << endl << flush;
