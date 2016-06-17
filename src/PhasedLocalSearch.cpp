@@ -528,10 +528,6 @@ bool PhasedLocalSearch::Run()
         cout << "Vertex " << uSampleVertex << " has weight " << m_vVertexWeights[uSampleVertex] << endl;
     }
 
-    // initialize random number generator with seed;
-    int const seed(0);
-    srand(seed);
-
     // initialize independent set
     int const randomVertex(rand()%m_vAdjacencyArray.size());
     AddToIndependentSet(randomVertex);

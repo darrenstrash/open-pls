@@ -96,6 +96,7 @@ int main(int argc, char** argv)
     bool   const bQuiet(mapCommandLineArgs.find("--verbose") == mapCommandLineArgs.end());
     bool   const bOutputLatex(mapCommandLineArgs.find("--latex") != mapCommandLineArgs.end());
     bool   const bOutputTable(mapCommandLineArgs.find("--table") != mapCommandLineArgs.end());
+    bool   const bWeighted(mapCommandLineArgs.find("--weighted") != mapCommandLineArgs.end());
     string const inputFile((mapCommandLineArgs.find("--input-file") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--input-file"] : "");
     string const algorithm((mapCommandLineArgs.find("--algorithm") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--algorithm"] : "");
     string const sExperimentName((mapCommandLineArgs.find("--experiment") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--experiment"] : "");
@@ -104,6 +105,7 @@ int main(int argc, char** argv)
     bool   const bRunUnitTests(mapCommandLineArgs.find("--run-tests") != mapCommandLineArgs.end());
     size_t const uMaxSelections(mapCommandLineArgs.find("--max-selections") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--max-selections"]) : 100000000);
     size_t const uTargetWeight(mapCommandLineArgs.find("--target-weight") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--target-weight"]) : ULONG_MAX);
+    size_t const uRandomSeed(mapCommandLineArgs.find("--random-seed") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--random-seed"]) : 0);
 ////    size_t const uTimeoutInMilliseconds(mapCommandLineArgs.find("--timeout-in-ms") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--timeout-in-ms"]) : 5000)
     double dTimeout(0.0);
     bool   bTimeoutSet(false);
@@ -115,6 +117,8 @@ int main(int argc, char** argv)
             cout << "ERROR!: Invalid --timeout argument, please enter valid double value." << endl << flush;
         }
     }
+
+    srand(uRandomSeed);
 
     bool   const bRunExperiment(!sExperimentName.empty());
     bool   const bTableMode(bOutputLatex || bOutputTable);
@@ -168,9 +172,12 @@ int main(int argc, char** argv)
         adjacencyList.clear(); // does this free up memory? probably some...
     }
 
-    vector<double> vVertexWeights(adjacencyArray.size());
-    for (size_t i = 0; i < vVertexWeights.size(); ++i) {
-        vVertexWeights[i] = (i+1)%200 + 1;
+    vector<double> vVertexWeights(adjacencyArray.size(),1);
+
+    if (bWeighted) {
+        for (size_t i = 0; i < vVertexWeights.size(); ++i) {
+            vVertexWeights[i] = (i+1)%200 + 1;
+        }
     }
     PhasedLocalSearch *pPLS = new PhasedLocalSearch(adjacencyArray, vVertexWeights);
     pPLS->SetMaxSelections(uMaxSelections);
@@ -192,11 +199,18 @@ int main(int argc, char** argv)
         cout << "-----------"   << endl << flush;
         cout << "git-commit : " << GIT_COMMIT_STRING << endl << flush;
         cout << "git-status : " << GIT_STATUS_STRING << endl << flush;
-        cout << "Graph      : " << basename(inputFile) << endl << flush;
-        cout << "MWIS       : " << pPLS->GetBestWeight() << endl << flush;
-        cout << "Target     : " << pPLS->GetTargetWeight() << endl << flush;
-        cout << "Time(s)    : " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;
-        cout << "Select     : " << pPLS->GetSelectionsToBestWeight() << endl << flush;
+        cout << "graph-name : " << basename(inputFile) << endl << flush;
+        cout << "random-seed: " << uRandomSeed << endl << flush;
+
+        if (bWeighted) {
+        cout << "mwis       : " << pPLS->GetBestWeight() << endl << flush;
+        } else {
+            cout << "mis        : " << pPLS->GetBestWeight() << endl << flush;
+        }
+
+        cout << "target     : " << pPLS->GetTargetWeight() << endl << flush;
+        cout << "time(s)    : " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;
+        cout << "selections : " << pPLS->GetSelectionsToBestWeight() << endl << flush;
     }
 
     delete pAlgorithm; pAlgorithm = nullptr;
