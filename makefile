@@ -33,7 +33,7 @@ clean:
 	rm -rf $(EXECS) $(BUILD_DIR) $(BIN_DIR)
 
 $(BIN_DIR)/pls: main.cpp ${OBJECTS} | ${BIN_DIR}
-	g++ $(CFLAGS) ${DEFINE} ${OBJECTS} $(SRC_DIR)/main.cpp -o $@
+	g++ $(CFLAGS) -D GIT_COMMIT_TAG=`git log --format="%H" -n 1` ${DEFINE} ${OBJECTS} $(SRC_DIR)/main.cpp -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/%.h $(BUILD_DIR)/%.d | $(BUILD_DIR)
 	g++ $(CFLAGS) ${DEFINE} -c $< -o $@

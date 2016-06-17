@@ -13,6 +13,11 @@
 #include <cstdlib>
 #include <ctime>
 
+#define str(x) xstr(x)
+#define xstr(x) #x
+
+#define GIT_COMMIT_TAG_STRING str(GIT_COMMIT_TAG)
+
 using namespace std;
 
 void ProcessCommandLineArgs(int const argc, char** argv, map<string,string> &mapCommandLineArgs)
@@ -97,10 +102,14 @@ int main(int argc, char** argv)
     string const sTimeout(mapCommandLineArgs.find("--timeout") != mapCommandLineArgs.end() ? mapCommandLineArgs["--timeout"] : "");
     bool   const bRunUnitTests(mapCommandLineArgs.find("--run-tests") != mapCommandLineArgs.end());
     size_t const uMaxSelections(mapCommandLineArgs.find("--max-selections") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--max-selections"]) : 100000000);
+    size_t const uTargetWeight(mapCommandLineArgs.find("--target-weight") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--target-weight"]) : ULONG_MAX);
+////    size_t const uTimeoutInMilliseconds(mapCommandLineArgs.find("--timeout-in-ms") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--timeout-in-ms"]) : 5000)
     double dTimeout(0.0);
+    bool   bTimeoutSet(false);
     if (!sTimeout.empty()) {
         try {
             dTimeout = stod(sTimeout);
+            bTimeoutSet = true;
         } catch(...) {
             cout << "ERROR!: Invalid --timeout argument, please enter valid double value." << endl << flush;
         }
@@ -164,12 +173,28 @@ int main(int argc, char** argv)
     }
     PhasedLocalSearch *pPLS = new PhasedLocalSearch(adjacencyArray, vVertexWeights);
     pPLS->SetMaxSelections(uMaxSelections);
+    if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
+    pPLS->SetTargetWeight(uTargetWeight);
+    pPLS->SetQuiet(bQuiet);
     pAlgorithm = pPLS;
 
     bool const bAlgorithmStatus(pAlgorithm->Run());
 
-    if (!bAlgorithmStatus) {
+    // if did not reach target (non-infinite) weight, then it's a failure...
+    if (!bAlgorithmStatus && uTargetWeight != ULONG_MAX) {
         std::cout << pAlgorithm->GetName() << " reported a failure. Quitting." << std::endl << std::flush;
+    }
+
+    // TODO/DS: output run statistics.
+    if (!bTableMode) {
+        cout << "OUTPUT : " << endl << flush;
+        cout << "-------"   << endl << flush;
+        cout << "Commit : " << GIT_COMMIT_TAG_STRING << endl << flush;
+        cout << "Graph  : " << basename(inputFile) << endl << flush;
+        cout << "MWIS   : " << pPLS->GetBestWeight() << endl << flush;
+        cout << "Target : " << pPLS->GetTargetWeight() << endl << flush;
+        cout << "Time(s): " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;
+        cout << "Select : " << pPLS->GetSelectionsToBestWeight() << endl << flush;
     }
 
     delete pAlgorithm; pAlgorithm = nullptr;

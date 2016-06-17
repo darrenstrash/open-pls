@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <cstddef>
+#include <ctime>
 
 enum SelectionPhase {RANDOM_SELECTION, PENALTY_SELECTION, DEGREE_SELECTION };
 
@@ -46,6 +47,18 @@ public:
 
     bool IsConsistent() const;
 
+    void SetTimeOutInMilliseconds(size_t const timeout);
+    void   SetTargetWeight(size_t const targetWeight);
+    size_t GetTargetWeight() { return m_uTargetWeight; }
+
+    size_t GetSelections() const { return m_uSelections; }
+    size_t GetBestWeight() const { return m_uBestWeight; }
+
+    clock_t GetTimeToBestWeight() const { return m_TimeToReachBestWeight; }
+    size_t  GetSelectionsToBestWeight() const { return m_uSelectionsToBestWeight; }
+
+    void SetQuiet(bool const quiet) { m_bQuiet = quiet; }
+
 protected:
     std::string m_sName;
 
@@ -77,6 +90,12 @@ protected:
     size_t                               m_IndependentSetWeight;
     size_t                               m_uBestWeight;
     size_t                               m_uBestSize;
+    clock_t                              m_TimeToReachBestWeight;
+    size_t                               m_uSelectionsToBestWeight;
+    clock_t                              m_StartTime;
+    clock_t                              m_TimeOut;
+
+    bool                                 m_bQuiet;
 };
 
 #endif //PLS_H
