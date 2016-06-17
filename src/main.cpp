@@ -16,7 +16,8 @@
 #define str(x) xstr(x)
 #define xstr(x) #x
 
-#define GIT_COMMIT_TAG_STRING str(GIT_COMMIT_TAG)
+#define GIT_COMMIT_STRING str(GIT_COMMIT)
+#define GIT_STATUS_STRING str(GIT_STATUS)
 
 using namespace std;
 
@@ -187,14 +188,15 @@ int main(int argc, char** argv)
 
     // TODO/DS: output run statistics.
     if (!bTableMode) {
-        cout << "OUTPUT : " << endl << flush;
-        cout << "-------"   << endl << flush;
-        cout << "Commit : " << GIT_COMMIT_TAG_STRING << endl << flush;
-        cout << "Graph  : " << basename(inputFile) << endl << flush;
-        cout << "MWIS   : " << pPLS->GetBestWeight() << endl << flush;
-        cout << "Target : " << pPLS->GetTargetWeight() << endl << flush;
-        cout << "Time(s): " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;
-        cout << "Select : " << pPLS->GetSelectionsToBestWeight() << endl << flush;
+        cout << "OUTPUT     : " << endl << flush;
+        cout << "-----------"   << endl << flush;
+        cout << "git-commit : " << GIT_COMMIT_STRING << endl << flush;
+        cout << "git-status : " << GIT_STATUS_STRING << endl << flush;
+        cout << "Graph      : " << basename(inputFile) << endl << flush;
+        cout << "MWIS       : " << pPLS->GetBestWeight() << endl << flush;
+        cout << "Target     : " << pPLS->GetTargetWeight() << endl << flush;
+        cout << "Time(s)    : " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;
+        cout << "Select     : " << pPLS->GetSelectionsToBestWeight() << endl << flush;
     }
 
     delete pAlgorithm; pAlgorithm = nullptr;
