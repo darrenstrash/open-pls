@@ -195,22 +195,24 @@ int main(int argc, char** argv)
 
     // TODO/DS: output run statistics.
     if (!bTableMode) {
-        cout << "#OUTPUT     : " << endl << flush;
-        cout << "#-----------"   << endl << flush;
-        cout << "git-commit : " << GIT_COMMIT_STRING << endl << flush;
-        cout << "git-status : " << GIT_STATUS_STRING << endl << flush;
-        cout << "graph-name : " << basename(inputFile) << endl << flush;
-        cout << "random-seed: " << uRandomSeed << endl << flush;
+        cout << "#OUTPUT        : " << endl << flush;
+        cout << "#--------------"   << endl << flush;
+        cout << "git-commit     : " << GIT_COMMIT_STRING << endl << flush;
+        cout << "git-status     : " << GIT_STATUS_STRING << endl << flush;
+        cout << "graph-name     : " << basename(inputFile) << endl << flush;
+        cout << "random-seed    : " << uRandomSeed << endl << flush;
 
         if (bWeighted) {
-        cout << "mwis       : " << pPLS->GetBestWeight() << endl << flush;
+        cout << "mwis           : " << pPLS->GetBestWeight() << endl << flush;
         } else {
-            cout << "mis        : " << pPLS->GetBestWeight() << endl << flush;
+            cout << "mis            : " << pPLS->GetBestWeight() << endl << flush;
         }
 
-        cout << "target     : " << pPLS->GetTargetWeight() << endl << flush;
-        cout << "time(s)    : " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;
-        cout << "selections : " << pPLS->GetSelectionsToBestWeight() << endl << flush;
+        cout << "target         : " << pPLS->GetTargetWeight() << endl << flush;
+        cout << "time(s)        : " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;
+        cout << "timeout        : " << pPLS->GetTimeoutInSeconds() << endl << flush;
+        cout << "selections     : " << pPLS->GetSelectionsToBestWeight() << endl << flush;
+        cout << "max-selections : " << pPLS->GetMaxSelections() << endl << flush;
     }
 
     delete pAlgorithm; pAlgorithm = nullptr;

@@ -59,6 +59,9 @@ public:
 
     void SetQuiet(bool const quiet) { m_bQuiet = quiet; }
 
+    double GetTimeoutInSeconds() const;
+    size_t GetMaxSelections() const { return m_uMaxSelections; }
+
 protected:
     std::string m_sName;
 

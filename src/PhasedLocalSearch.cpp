@@ -575,3 +575,8 @@ void PhasedLocalSearch::SetTargetWeight(size_t const targetWeight)
 {
     m_uTargetWeight = targetWeight;
 }
+
+double PhasedLocalSearch::GetTimeoutInSeconds() const
+{
+    return ((double)m_TimeOut)/CLOCKS_PER_SEC;
+}
