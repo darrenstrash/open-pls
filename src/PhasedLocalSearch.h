@@ -83,6 +83,8 @@ protected:
 
 // Sets
     ArraySet                             m_IndependentSet;
+    ArraySet                             m_RandomIndependentSet;
+    ArraySet                             m_DegreeIndependentSet;
     ArraySet                             m_U;
     ArraySet                             m_NotAdjacentToOne;
     ArraySet                             m_NotAdjacentToZero;

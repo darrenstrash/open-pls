@@ -33,6 +33,8 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 
 // Sets
 , m_IndependentSet(vAdjacencyArray.size())
+, m_RandomIndependentSet(vAdjacencyArray.size()) // for saving state of random phase
+, m_DegreeIndependentSet(vAdjacencyArray.size()) // for saving state of degree phase
 , m_U(vAdjacencyArray.size())
 , m_NotAdjacentToOne(vAdjacencyArray.size())
 , m_NotAdjacentToZero(vAdjacencyArray.size())
@@ -573,27 +575,41 @@ bool PhasedLocalSearch::Run()
     // initialize independent set
     int const randomVertex(rand()%m_vAdjacencyArray.size());
     AddToIndependentSet(randomVertex);
+    m_RandomIndependentSet = m_IndependentSet;
+    m_DegreeIndependentSet = m_IndependentSet;
     m_bCheckZero = true;
 
     bool foundSolution(false);
     while (m_uSelections < m_uMaxSelections) {
         foundSolution = Phase(50,  SelectionPhase::RANDOM_SELECTION);
+        m_RandomIndependentSet = m_IndependentSet;
         if (foundSolution) return true;
         if (clock() - m_StartTime > m_TimeOut) {
             return false;
         }
 
+        // penalty phase begins where random phase left off
         foundSolution = Phase(50, SelectionPhase::PENALTY_SELECTION);
         if (foundSolution) return true;
         if (clock() - m_StartTime > m_TimeOut) {
             return false;
         }
 
+        // degree phase starts where previous degree phase left off.
+        m_IndependentSet = m_DegreeIndependentSet;
+        InitializeFromIndependentSet();
+
         foundSolution = Phase(100, SelectionPhase::DEGREE_SELECTION);
         if (foundSolution) return true;
         if (clock() - m_StartTime > m_TimeOut) {
             return false;
         }
+
+        m_DegreeIndependentSet = m_IndependentSet;
+
+        // random phase begins where random phase left off.
+        m_IndependentSet = m_RandomIndependentSet;
+        InitializeFromIndependentSet();
     }
 
     return false;
