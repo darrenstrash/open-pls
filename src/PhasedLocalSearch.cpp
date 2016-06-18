@@ -37,6 +37,7 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 , m_NotAdjacentToOne(vAdjacencyArray.size())
 , m_NotAdjacentToZero(vAdjacencyArray.size())
 , m_ScratchSpace(vAdjacencyArray.size())
+, m_bCheckZero(true)
 
 // Progress Tracking
 , m_SelectionPhase(SelectionPhase::RANDOM_SELECTION)
@@ -281,6 +282,7 @@ void PhasedLocalSearch::AddToIndependentSet(int const vertex)
     // TODO/DS: Remove?
     vector<int> oneDiffVertices;
     m_NotAdjacentToOne.IntersectInPlace(m_vAdjacencyArray[vertex], oneDiffVertices);
+    // TODO/DS: check that C_0\U is empty.
     for (int const newVertex : zeroDiffVertices) {
 ////        if (newVertex == 18) {
 ////            cout << "Moving " << newVertex << " from C_0 to C_1" << endl << flush;
@@ -314,6 +316,8 @@ void PhasedLocalSearch::InitializeFromIndependentSet()
         m_IndependentSetWeight += m_vVertexWeights[vertex];
     }
 
+    m_bCheckZero = false;
+
     // check all-neighbors and all-but-one-neighbors
     for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
         // C_0 and C_1 don't contain vertices from K
@@ -327,6 +331,7 @@ void PhasedLocalSearch::InitializeFromIndependentSet()
 
         if (neighborCount == m_IndependentSet.Size()) {
             m_NotAdjacentToZero.Insert(vertex);
+            m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
         }
 
         if (neighborCount == m_IndependentSet.Size()-1) { 
@@ -449,9 +454,19 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
             cout << "C_0 \\ U is " << (DiffIsEmpty(m_NotAdjacentToZero, m_U) ? "empty" : "not empty") << endl << flush;
             cout << "C_1 \\ U is " << (DiffIsEmpty(m_NotAdjacentToOne, m_U)  ? "empty" : "not empty") << endl << flush;
 #endif // DEBUG
+#ifdef DEBUG
+            bool const bDiffNotEmpty(!DiffIsEmpty(m_NotAdjacentToZero, m_U));
+            bool const bNewDiffNotEmpty(!m_NotAdjacentToZero.Empty() && m_bCheckZero);
+            if (bNewDiffNotEmpty != bDiffNotEmpty) {
+                cout << "New check failed..." << endl << flush;
+                cout << "    DiffNotEmpty    =" << (bDiffNotEmpty ? "true" : "false") << endl << flush;
+                cout << "    NewDiffNotEmpty =" << (bNewDiffNotEmpty ? "true" : "false") << endl << flush;
+            }
+#endif // DEBUG
 
             // select from C_0
-            while (!DiffIsEmpty(m_NotAdjacentToZero, m_U)) {
+////            while (!DiffIsEmpty(m_NotAdjacentToZero, m_U)) {
+            while (!m_NotAdjacentToZero.Empty() && m_bCheckZero) {
                 bNoSelectionWasMade = false;
 
                 int const vertex(SelectFromZero());
@@ -481,6 +496,7 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
                     return true;
                 }
                 m_U.Clear();
+                m_bCheckZero = false;
             }
 
             // select from C_1 \ U
@@ -531,6 +547,7 @@ bool PhasedLocalSearch::Run()
     // initialize independent set
     int const randomVertex(rand()%m_vAdjacencyArray.size());
     AddToIndependentSet(randomVertex);
+    m_bCheckZero = true;
 
     bool foundSolution(false);
     while (m_uSelections < m_uMaxSelections) {
