@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cstdlib>
 
-#define ALLOW_OVERLAP
+////#define ALLOW_OVERLAP
 #define CHECK_CONSISTENCY
 ////#define DEBUG
 
@@ -38,6 +38,7 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 , m_NotAdjacentToZero(vAdjacencyArray.size())
 , m_ScratchSpace(vAdjacencyArray.size())
 , m_bCheckZero(true)
+, m_bCheckOne(true)
 
 // Progress Tracking
 , m_SelectionPhase(SelectionPhase::RANDOM_SELECTION)
@@ -288,6 +289,7 @@ void PhasedLocalSearch::AddToIndependentSet(int const vertex)
 ////            cout << "Moving " << newVertex << " from C_0 to C_1" << endl << flush;
 ////        }
         m_NotAdjacentToOne.Insert(newVertex);
+        m_bCheckOne = m_bCheckOne || !m_U.Contains(newVertex); // if u\in C_1 \ U
     }
 
 ////    cout << "Eject from C_1:";
@@ -317,6 +319,7 @@ void PhasedLocalSearch::InitializeFromIndependentSet()
     }
 
     m_bCheckZero = false;
+    m_bCheckOne  = false;
 
     // check all-neighbors and all-but-one-neighbors
     for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
@@ -336,6 +339,7 @@ void PhasedLocalSearch::InitializeFromIndependentSet()
 
         if (neighborCount == m_IndependentSet.Size()-1) { 
             m_NotAdjacentToOne.Insert(vertex);
+            m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
         }
     }
 
@@ -446,7 +450,17 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
 
         // TODO/DS: understand why $U\superseteq C_0$, which can cause no selections.
         bool bNoSelectionWasMade(false);
-        while ((!m_NotAdjacentToZero.Empty() || !DiffIsEmpty(m_NotAdjacentToOne, m_U)) && !bNoSelectionWasMade) {
+////        while ((!m_NotAdjacentToZero.Empty() || !DiffIsEmpty(m_NotAdjacentToOne, m_U)) && !bNoSelectionWasMade) {
+        while ((!m_NotAdjacentToZero.Empty() || (!m_NotAdjacentToOne.Empty() && m_bCheckOne)) && !bNoSelectionWasMade) {
+#ifdef DEBUG
+            bool const bDiffNotEmpty2(!DiffIsEmpty(m_NotAdjacentToOne, m_U));
+            bool const bNewDiffNotEmpty2(!m_NotAdjacentToOne.Empty() && m_bCheckOne);
+            if (bNewDiffNotEmpty2 != bDiffNotEmpty2) {
+                cout << "New check failed..." << endl << flush;
+                cout << "    DiffNotEmpty2    =" << (bDiffNotEmpty2    ? "true" : "false") << endl << flush;
+                cout << "    NewDiffNotEmpty2 =" << (bNewDiffNotEmpty2 ? "true" : "false") << endl << flush;
+            }
+#endif // DEBUG
             bNoSelectionWasMade = true;
 #ifdef DEBUG
             cout << "Inner Loop... Selections=" << m_uSelections << endl << flush;
@@ -454,6 +468,7 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
             cout << "C_0 \\ U is " << (DiffIsEmpty(m_NotAdjacentToZero, m_U) ? "empty" : "not empty") << endl << flush;
             cout << "C_1 \\ U is " << (DiffIsEmpty(m_NotAdjacentToOne, m_U)  ? "empty" : "not empty") << endl << flush;
 #endif // DEBUG
+
 #ifdef DEBUG
             bool const bDiffNotEmpty(!DiffIsEmpty(m_NotAdjacentToZero, m_U));
             bool const bNewDiffNotEmpty(!m_NotAdjacentToZero.Empty() && m_bCheckZero);
@@ -499,8 +514,19 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
                 m_bCheckZero = true;
             }
 
+#ifdef DEBUG
+            bool const bDiffNotEmpty3(!DiffIsEmpty(m_NotAdjacentToOne, m_U));
+            bool const bNewDiffNotEmpty3(!m_NotAdjacentToOne.Empty() && m_bCheckOne);
+            if (bNewDiffNotEmpty3 != bDiffNotEmpty3) {
+                cout << "New check failed..." << endl << flush;
+                cout << "    DiffNotEmpty3    =" << (bDiffNotEmpty3    ? "true" : "false") << endl << flush;
+                cout << "    NewDiffNotEmpty3 =" << (bNewDiffNotEmpty3 ? "true" : "false") << endl << flush;
+            }
+#endif // DEBUG
+
             // select from C_1 \ U
-            if (!DiffIsEmpty(m_NotAdjacentToOne, m_U)) {
+////            if (!DiffIsEmpty(m_NotAdjacentToOne, m_U)) {
+            if (!m_NotAdjacentToOne.Empty() && m_bCheckOne) {
                 bNoSelectionWasMade = false;
 
                 int const vertex = SelectFromOne();

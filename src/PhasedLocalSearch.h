@@ -88,6 +88,7 @@ protected:
     ArraySet                             m_NotAdjacentToZero;
     mutable ArraySet                     m_ScratchSpace;
     bool                                 m_bCheckZero;
+    bool                                 m_bCheckOne;
 
 // Progress Tracking
     enum SelectionPhase                  m_SelectionPhase;
