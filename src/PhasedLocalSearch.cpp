@@ -496,7 +496,7 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
                     return true;
                 }
                 m_U.Clear();
-                m_bCheckZero = false;
+                m_bCheckZero = true;
             }
 
             // select from C_1 \ U
