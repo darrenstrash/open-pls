@@ -8,7 +8,7 @@
 #include <cstdlib>
 
 ////#define ALLOW_OVERLAP
-#define CHECK_CONSISTENCY
+////#define CHECK_CONSISTENCY
 ////#define DEBUG
 
 using namespace std;
@@ -39,6 +39,7 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 , m_NotAdjacentToOne(vAdjacencyArray.size())
 , m_NotAdjacentToZero(vAdjacencyArray.size())
 , m_ScratchSpace(vAdjacencyArray.size())
+, m_vScratchCounters(vAdjacencyArray.size(),0)
 , m_bCheckZero(true)
 , m_bCheckOne(true)
 
@@ -70,14 +71,14 @@ void PhasedLocalSearch::Perturb()
     // Set $K$ to contain only random vertex.
     if (SelectionPhase::PENALTY_SELECTION) {
         m_IndependentSet.Insert(randomVertex);
-        InitializeFromIndependentSet();
+        InitializeFromIndependentSet2();
         return;
     }
 
     // Add random vertex to $K$, remove non-neighbors from $K$.
     m_IndependentSet.IntersectInPlace(m_vAdjacencyArray[randomVertex]);
     m_IndependentSet.Insert(randomVertex);
-    InitializeFromIndependentSet();
+    InitializeFromIndependentSet2();
 }
 
 void PhasedLocalSearch::UpdatePenalties()
@@ -283,8 +284,9 @@ void PhasedLocalSearch::AddToIndependentSet(int const vertex)
     // if previously adjacent to all but one, and neighbor of newly added vertex
     // then still adjacent to all but one.
     // TODO/DS: Remove?
-    vector<int> oneDiffVertices;
-    m_NotAdjacentToOne.IntersectInPlace(m_vAdjacencyArray[vertex], oneDiffVertices);
+////    vector<int> oneDiffVertices;
+////    m_NotAdjacentToOne.IntersectInPlace(m_vAdjacencyArray[vertex], oneDiffVertices);
+    m_NotAdjacentToOne.IntersectInPlace(m_vAdjacencyArray[vertex]);
     // TODO/DS: check that C_0\U is empty.
     for (int const newVertex : zeroDiffVertices) {
 ////        if (newVertex == 18) {
@@ -351,6 +353,60 @@ void PhasedLocalSearch::InitializeFromIndependentSet()
     }
 #endif // CHECK_CONSISTENCY
 }
+
+void PhasedLocalSearch::InitializeFromIndependentSet2()
+{
+    if (m_IndependentSet.Size() == 1) {
+        InitializeFromIndependentSet();
+        return;
+    }
+
+    assert(!m_IndependentSet.Empty());
+    //Empty items that dependent on independent set, so they can be initialized.
+    m_IndependentSetWeight = 0;
+    m_ScratchSpace.Clear();
+    m_NotAdjacentToZero.Clear();
+    m_NotAdjacentToOne.Clear();
+
+    m_bCheckZero = false;
+    m_bCheckOne  = false;
+
+    // update weights, follow neighbors, count them
+    // insert into levels sets C_0 and C_1
+    for (int const vertex : m_IndependentSet) {
+        m_IndependentSetWeight += m_vVertexWeights[vertex];
+
+        for (int const neighbor : m_vAdjacencyArray[vertex]) {
+#ifndef ALLOW_OVERLAP
+            if (m_IndependentSet.Contains(neighbor)) continue;
+#endif // ALLOW_OVERLAP
+            m_ScratchSpace.Insert(neighbor);
+            m_vScratchCounters[neighbor]++; 
+        }
+    }
+
+    for (int const vertex : m_ScratchSpace) {
+        int const neighborCount(m_vScratchCounters[vertex]);
+        if (neighborCount == m_IndependentSet.Size()) {
+            m_NotAdjacentToZero.Insert(vertex);
+            m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
+        } else if (neighborCount == m_IndependentSet.Size()-1) { 
+            m_NotAdjacentToOne.Insert(vertex);
+            m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
+        }
+
+        m_vScratchCounters[vertex] = 0;
+    }
+
+    m_ScratchSpace.Clear();
+
+#ifdef CHECK_CONSISTENCY
+    if (!IsConsistent()) {
+        cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
+    }
+#endif // CHECK_CONSISTENCY
+}
+
 
 
 bool PhasedLocalSearch::IsConsistent() const
@@ -546,7 +602,7 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
 
                 // then add v and update helper sets.
                 m_IndependentSet.Insert(vertex);
-                InitializeFromIndependentSet();
+                InitializeFromIndependentSet2();
 
                 m_uSelections++;
             }
@@ -575,8 +631,8 @@ bool PhasedLocalSearch::Run()
     // initialize independent set
     int const randomVertex(rand()%m_vAdjacencyArray.size());
     AddToIndependentSet(randomVertex);
-    m_RandomIndependentSet = m_IndependentSet;
-    m_DegreeIndependentSet = m_IndependentSet;
+    m_RandomIndependentSet.Insert(randomVertex);
+    m_DegreeIndependentSet.Insert(randomVertex);
     m_bCheckZero = true;
 
     bool foundSolution(false);
@@ -597,7 +653,7 @@ bool PhasedLocalSearch::Run()
 
         // degree phase starts where previous degree phase left off.
         m_IndependentSet = m_DegreeIndependentSet;
-        InitializeFromIndependentSet();
+        InitializeFromIndependentSet2();
 
         foundSolution = Phase(100, SelectionPhase::DEGREE_SELECTION);
         if (foundSolution) return true;
@@ -609,7 +665,7 @@ bool PhasedLocalSearch::Run()
 
         // random phase begins where random phase left off.
         m_IndependentSet = m_RandomIndependentSet;
-        InitializeFromIndependentSet();
+        InitializeFromIndependentSet2();
     }
 
     return false;

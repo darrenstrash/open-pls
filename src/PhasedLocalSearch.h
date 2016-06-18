@@ -44,6 +44,7 @@ public:
     void AddToIndependentSet(int const vertex);
 
     void InitializeFromIndependentSet();
+    void InitializeFromIndependentSet2();
 
     bool IsConsistent() const;
 
@@ -89,6 +90,7 @@ protected:
     ArraySet                             m_NotAdjacentToOne;
     ArraySet                             m_NotAdjacentToZero;
     mutable ArraySet                     m_ScratchSpace;
+    mutable std::vector<int>             m_vScratchCounters;
     bool                                 m_bCheckZero;
     bool                                 m_bCheckOne;
 
