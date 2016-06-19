@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <cstdlib>
+#include <climits>
 
 ////#define ALLOW_OVERLAP
 ////#define CHECK_CONSISTENCY
@@ -94,7 +95,6 @@ void PhasedLocalSearch::UpdatePenalties()
 
     m_uIterationsSinceLastPenaltyUpdate = 0;
     m_uNumPenalizedVertices = 0;
-
 
     // TODO/DS: Don't actually store penalties.
     // store in array, ordered by penalty, with separator indices
@@ -356,11 +356,6 @@ void PhasedLocalSearch::InitializeFromIndependentSet()
 
 void PhasedLocalSearch::InitializeFromIndependentSet2()
 {
-    if (m_IndependentSet.Size() == 1) {
-        InitializeFromIndependentSet();
-        return;
-    }
-
     assert(!m_IndependentSet.Empty());
     //Empty items that dependent on independent set, so they can be initialized.
     m_IndependentSetWeight = 0;
@@ -370,6 +365,22 @@ void PhasedLocalSearch::InitializeFromIndependentSet2()
 
     m_bCheckZero = false;
     m_bCheckOne  = false;
+
+    if (m_IndependentSet.Size() == 1) {
+        int const vertexInIndependentSet(*m_IndependentSet.begin());
+        for (int const neighbor : m_vAdjacencyArray[vertexInIndependentSet]) {
+            m_NotAdjacentToZero.Insert(neighbor);
+            m_bCheckZero = m_bCheckZero || !m_U.Contains(neighbor);
+        }
+        for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
+            if (m_NotAdjacentToZero.Contains(vertex)) continue;
+            m_NotAdjacentToOne.Insert(vertex);
+            m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
+        }
+        m_NotAdjacentToOne.Remove(vertexInIndependentSet);
+
+        return;
+    }
 
     // update weights, follow neighbors, count them
     // insert into levels sets C_0 and C_1

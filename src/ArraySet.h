@@ -123,7 +123,7 @@ public:
             }
         }
 
-        m_iEnd = iPutValueHere-1;;
+        m_iEnd = iPutValueHere-1;
     }
 
     void DiffInPlace(ArraySet const &other) {
@@ -140,6 +140,7 @@ public:
     size_t Size()  const { return m_iEnd - m_iBegin + 1; }
     bool   Empty() const { return m_iEnd < m_iBegin; }
 
+    // slow because end is called a lot?
     std::vector<int>::iterator begin() { return m_Elements.begin() + m_iBegin;   }
     std::vector<int>::iterator end()   { return m_Elements.begin() + m_iEnd + 1; }
 

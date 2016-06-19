@@ -12,6 +12,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <climits>
 
 #define str(x) xstr(x)
 #define xstr(x) #x
