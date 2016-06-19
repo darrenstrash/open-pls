@@ -84,6 +84,10 @@ void PhasedLocalSearch::Perturb()
 
 void PhasedLocalSearch::UpdatePenalties()
 {
+    for (int const vertex : m_IndependentSet) {
+        m_vVertexPenalties[vertex]++;
+    }
+
     if (m_uPenaltyDelay > m_uIterationsSinceLastPenaltyUpdate) {
         m_uIterationsSinceLastPenaltyUpdate++;
         return;
@@ -105,13 +109,13 @@ void PhasedLocalSearch::UpdatePenalties()
     // All items in clique have penalty increased by one
     // All others have penalty decreased by one.
     for (size_t vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
-        if (m_IndependentSet.Contains(vertex)) {
-            m_vVertexPenalties[vertex]++;
-        } else {
+////        if (m_IndependentSet.Contains(vertex)) {
+////            m_vVertexPenalties[vertex]++;
+////        } else {
             if (m_vVertexPenalties[vertex] > 0) {
                 m_vVertexPenalties[vertex]--;
             }
-        }
+////        }
         if (m_vVertexPenalties[vertex] != 0) {
             m_uNumPenalizedVertices++;
         }
