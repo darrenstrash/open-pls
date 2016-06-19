@@ -27,8 +27,10 @@ public:
 ////    void RunPhase(int const iterations, SelectionPhase selectionPhase);
 
     int SelectFrom(ArraySet const &vertexSet) const;
-    int SelectFromZero() const;
+    int SelectFromZero();
     int SelectFromOne();
+
+    void UpdateStatistics();
 
     bool Phase(size_t iterations, SelectionPhase const selectionPhase);
 
@@ -62,6 +64,7 @@ public:
 
     double GetTimeoutInSeconds() const;
     size_t GetMaxSelections() const { return m_uMaxSelections; }
+    size_t GetPenaltyDelay() const;
 
 protected:
     std::string m_sName;

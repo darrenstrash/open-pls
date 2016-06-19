@@ -212,6 +212,7 @@ int main(int argc, char** argv)
         cout << "target         : " << pPLS->GetTargetWeight() << endl << flush;
         cout << "time(s)        : " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;
         cout << "timeout        : " << pPLS->GetTimeoutInSeconds() << endl << flush;
+        cout << "penalty-delay  : " << pPLS->GetPenaltyDelay() << endl << flush;
         cout << "selections     : " << pPLS->GetSelectionsToBestWeight() << endl << flush;
         cout << "max-selections : " << pPLS->GetMaxSelections() << endl << flush;
     }

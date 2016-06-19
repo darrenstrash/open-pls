@@ -194,12 +194,19 @@ int PhasedLocalSearch::DegreeSelect(ArraySet const &vertexSet) const
 }
 
 // TODO/DS: select vertex from C_0(K)
-int PhasedLocalSearch::SelectFromZero() const
+int PhasedLocalSearch::SelectFromZero()
 {
 #ifdef DEBUG
     cout << "Selecting from C_0..." << endl << flush;
 #endif // DEBUG
+
+////    m_NotAdjacentToZero.SaveState();
+////    m_NotAdjacentToZero.DiffInPlace(m_U);
+////    assert(!m_NotAdjacentToZero.Empty());
+
     int const vertexToSelect(SelectFrom(m_NotAdjacentToZero));
+
+////    m_NotAdjacentToZero.RestoreState();
     assert(vertexToSelect != -1);
     return vertexToSelect;
 }
@@ -508,6 +515,25 @@ bool PhasedLocalSearch::IsConsistent() const
     return bConsistent;
 }
 
+void PhasedLocalSearch::UpdateStatistics()
+{
+    if (m_IndependentSetWeight > m_uBestWeight) {
+        m_TimeToReachBestWeight = clock() - m_StartTime;
+        m_uSelectionsToBestWeight = m_uSelections;
+        m_uBestWeight = m_IndependentSetWeight;
+        if (!m_bQuiet)
+            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best MWIS weight=" << m_uBestWeight << " has size   " << m_IndependentSet.Size() << endl << flush;
+    }
+
+    if (m_IndependentSet.Size() > m_uBestSize) {
+        m_uBestSize = m_IndependentSet.Size();
+        ////                    cout << "Best MWIS Size=" << m_uBestSize << endl << flush;
+        if (!m_bQuiet)
+            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best WIS size   =" << m_uBestWeight << " has weight " << m_IndependentSetWeight << endl << flush;
+    }
+}
+
+
 bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selectionPhase)
 {
     m_SelectionPhase = selectionPhase;
@@ -520,6 +546,7 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
         // TODO/DS: understand why $U\superseteq C_0$, which can cause no selections.
         bool bNoSelectionWasMade(false);
 ////        while ((!m_NotAdjacentToZero.Empty() || !DiffIsEmpty(m_NotAdjacentToOne, m_U)) && !bNoSelectionWasMade) {
+////        while (((!m_NotAdjacentToZero.Empty() && m_bCheckZero) || (!m_NotAdjacentToOne.Empty() && m_bCheckOne)) && !bNoSelectionWasMade) {
         while ((!m_NotAdjacentToZero.Empty() || (!m_NotAdjacentToOne.Empty() && m_bCheckOne)) && !bNoSelectionWasMade) {
 #ifdef DEBUG
             bool const bDiffNotEmpty2(!DiffIsEmpty(m_NotAdjacentToOne, m_U));
@@ -560,27 +587,15 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
                 AddToIndependentSet(vertex);
                 m_uSelections++;
 
-                // done! independent set weight reached target size
-                if (m_IndependentSetWeight > m_uBestWeight) {
-                    m_TimeToReachBestWeight = clock() - m_StartTime;
-                    m_uSelectionsToBestWeight = m_uSelections;
-                    m_uBestWeight = m_IndependentSetWeight;
-                    if (!m_bQuiet)
-                        cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best MWIS weight=" << m_uBestWeight << " has size   " << m_IndependentSet.Size() << endl << flush;
-                }
-
-                if (m_IndependentSet.Size() > m_uBestSize) {
-                    m_uBestSize = m_IndependentSet.Size();
-////                    cout << "Best MWIS Size=" << m_uBestSize << endl << flush;
-                    if (!m_bQuiet)
-                        cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best WIS size   =" << m_uBestWeight << " has weight " << m_IndependentSetWeight << endl << flush;
-                }
-
-                if (m_IndependentSetWeight == m_uTargetWeight) {
-                    return true;
-                }
+                // done! independent set weight reached target
                 m_U.Clear();
                 m_bCheckZero = true;
+                m_bCheckOne  = true;
+            }
+
+            UpdateStatistics();
+            if (m_IndependentSetWeight == m_uTargetWeight) {
+                return true;
             }
 
 #ifdef DEBUG
@@ -621,6 +636,9 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
         uIterations--; // unused in algorithm?
         UpdatePenalties();
         Perturb();
+////        m_U.Clear();
+////        m_bCheckZero = true;
+////        m_bCheckOne = true;
     }
 
     return false;
@@ -705,4 +723,9 @@ void PhasedLocalSearch::SetTargetWeight(size_t const targetWeight)
 double PhasedLocalSearch::GetTimeoutInSeconds() const
 {
     return ((double)m_TimeOut)/CLOCKS_PER_SEC;
+}
+
+size_t PhasedLocalSearch::GetPenaltyDelay() const
+{
+    return m_uPenaltyDelay;
 }
