@@ -66,11 +66,11 @@ void PhasedLocalSearch::Perturb()
     cout << "Perturbing..." << endl << flush;
 #endif // DEBUG
 
-    m_IndependentSet.Clear();
     int const randomVertex(rand()%m_vAdjacencyArray.size());
 
     // Set $K$ to contain only random vertex.
-    if (SelectionPhase::PENALTY_SELECTION) {
+    if (m_SelectionPhase == SelectionPhase::PENALTY_SELECTION) {
+        m_IndependentSet.Clear();
         m_IndependentSet.Insert(randomVertex);
         InitializeFromIndependentSet2();
         return;
@@ -89,6 +89,10 @@ void PhasedLocalSearch::UpdatePenalties()
     }
 
     if (m_uPenaltyDelay > m_uIterationsSinceLastPenaltyUpdate) {
+////        for (int const vertex : m_IndependentSet) {
+////            m_vVertexPenalties[vertex]++;
+////        }
+
         m_uIterationsSinceLastPenaltyUpdate++;
         return;
     }
@@ -121,9 +125,9 @@ void PhasedLocalSearch::UpdatePenalties()
         }
     }
 
-    for (int const independentVertex : m_IndependentSet) {
-        m_vVertexPenalties[independentVertex]++;
-    }
+////    for (int const independentVertex : m_IndependentSet) {
+////        m_vVertexPenalties[independentVertex]++;
+////    }
 
     //// Update the Penalty Delay.
     //// TODO/DS: Should update happen before or after penalties update?
