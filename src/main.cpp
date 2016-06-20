@@ -1,5 +1,7 @@
 // local includes
-#include "PhasedLocalSearch.h"
+#include "CliquePhasedLocalSearch.h"
+#include "IndependentSetPhasedLocalSearch.h"
+////#include "PhasedLocalSearch.h"
 #include "Algorithm.h"
 #include "Tools.h"
 
@@ -99,7 +101,7 @@ int main(int argc, char** argv)
     bool   const bOutputTable(mapCommandLineArgs.find("--table") != mapCommandLineArgs.end());
     bool   const bWeighted(mapCommandLineArgs.find("--weighted") != mapCommandLineArgs.end());
     string const inputFile((mapCommandLineArgs.find("--input-file") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--input-file"] : "");
-    string const algorithm((mapCommandLineArgs.find("--algorithm") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--algorithm"] : "");
+    string const sAlgorithm((mapCommandLineArgs.find("--algorithm") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--algorithm"] : "clique");
     string const sExperimentName((mapCommandLineArgs.find("--experiment") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--experiment"] : "");
     bool   const bPrintHeader(mapCommandLineArgs.find("--header") != mapCommandLineArgs.end());
     string const sTimeout(mapCommandLineArgs.find("--timeout") != mapCommandLineArgs.end() ? mapCommandLineArgs["--timeout"] : "");
@@ -108,6 +110,13 @@ int main(int argc, char** argv)
     size_t const uTargetWeight(mapCommandLineArgs.find("--target-weight") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--target-weight"]) : ULONG_MAX);
     size_t const uRandomSeed(mapCommandLineArgs.find("--random-seed") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--random-seed"]) : 0);
 ////    size_t const uTimeoutInMilliseconds(mapCommandLineArgs.find("--timeout-in-ms") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--timeout-in-ms"]) : 5000)
+
+    cout << "#command :";
+    for (int i = 0; i < argc; ++i) {
+        cout << " " << argv[i];
+    }
+    cout << endl << flush;
+
     double dTimeout(0.0);
     bool   bTimeoutSet(false);
     if (!sTimeout.empty()) {
@@ -143,7 +152,7 @@ int main(int argc, char** argv)
         cout << "usage: " << argv[0] << " --input-file=<filename> [--latex] [--header]" << endl;
     }
 
-    string const name(algorithm);
+    string const name(sAlgorithm);
     Algorithm *pAlgorithm(nullptr);
 
     int n; // number of vertices
@@ -180,7 +189,17 @@ int main(int argc, char** argv)
             vVertexWeights[i] = (i+1)%200 + 1;
         }
     }
-    PhasedLocalSearch *pPLS = new PhasedLocalSearch(adjacencyArray, vVertexWeights);
+
+    bool cliqueAlgorithm(true);
+    PhasedLocalSearch *pPLS(nullptr);
+    if (sAlgorithm=="clique") {
+        cliqueAlgorithm = true;
+        pPLS = new CliquePhasedLocalSearch(adjacencyArray, vVertexWeights);
+    } else {
+        cliqueAlgorithm = false;
+        pPLS = new IndependentSetPhasedLocalSearch(adjacencyArray, vVertexWeights);
+    }
+
     pPLS->SetMaxSelections(uMaxSelections);
     if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
     pPLS->SetTargetWeight(uTargetWeight);
@@ -198,16 +217,18 @@ int main(int argc, char** argv)
     if (!bTableMode) {
         cout << "#OUTPUT        : " << endl << flush;
         cout << "#--------------"   << endl << flush;
+        cout << "algorithm-name : " << pAlgorithm->GetName() << endl << flush;
         cout << "git-commit     : " << GIT_COMMIT_STRING << endl << flush;
         cout << "git-status     : " << GIT_STATUS_STRING << endl << flush;
         cout << "graph-name     : " << basename(inputFile) << endl << flush;
         cout << "random-seed    : " << uRandomSeed << endl << flush;
 
-        if (bWeighted) {
-        cout << "mwis           : " << pPLS->GetBestWeight() << endl << flush;
-        } else {
-            cout << "mis            : " << pPLS->GetBestWeight() << endl << flush;
-        }
+        if (cliqueAlgorithm)
+            cout << (bWeighted ? "mwc            : " : "mc             : ");
+        else
+            cout << (bWeighted ? "mwis           : " : "mis            : ");
+
+        cout << pPLS->GetBestWeight() << endl << flush;
 
         cout << "target         : " << pPLS->GetTargetWeight() << endl << flush;
         cout << "time(s)        : " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;

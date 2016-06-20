@@ -8,6 +8,7 @@ CFLAGS = -Winline -O2 -std=c++0x -g
 
 SOURCES_TMP += PhasedLocalSearch.cpp
 SOURCES_TMP += CliquePhasedLocalSearch.cpp
+SOURCES_TMP += IndependentSetPhasedLocalSearch.cpp
 SOURCES_TMP += Tools.cpp
 
 SOURCES=$(addprefix $(SOURCES_DIR)/, $(SOURCES_TMP))
