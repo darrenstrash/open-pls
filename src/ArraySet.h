@@ -133,6 +133,25 @@ public:
         }
     }
 
+    void DiffInPlace(std::vector<int> const &other) {
+        // if we have the same value as the other set, then we remove it.
+        for (int const valueOther : other) {
+            if (Contains(valueOther)) Remove(valueOther);
+        }
+    }
+
+
+    void DiffInPlace(std::vector<int> const &other, std::vector<int> &intersect) {
+        // if we have the same value as the other set, then we remove it.
+        for (int const valueOther : other) {
+            if (Contains(valueOther)) {
+                Remove(valueOther);
+                intersect.push_back(valueOther);
+            }
+        }
+    }
+
+
 ////    void ForAllInDiff()
 ////    {
 ////    }

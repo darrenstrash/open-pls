@@ -7,7 +7,30 @@ CliquePhasedLocalSearch::CliquePhasedLocalSearch(vector<vector<int>> const &vAdj
 : PhasedLocalSearch(vAdjacencyArray,vVertexWeights)
 {
     SetName("pls-clique");
+    for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
+        m_NotAdjacentToZero.Insert(vertex);
+    }
 }
+
+int CliquePhasedLocalSearch::DegreeSelect(ArraySet const &vertexSet) const
+{
+    size_t maxDegree(0);
+    m_ScratchSpace.Clear();
+    for (int const vertex : vertexSet) {
+        if (m_vAdjacencyArray[vertex].size() > maxDegree) {
+            m_ScratchSpace.Clear();
+            maxDegree = m_vAdjacencyArray[vertex].size();
+            m_ScratchSpace.Insert(vertex);
+        } else if (m_vAdjacencyArray[vertex].size() == maxDegree) {
+            m_ScratchSpace.Insert(vertex);
+        }
+    }
+
+    int const vertexToReturn = *(m_ScratchSpace.begin() + rand()%m_ScratchSpace.Size());
+    m_ScratchSpace.Clear();
+    return vertexToReturn;
+}
+
 
 void CliquePhasedLocalSearch::AddToK(int const vertex)
 {
@@ -169,5 +192,127 @@ void CliquePhasedLocalSearch::InitializeFromK2()
         cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
     }
 #endif // CHECK_CONSISTENCY
+}
+
+bool CliquePhasedLocalSearch::IsConsistent() const
+{
+////    cout << "Checking Consistency..." << endl << flush;
+    bool bConsistent(true);
+    // check weight
+    double weight(0.0);
+    for (int const vertex : m_K) {
+        weight += m_vVertexWeights[vertex];
+        size_t neighborsInSet(0);
+        for (int const neighbor : m_vAdjacencyArray[vertex]) {
+            if (m_K.Contains(neighbor)) {
+                neighborsInSet++;
+            }
+        }
+
+        if (neighborsInSet != m_K.Size()-1) {
+            cout << "Consistency Error!: vertex " << vertex << " has " << neighborsInSet << " neighbors in $K$, but should have " << m_K.Size()-1 << endl << flush;
+        }
+    }
+
+    if (weight != m_KWeight) {
+        cout << "Consistency Error!: weight incorrect -> should be " << weight << ", is " << m_KWeight << endl << flush;
+        bConsistent = false;
+    }
+
+    // check all-neighbors and all-but-one-neighbors
+    for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
+
+        bool const bDebug(false);
+////        bool const bDebug(vertex == 18);
+        size_t neighborCount(0);
+        for (int const neighbor : m_vAdjacencyArray[vertex]) {
+            if (m_K.Contains(neighbor)) neighborCount++;
+        }
+
+        if (bDebug) {
+            cout << vertex << ":";
+            for (int const neighbor : m_vAdjacencyArray[vertex]) {
+                cout << neighbor << " ";
+            }
+            cout << endl;
+
+            cout << 176 << ":";
+            for (int const neighbor : m_vAdjacencyArray[176]) {
+                cout << neighbor << " ";
+            }
+            cout << endl;
+
+            cout << " vertex " << vertex << " has " << neighborCount << " neighbors in independent set, and independent set has " << m_K.Size() << endl << flush;
+        }
+
+
+#ifndef ALLOW_OVERLAP
+        if (m_K.Contains(vertex) && m_NotAdjacentToZero.Contains(vertex)) {
+            cout << "Consistency Error!: vertex " << vertex << " is in K and C_0, but they are mutually exclusive (should only be in K?)" << endl << flush;
+        }
+
+        if (m_K.Contains(vertex) && m_NotAdjacentToOne.Contains(vertex)) {
+            cout << "Consistency Error!: vertex " << vertex << " is in K and C_1, but they are mutually exclusive (should only be in K?)" << endl << flush;
+        }
+
+        bool dontRunCountCheck(m_K.Contains(vertex));
+        if (dontRunCountCheck) continue;
+#endif // ALLOW_OVERLAP
+
+        if (neighborCount != m_K.Size() && m_NotAdjacentToZero.Contains(vertex)) {
+            cout << "Consistency Error!: vertex " << vertex << " is in C_0, but does not belong in C_0" << endl << flush;
+            bConsistent = false;
+        }
+
+        if (neighborCount == m_K.Size() && !m_NotAdjacentToZero.Contains(vertex)) {
+            cout << "Consistency Error!: vertex " << vertex << " is not in C_0, but belongs in C_0" << endl << flush;
+            bConsistent = false;
+        }
+
+        if (neighborCount != m_K.Size()-1 && m_NotAdjacentToOne.Contains(vertex)) {
+            cout << "Consistency Error!: vertex " << vertex << " is in C_1, but does not belong in C_1" << endl << flush;
+            bConsistent = false;
+        }
+
+        if (neighborCount == m_K.Size()-1 && !m_NotAdjacentToOne.Contains(vertex)) {
+            cout << "Consistency Error!: vertex " << vertex << " is not in C_1, but belongs in C_1" << endl << flush;
+            bConsistent = false;
+        }
+    }
+
+    return bConsistent;
+}
+
+void CliquePhasedLocalSearch::ForceIntoK(int const vertex, bool const updateU)
+{
+////                AddToKFromOne(vertex);
+
+////                size_t neighborsInK(0);
+////                for (int const neighbor : m_vAdjacencyArray[vertex]) {
+////                    if (m_K.Contains(neighbor)) {
+////                        neighborsInK++;
+////                    }
+////                }
+                // first restrict to neighborhood of $v$
+                vector<int> diffSet;
+                m_K.IntersectInPlace(m_vAdjacencyArray[vertex], diffSet);
+
+////                if (neighborsInK != m_K.Size()) {
+////                    cout << "Mismatch in independent set." << endl << flush;
+////                }
+////                if (diffSet.size() != 1) {
+////                    cout << "ERROR!: diff set should be one..." << endl << flush;
+////                }
+
+                if (updateU) {
+                for (int const diffVertex : diffSet) {
+                    m_U.Insert(diffVertex);
+                }
+                }
+
+                // then add v and update helper sets.
+                m_K.Insert(vertex);
+                InitializeFromK2();
+
 }
 

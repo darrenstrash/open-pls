@@ -23,7 +23,7 @@ public:
 
     int RandomSelect (ArraySet const &vertexSet) const;
     int PenaltySelect(ArraySet const &vertexSet) const;
-    virtual int DegreeSelect (ArraySet const &vertexSet) const;
+    virtual int DegreeSelect (ArraySet const &vertexSet) const = 0;
 
 ////    void RunPhase(int const iterations, SelectionPhase selectionPhase);
 
@@ -45,12 +45,12 @@ public:
     bool DiffIsEmpty(ArraySet const A, ArraySet const B) const;
 
     virtual void AddToK(int const vertex)   = 0;
-    void AddToKFromOne(int const vertex);
+////    void AddToKFromOne(int const vertex);
 
     virtual void InitializeFromK()  = 0;
     virtual void InitializeFromK2() = 0;
 
-    bool IsConsistent() const;
+    virtual bool IsConsistent() const = 0;
 
     void SetTimeOutInMilliseconds(size_t const timeout);
     void   SetTargetWeight(size_t const targetWeight);
@@ -67,6 +67,8 @@ public:
     double GetTimeoutInSeconds() const;
     size_t GetMaxSelections() const { return m_uMaxSelections; }
     size_t GetPenaltyDelay() const;
+
+    virtual void ForceIntoK(int const vertex, bool const updateU) = 0;
 
 protected:
     std::string m_sName;
