@@ -15,6 +15,7 @@ class PhasedLocalSearch : public Algorithm
 {
 public:
     PhasedLocalSearch(std::vector<std::vector<int>> const &vAdjacencyArray, std::vector<double> const &vVertexWeights);
+    virtual ~PhasedLocalSearch() {}
 
     void Perturb();
 
@@ -22,7 +23,7 @@ public:
 
     int RandomSelect (ArraySet const &vertexSet) const;
     int PenaltySelect(ArraySet const &vertexSet) const;
-    int DegreeSelect (ArraySet const &vertexSet) const;
+    virtual int DegreeSelect (ArraySet const &vertexSet) const;
 
 ////    void RunPhase(int const iterations, SelectionPhase selectionPhase);
 
@@ -43,10 +44,11 @@ public:
 
     bool DiffIsEmpty(ArraySet const A, ArraySet const B) const;
 
-    void AddToIndependentSet(int const vertex);
+    virtual void AddToK(int const vertex)   = 0;
+    void AddToKFromOne(int const vertex);
 
-    void InitializeFromIndependentSet();
-    void InitializeFromIndependentSet2();
+    virtual void InitializeFromK()  = 0;
+    virtual void InitializeFromK2() = 0;
 
     bool IsConsistent() const;
 
@@ -86,9 +88,9 @@ protected:
     size_t                               m_uSelections;
 
 // Sets
-    ArraySet                             m_IndependentSet;
-    ArraySet                             m_RandomIndependentSet;
-    ArraySet                             m_DegreeIndependentSet;
+    ArraySet                             m_K;
+    ArraySet                             m_RandomK;
+    ArraySet                             m_DegreeK;
     ArraySet                             m_U;
     ArraySet                             m_NotAdjacentToOne;
     ArraySet                             m_NotAdjacentToZero;
@@ -99,7 +101,7 @@ protected:
 
 // Progress Tracking
     enum SelectionPhase                  m_SelectionPhase;
-    size_t                               m_IndependentSetWeight;
+    size_t                               m_KWeight;
     size_t                               m_uBestWeight;
     size_t                               m_uBestSize;
     clock_t                              m_TimeToReachBestWeight;

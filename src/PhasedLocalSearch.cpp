@@ -9,7 +9,7 @@
 #include <climits>
 
 ////#define ALLOW_OVERLAP
-////#define CHECK_CONSISTENCY
+#define CHECK_CONSISTENCY
 ////#define DEBUG
 
 using namespace std;
@@ -33,9 +33,9 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 , m_uSelections(0)
 
 // Sets
-, m_IndependentSet(vAdjacencyArray.size())
-, m_RandomIndependentSet(vAdjacencyArray.size()) // for saving state of random phase
-, m_DegreeIndependentSet(vAdjacencyArray.size()) // for saving state of degree phase
+, m_K(vAdjacencyArray.size())
+, m_RandomK(vAdjacencyArray.size()) // for saving state of random phase
+, m_DegreeK(vAdjacencyArray.size()) // for saving state of degree phase
 , m_U(vAdjacencyArray.size())
 , m_NotAdjacentToOne(vAdjacencyArray.size())
 , m_NotAdjacentToZero(vAdjacencyArray.size())
@@ -46,7 +46,7 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 
 // Progress Tracking
 , m_SelectionPhase(SelectionPhase::RANDOM_SELECTION)
-, m_IndependentSetWeight(0.0)
+, m_KWeight(0.0)
 , m_uBestWeight(0)
 , m_uBestSize(0)
 , m_StartTime(0)
@@ -70,26 +70,26 @@ void PhasedLocalSearch::Perturb()
 
     // Set $K$ to contain only random vertex.
     if (m_SelectionPhase == SelectionPhase::PENALTY_SELECTION) {
-        m_IndependentSet.Clear();
-        m_IndependentSet.Insert(randomVertex);
-        InitializeFromIndependentSet2();
+        m_K.Clear();
+        m_K.Insert(randomVertex);
+        InitializeFromK2();
         return;
     }
 
     // Add random vertex to $K$, remove non-neighbors from $K$.
-    m_IndependentSet.IntersectInPlace(m_vAdjacencyArray[randomVertex]);
-    m_IndependentSet.Insert(randomVertex);
-    InitializeFromIndependentSet2();
+    m_K.IntersectInPlace(m_vAdjacencyArray[randomVertex]);
+    m_K.Insert(randomVertex);
+    InitializeFromK2();
 }
 
 void PhasedLocalSearch::UpdatePenalties()
 {
-    for (int const vertex : m_IndependentSet) {
+    for (int const vertex : m_K) {
         m_vVertexPenalties[vertex]++;
     }
 
     if (m_uPenaltyDelay > m_uIterationsSinceLastPenaltyUpdate) {
-////        for (int const vertex : m_IndependentSet) {
+////        for (int const vertex : m_K) {
 ////            m_vVertexPenalties[vertex]++;
 ////        }
 
@@ -113,7 +113,7 @@ void PhasedLocalSearch::UpdatePenalties()
     // All items in clique have penalty increased by one
     // All others have penalty decreased by one.
     for (size_t vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
-////        if (m_IndependentSet.Contains(vertex)) {
+////        if (m_K.Contains(vertex)) {
 ////            m_vVertexPenalties[vertex]++;
 ////        } else {
             if (m_vVertexPenalties[vertex] > 0) {
@@ -125,7 +125,7 @@ void PhasedLocalSearch::UpdatePenalties()
         }
     }
 
-////    for (int const independentVertex : m_IndependentSet) {
+////    for (int const independentVertex : m_K) {
 ////        m_vVertexPenalties[independentVertex]++;
 ////    }
 
@@ -276,65 +276,85 @@ bool PhasedLocalSearch::DiffIsEmpty(ArraySet const A, ArraySet const B) const
     return (uIntersectionCount == A.Size());
 }
 
-void PhasedLocalSearch::AddToIndependentSet(int const vertex)
+
+// TODO/DS: finish and test. Not currently working, some vertices on in C_1
+// that shouldn't be there.
+void PhasedLocalSearch::AddToKFromOne(int const vertex)
 {
 #ifdef DEBUG
     cout << "Adding " << vertex << " to $K$" << endl << flush;
 #endif // DEBUG
-    if (m_IndependentSet.Contains(vertex)) return;
 
-    m_IndependentSet.Insert(vertex);
-#ifndef ALLOW_OVERLAP
-    // Should they be mutually exclusive from $K$?
+    // first restrict to neighborhood of $v$
+    vector<int> removedSet;
+    m_K.IntersectInPlace(m_vAdjacencyArray[vertex], removedSet);
+    assert (removedSet.size() == 1);
+    int const removedVertex(removedSet[0]);
     m_NotAdjacentToOne.Remove(vertex);
+    m_K.Insert(vertex);
+    m_U.Insert(removedVertex);
 
-    // definitely mutually exclusive, by definition
-    m_NotAdjacentToZero.Remove(vertex);
-#endif // ALLOW_OVERLAP
+    // removedVertex is vertex's only neighbor not in K
+    // we remove removedVertex and add vertex.
 
-    // were already neighbors of $K$, now must be neighbors of vertex too
-    vector<int> zeroDiffVertices;
-    m_NotAdjacentToZero.IntersectInPlace(m_vAdjacencyArray[vertex], zeroDiffVertices);
+    vector<int> diffOne;
+    // if neighbor of removed vertex, and in $C_1$, then still in C_1
+    m_NotAdjacentToOne.IntersectInPlace(m_vAdjacencyArray[removedVertex], diffOne);
 
-    // if previously adjacent to all but one, and neighbor of newly added vertex
-    // then still adjacent to all but one.
-    // TODO/DS: Remove?
-////    vector<int> oneDiffVertices;
-////    m_NotAdjacentToOne.IntersectInPlace(m_vAdjacencyArray[vertex], oneDiffVertices);
-    m_NotAdjacentToOne.IntersectInPlace(m_vAdjacencyArray[vertex]);
-    // TODO/DS: check that C_0\U is empty.
-    for (int const newVertex : zeroDiffVertices) {
-////        if (newVertex == 18) {
-////            cout << "Moving " << newVertex << " from C_0 to C_1" << endl << flush;
-////        }
-        m_NotAdjacentToOne.Insert(newVertex);
-        m_bCheckOne = m_bCheckOne || !m_U.Contains(newVertex); // if u\in C_1 \ U
+    // nonneighbors of removedVertex are neighbors of everyone else in K
+    for (int const vertexInDiff : diffOne) {
+        m_NotAdjacentToZero.Insert(vertexInDiff);
     }
 
-////    cout << "Eject from C_1:";
-////    for (int const vertex : oneDiffVertices) {
-////        cout << " " << vertex;
-////    }
-////    cout << endl;
-////
-    m_IndependentSetWeight += m_vVertexWeights[vertex];
+    vector<int> diffTwo;
+    // neighbors of vertex must be in C_0
+    m_NotAdjacentToZero.IntersectInPlace(m_vAdjacencyArray[vertex], diffTwo);
 
-#ifdef CHECK_CONSISTENCY
+    // non-neighbors are in C_1
+    for (int const vertexInDiff : diffTwo) {
+        m_NotAdjacentToOne.Insert(vertexInDiff);
+    }
+
+    // check neighbors of vertex, to see if they should be in C_1.
+    for (int const neighbor : m_vAdjacencyArray[vertex]) {
+#ifndef ALLOW_OVERLAP
+        if (m_K.Contains(neighbor)) continue;
+#endif //ALLOW_OVERLAP
+        // don't evaluate vertices that are already in C_1
+        if (m_NotAdjacentToOne.Contains(neighbor)) continue;
+
+        // test neighbor to see if it should be in C_1
+        size_t neighborCount(0);
+        for (int const nNeighbor : m_vAdjacencyArray[neighbor]) {
+            if (m_K.Contains(nNeighbor)) neighborCount++;
+        }
+
+        if (neighborCount == m_K.Size()-1) {
+            m_NotAdjacentToOne.Insert(neighbor);
+        }
+    }
+
+    ////TODO/DS: Update CheckZero and CheckOne
+    m_bCheckZero = !DiffIsEmpty(m_NotAdjacentToZero, m_U);
+    m_bCheckOne  = !DiffIsEmpty(m_NotAdjacentToOne,  m_U);
+
+////#ifdef CHECK_CONSISTENCY
     if (!IsConsistent()) {
         cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
     }
-#endif // CHECK_CONSISTENCY
+////#endif // CHECK_CONSISTENCY
 }
 
-void PhasedLocalSearch::InitializeFromIndependentSet()
+
+void PhasedLocalSearch::InitializeFromK()
 {
     //Empty items that dependent on independent set, so they can be initialized.
-    m_IndependentSetWeight = 0;
+    m_KWeight = 0;
     m_NotAdjacentToZero.Clear();
     m_NotAdjacentToOne.Clear();
 
-    for (int const vertex : m_IndependentSet) {
-        m_IndependentSetWeight += m_vVertexWeights[vertex];
+    for (int const vertex : m_K) {
+        m_KWeight += m_vVertexWeights[vertex];
     }
 
     m_bCheckZero = false;
@@ -344,19 +364,19 @@ void PhasedLocalSearch::InitializeFromIndependentSet()
     for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
         // C_0 and C_1 don't contain vertices from K
 #ifndef ALLOW_OVERLAP
-        if (m_IndependentSet.Contains(vertex)) continue;
+        if (m_K.Contains(vertex)) continue;
 #endif // ALLOW_OVERLAP
         size_t neighborCount(0);
         for (int const neighbor : m_vAdjacencyArray[vertex]) {
-            if (m_IndependentSet.Contains(neighbor)) neighborCount++;
+            if (m_K.Contains(neighbor)) neighborCount++;
         }
 
-        if (neighborCount == m_IndependentSet.Size()) {
+        if (neighborCount == m_K.Size()) {
             m_NotAdjacentToZero.Insert(vertex);
             m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
         }
 
-        if (neighborCount == m_IndependentSet.Size()-1) { 
+        if (neighborCount == m_K.Size()-1) { 
             m_NotAdjacentToOne.Insert(vertex);
             m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
         }
@@ -369,11 +389,11 @@ void PhasedLocalSearch::InitializeFromIndependentSet()
 #endif // CHECK_CONSISTENCY
 }
 
-void PhasedLocalSearch::InitializeFromIndependentSet2()
+void PhasedLocalSearch::InitializeFromK2()
 {
-    assert(!m_IndependentSet.Empty());
+    assert(!m_K.Empty());
     //Empty items that dependent on independent set, so they can be initialized.
-    m_IndependentSetWeight = 0;
+    m_KWeight = 0;
     m_ScratchSpace.Clear();
     m_NotAdjacentToZero.Clear();
     m_NotAdjacentToOne.Clear();
@@ -381,9 +401,10 @@ void PhasedLocalSearch::InitializeFromIndependentSet2()
     m_bCheckZero = false;
     m_bCheckOne  = false;
 
-    if (m_IndependentSet.Size() == 1) {
-        int const vertexInIndependentSet(*m_IndependentSet.begin());
-        for (int const neighbor : m_vAdjacencyArray[vertexInIndependentSet]) {
+    if (m_K.Size() == 1) {
+        int const vertexInK(*m_K.begin());
+        m_KWeight = m_vVertexWeights[vertexInK];
+        for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
             m_NotAdjacentToZero.Insert(neighbor);
             m_bCheckZero = m_bCheckZero || !m_U.Contains(neighbor);
         }
@@ -392,19 +413,19 @@ void PhasedLocalSearch::InitializeFromIndependentSet2()
             m_NotAdjacentToOne.Insert(vertex);
             m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
         }
-        m_NotAdjacentToOne.Remove(vertexInIndependentSet);
+        m_NotAdjacentToOne.Remove(vertexInK);
 
         return;
     }
 
     // update weights, follow neighbors, count them
     // insert into levels sets C_0 and C_1
-    for (int const vertex : m_IndependentSet) {
-        m_IndependentSetWeight += m_vVertexWeights[vertex];
+    for (int const vertex : m_K) {
+        m_KWeight += m_vVertexWeights[vertex];
 
         for (int const neighbor : m_vAdjacencyArray[vertex]) {
 #ifndef ALLOW_OVERLAP
-            if (m_IndependentSet.Contains(neighbor)) continue;
+            if (m_K.Contains(neighbor)) continue;
 #endif // ALLOW_OVERLAP
             m_ScratchSpace.Insert(neighbor);
             m_vScratchCounters[neighbor]++; 
@@ -413,10 +434,10 @@ void PhasedLocalSearch::InitializeFromIndependentSet2()
 
     for (int const vertex : m_ScratchSpace) {
         int const neighborCount(m_vScratchCounters[vertex]);
-        if (neighborCount == m_IndependentSet.Size()) {
+        if (neighborCount == m_K.Size()) {
             m_NotAdjacentToZero.Insert(vertex);
             m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
-        } else if (neighborCount == m_IndependentSet.Size()-1) { 
+        } else if (neighborCount == m_K.Size()-1) { 
             m_NotAdjacentToOne.Insert(vertex);
             m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
         }
@@ -441,21 +462,22 @@ bool PhasedLocalSearch::IsConsistent() const
     bool bConsistent(true);
     // check weight
     double weight(0.0);
-    for (int const vertex : m_IndependentSet) {
+    for (int const vertex : m_K) {
         weight += m_vVertexWeights[vertex];
         size_t neighborsInSet(0);
         for (int const neighbor : m_vAdjacencyArray[vertex]) {
-            if (m_IndependentSet.Contains(neighbor)) {
+            if (m_K.Contains(neighbor)) {
                 neighborsInSet++;
             }
         }
 
-        if (neighborsInSet != m_IndependentSet.Size()-1) {
-            cout << "Consistency Error!: vertex " << vertex << " has " << neighborsInSet << " neighbors in $K$, but should have " << m_IndependentSet.Size()-1 << endl << flush;
+        if (neighborsInSet != m_K.Size()-1) {
+            cout << "Consistency Error!: vertex " << vertex << " has " << neighborsInSet << " neighbors in $K$, but should have " << m_K.Size()-1 << endl << flush;
         }
     }
-    if (weight != m_IndependentSetWeight) {
-        cout << "Consistency Error!: weight incorrect -> should be " << weight << ", is " << m_IndependentSetWeight << endl << flush;
+
+    if (weight != m_KWeight) {
+        cout << "Consistency Error!: weight incorrect -> should be " << weight << ", is " << m_KWeight << endl << flush;
         bConsistent = false;
     }
 
@@ -466,7 +488,7 @@ bool PhasedLocalSearch::IsConsistent() const
 ////        bool const bDebug(vertex == 18);
         size_t neighborCount(0);
         for (int const neighbor : m_vAdjacencyArray[vertex]) {
-            if (m_IndependentSet.Contains(neighbor)) neighborCount++;
+            if (m_K.Contains(neighbor)) neighborCount++;
         }
 
         if (bDebug) {
@@ -482,39 +504,39 @@ bool PhasedLocalSearch::IsConsistent() const
             }
             cout << endl;
 
-            cout << " vertex " << vertex << " has " << neighborCount << " neighbors in independent set, and independent set has " << m_IndependentSet.Size() << endl << flush;
+            cout << " vertex " << vertex << " has " << neighborCount << " neighbors in independent set, and independent set has " << m_K.Size() << endl << flush;
         }
 
 
 #ifndef ALLOW_OVERLAP
-        if (m_IndependentSet.Contains(vertex) && m_NotAdjacentToZero.Contains(vertex)) {
+        if (m_K.Contains(vertex) && m_NotAdjacentToZero.Contains(vertex)) {
             cout << "Consistency Error!: vertex " << vertex << " is in K and C_0, but they are mutually exclusive (should only be in K?)" << endl << flush;
         }
 
-        if (m_IndependentSet.Contains(vertex) && m_NotAdjacentToOne.Contains(vertex)) {
+        if (m_K.Contains(vertex) && m_NotAdjacentToOne.Contains(vertex)) {
             cout << "Consistency Error!: vertex " << vertex << " is in K and C_1, but they are mutually exclusive (should only be in K?)" << endl << flush;
         }
 
-        bool dontRunCountCheck(m_IndependentSet.Contains(vertex));
+        bool dontRunCountCheck(m_K.Contains(vertex));
         if (dontRunCountCheck) continue;
 #endif // ALLOW_OVERLAP
 
-        if (neighborCount != m_IndependentSet.Size() && m_NotAdjacentToZero.Contains(vertex)) {
+        if (neighborCount != m_K.Size() && m_NotAdjacentToZero.Contains(vertex)) {
             cout << "Consistency Error!: vertex " << vertex << " is in C_0, but does not belong in C_0" << endl << flush;
             bConsistent = false;
         }
 
-        if (neighborCount == m_IndependentSet.Size() && !m_NotAdjacentToZero.Contains(vertex)) {
+        if (neighborCount == m_K.Size() && !m_NotAdjacentToZero.Contains(vertex)) {
             cout << "Consistency Error!: vertex " << vertex << " is not in C_0, but belongs in C_0" << endl << flush;
             bConsistent = false;
         }
 
-        if (neighborCount != m_IndependentSet.Size()-1 && m_NotAdjacentToOne.Contains(vertex)) {
+        if (neighborCount != m_K.Size()-1 && m_NotAdjacentToOne.Contains(vertex)) {
             cout << "Consistency Error!: vertex " << vertex << " is in C_1, but does not belong in C_1" << endl << flush;
             bConsistent = false;
         }
 
-        if (neighborCount == m_IndependentSet.Size()-1 && !m_NotAdjacentToOne.Contains(vertex)) {
+        if (neighborCount == m_K.Size()-1 && !m_NotAdjacentToOne.Contains(vertex)) {
             cout << "Consistency Error!: vertex " << vertex << " is not in C_1, but belongs in C_1" << endl << flush;
             bConsistent = false;
         }
@@ -525,19 +547,19 @@ bool PhasedLocalSearch::IsConsistent() const
 
 void PhasedLocalSearch::UpdateStatistics()
 {
-    if (m_IndependentSetWeight > m_uBestWeight) {
+    if (m_KWeight > m_uBestWeight) {
         m_TimeToReachBestWeight = clock() - m_StartTime;
         m_uSelectionsToBestWeight = m_uSelections;
-        m_uBestWeight = m_IndependentSetWeight;
+        m_uBestWeight = m_KWeight;
         if (!m_bQuiet)
-            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best MWIS weight=" << m_uBestWeight << " has size   " << m_IndependentSet.Size() << endl << flush;
+            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best MWIS weight=" << m_uBestWeight << " has size   " << m_K.Size() << endl << flush;
     }
 
-    if (m_IndependentSet.Size() > m_uBestSize) {
-        m_uBestSize = m_IndependentSet.Size();
+    if (m_K.Size() > m_uBestSize) {
+        m_uBestSize = m_K.Size();
         ////                    cout << "Best MWIS Size=" << m_uBestSize << endl << flush;
         if (!m_bQuiet)
-            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best WIS size   =" << m_uBestWeight << " has weight " << m_IndependentSetWeight << endl << flush;
+            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best WIS size   =" << m_uBestWeight << " has weight " << m_KWeight << endl << flush;
     }
 }
 
@@ -556,6 +578,7 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
 ////        while ((!m_NotAdjacentToZero.Empty() || !DiffIsEmpty(m_NotAdjacentToOne, m_U)) && !bNoSelectionWasMade) {
 ////        while (((!m_NotAdjacentToZero.Empty() && m_bCheckZero) || (!m_NotAdjacentToOne.Empty() && m_bCheckOne)) && !bNoSelectionWasMade) {
         while ((!m_NotAdjacentToZero.Empty() || (!m_NotAdjacentToOne.Empty() && m_bCheckOne)) && !bNoSelectionWasMade) {
+////        while (!m_NotAdjacentToZero.Empty() || (!m_NotAdjacentToOne.Empty() && m_bCheckOne)) {
 #ifdef DEBUG
             bool const bDiffNotEmpty2(!DiffIsEmpty(m_NotAdjacentToOne, m_U));
             bool const bNewDiffNotEmpty2(!m_NotAdjacentToOne.Empty() && m_bCheckOne);
@@ -592,17 +615,17 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
 #ifdef DEBUG
                 cout << "Selected vertex " << vertex << " from C_0" << endl << flush;
 #endif // DEBUG
-                AddToIndependentSet(vertex);
+                AddToK(vertex);
                 m_uSelections++;
 
-                // done! independent set weight reached target
                 m_U.Clear();
                 m_bCheckZero = true;
                 m_bCheckOne  = true;
             }
 
             UpdateStatistics();
-            if (m_IndependentSetWeight == m_uTargetWeight) {
+            // done! independent set weight reached target
+            if (m_KWeight == m_uTargetWeight) {
                 return true;
             }
 
@@ -626,27 +649,49 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
                 cout << "Selected vertex " << vertex << " from C_1 \\ U" << endl << flush;
 #endif // DEBUG
 
+////                AddToKFromOne(vertex);
+
+////                size_t neighborsInK(0);
+                for (int const neighbor : m_vAdjacencyArray[vertex]) {
+////                    if (m_K.Contains(neighbor)) {
+////                        neighborsInK++;
+////                    }
+                }
                 // first restrict to neighborhood of $v$
                 vector<int> diffSet;
-                m_IndependentSet.IntersectInPlace(m_vAdjacencyArray[vertex], diffSet);
+                m_K.IntersectInPlace(m_vAdjacencyArray[vertex], diffSet);
+
+////                if (neighborsInK != m_K.Size()) {
+////                    cout << "Mismatch in independent set." << endl << flush;
+////                }
+////                if (diffSet.size() != 1) {
+////                    cout << "ERROR!: diff set should be one..." << endl << flush;
+////                }
 
                 for (int const diffVertex : diffSet) {
                     m_U.Insert(diffVertex);
                 }
 
                 // then add v and update helper sets.
-                m_IndependentSet.Insert(vertex);
-                InitializeFromIndependentSet2();
+                m_K.Insert(vertex);
+                InitializeFromK2();
 
                 m_uSelections++;
             }
+
+////            if (bNoSelectionWasMade) {
+////                cout << "ERROR!: No selection was made" << endl << flush;
+////            }
         }
+
         uIterations--; // unused in algorithm?
         UpdatePenalties();
         Perturb();
-////        m_U.Clear();
-////        m_bCheckZero = true;
-////        m_bCheckOne = true;
+
+        // only track vertices added to clique during current iteration
+        m_U.Clear();
+        m_bCheckZero = true;
+        m_bCheckOne = true;
     }
 
     return false;
@@ -667,15 +712,15 @@ bool PhasedLocalSearch::Run()
 
     // initialize independent set
     int const randomVertex(rand()%m_vAdjacencyArray.size());
-    AddToIndependentSet(randomVertex);
-    m_RandomIndependentSet.Insert(randomVertex);
-    m_DegreeIndependentSet.Insert(randomVertex);
+    AddToK(randomVertex);
+    m_RandomK.Insert(randomVertex);
+    m_DegreeK.Insert(randomVertex);
     m_bCheckZero = true;
 
     bool foundSolution(false);
     while (m_uSelections < m_uMaxSelections) {
         foundSolution = Phase(50,  SelectionPhase::RANDOM_SELECTION);
-        m_RandomIndependentSet = m_IndependentSet;
+        m_RandomK = m_K;
         if (foundSolution) return true;
         if (clock() - m_StartTime > m_TimeOut) {
             return false;
@@ -689,8 +734,8 @@ bool PhasedLocalSearch::Run()
         }
 
         // degree phase starts where previous degree phase left off.
-        m_IndependentSet = m_DegreeIndependentSet;
-        InitializeFromIndependentSet2();
+        m_K = m_DegreeK;
+        InitializeFromK2();
 
         foundSolution = Phase(100, SelectionPhase::DEGREE_SELECTION);
         if (foundSolution) return true;
@@ -698,11 +743,11 @@ bool PhasedLocalSearch::Run()
             return false;
         }
 
-        m_DegreeIndependentSet = m_IndependentSet;
+        m_DegreeK = m_K;
 
         // random phase begins where random phase left off.
-        m_IndependentSet = m_RandomIndependentSet;
-        InitializeFromIndependentSet2();
+        m_K = m_RandomK;
+        InitializeFromK2();
     }
 
     return false;
