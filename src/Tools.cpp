@@ -123,7 +123,7 @@ vector<list<int>> readInGraphAdjListEdgesPerLine(int &n, int &m, string const &f
     
     vector<list<int>> adjList(n);
 
-    int u, v; // endvertices, to read edges.
+    int u(-1);
     int i = 0;
     while (i < n) {
         if (!instream.good()  || instream.eof()) {
@@ -140,11 +140,12 @@ vector<list<int>> readInGraphAdjListEdgesPerLine(int &n, int &m, string const &f
 ////if (debug)        cout << "Read     Line: " << line << endl << flush;
 ////if (debug)        cout << "Actually Read: ";
         while (!line.empty() && strm.good() && !strm.eof()) {
+            int v(-1);
             strm >> v;
             ////if (!strm.good()) break;
 ////if (debug)            cout << v << " ";
             v--;
-
+////            cout << "(u,v)=" << u << "," << v << endl << flush;
             assert(u < n && u > -1);
             assert(v < n && v > -1);
             if (u==v) {
@@ -153,12 +154,14 @@ vector<list<int>> readInGraphAdjListEdgesPerLine(int &n, int &m, string const &f
             }
 
             adjList[u].push_back(v);
+////            cout << "pushed back..." << endl << flush;
         }
 ////if (debug)        cout << endl << flush;
 
         i++;
     }
 
+////    cout << "Done reading file..." << endl << flush;
 #ifdef DEBUG
     printArrayOfLinkedLists(adjList, n);
 #endif

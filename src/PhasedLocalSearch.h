@@ -53,11 +53,11 @@ public:
     virtual bool IsConsistent() const = 0;
 
     void SetTimeOutInMilliseconds(size_t const timeout);
-    void   SetTargetWeight(size_t const targetWeight);
-    size_t GetTargetWeight() { return m_uTargetWeight; }
+    void   SetTargetWeight(double const targetWeight);
+    double GetTargetWeight() { return m_dTargetWeight; }
 
     size_t GetSelections() const { return m_uSelections; }
-    size_t GetBestWeight() const { return m_uBestWeight; }
+    double GetBestWeight() const { return m_dBestWeight; }
 
     clock_t GetTimeToBestWeight() const { return m_TimeToReachBestWeight; }
     size_t  GetSelectionsToBestWeight() const { return m_uSelectionsToBestWeight; }
@@ -85,7 +85,7 @@ protected:
     size_t                               m_uIterationsSinceLastPenaltyUpdate;
 
     size_t                               m_uTargetSize;
-    size_t                               m_uTargetWeight;
+    double                               m_dTargetWeight;
     size_t                               m_uMaxSelections;
     size_t                               m_uSelections;
 
@@ -103,8 +103,8 @@ protected:
 
 // Progress Tracking
     enum SelectionPhase                  m_SelectionPhase;
-    size_t                               m_KWeight;
-    size_t                               m_uBestWeight;
+    double                               m_dKWeight;
+    double                               m_dBestWeight;
     size_t                               m_uBestSize;
     clock_t                              m_TimeToReachBestWeight;
     size_t                               m_uSelectionsToBestWeight;

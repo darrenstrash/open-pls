@@ -10,8 +10,11 @@
 #include <list>
 #include <string>
 #include <vector>
-#include <cassert>
+#include <fstream>
+#include <sstream>
 #include <iostream>
+
+#include <cassert>
 #include <cstdlib>
 #include <ctime>
 #include <climits>
@@ -88,6 +91,39 @@ string basename(string const &fileName)
     return sBaseName;
 }
 
+bool ReadWeights(string const &inputFileName, vector<double> &vVertexWeights)
+{
+    string const weightFileName(inputFileName + ".weights");
+    ifstream instream(weightFileName.c_str());
+
+    int vertex(-1);
+    double weight(-1.0); // endvertices, to read edges.
+    size_t uNumRead(0);
+    while (instream.good() && !instream.eof()) {
+        string line;
+        std::getline(instream, line);
+        stringstream strm(line);
+////        bool debug(true); ////u == 40656 || u == 40653);
+////if (debug)        cout << (u+1) << " : " << endl << flush;
+////        if (debug)        cout << "Read     Line: " << line << endl << flush;
+////if (debug)        cout << "Actually Read: ";
+        if (!line.empty() && strm.good() && !strm.eof()) {
+            strm >> vertex >> weight;
+            assert(vertex > -1 && vertex < vVertexWeights.size());
+            vVertexWeights[vertex] = weight;
+////            if (debug)        cout << "Inserted     : " << vertex << "->" << weight<< endl << flush;
+            uNumRead++;
+////if (debug)        cout << "Actually Read: ";
+        }
+    }
+
+#ifdef DEBUG
+    printArrayOfLinkedLists(adjList, n);
+#endif
+
+    return (uNumRead == vVertexWeights.size());
+}
+
 int main(int argc, char** argv)
 {
     int failureCode(0);
@@ -100,6 +136,7 @@ int main(int argc, char** argv)
     bool   const bOutputLatex(mapCommandLineArgs.find("--latex") != mapCommandLineArgs.end());
     bool   const bOutputTable(mapCommandLineArgs.find("--table") != mapCommandLineArgs.end());
     bool   const bWeighted(mapCommandLineArgs.find("--weighted") != mapCommandLineArgs.end());
+    bool   const bUseWeightFile(mapCommandLineArgs.find("--use-weight-file") != mapCommandLineArgs.end());
     string const inputFile((mapCommandLineArgs.find("--input-file") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--input-file"] : "");
     string const sAlgorithm((mapCommandLineArgs.find("--algorithm") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--algorithm"] : "clique");
     string const sExperimentName((mapCommandLineArgs.find("--experiment") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--experiment"] : "");
@@ -185,8 +222,14 @@ int main(int argc, char** argv)
     vector<double> vVertexWeights(adjacencyArray.size(),1);
 
     if (bWeighted) {
-        for (size_t i = 0; i < vVertexWeights.size(); ++i) {
-            vVertexWeights[i] = (i+1)%200 + 1;
+        if (bUseWeightFile) {
+            if (!ReadWeights(inputFile, vVertexWeights)) {
+                cout << "ERROR! Did not read all vertices in .weights file" << endl << flush;
+            }
+        } else {
+            for (size_t i = 0; i < vVertexWeights.size(); ++i) {
+                vVertexWeights[i] = (i+1)%200 + 1;
+            }
         }
     }
 

@@ -28,7 +28,7 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 
 , m_uTargetSize(vAdjacencyArray.size())
 // initial weight, TODO/DS: change.
-, m_uTargetWeight(ULONG_MAX)
+, m_dTargetWeight(ULONG_MAX)
 , m_uMaxSelections(100000000)
 , m_uSelections(0)
 
@@ -46,8 +46,8 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 
 // Progress Tracking
 , m_SelectionPhase(SelectionPhase::RANDOM_SELECTION)
-, m_KWeight(0.0)
-, m_uBestWeight(0)
+, m_dKWeight(0.0)
+, m_dBestWeight(0.0)
 , m_uBestSize(0)
 , m_StartTime(0)
 , m_TimeToReachBestWeight(0)
@@ -328,12 +328,12 @@ bool PhasedLocalSearch::DiffIsEmpty(ArraySet const A, ArraySet const B) const
 void PhasedLocalSearch::InitializeFromK()
 {
     //Empty items that dependent on independent set, so they can be initialized.
-    m_KWeight = 0;
+    m_dKWeight = 0;
     m_NotAdjacentToZero.Clear();
     m_NotAdjacentToOne.Clear();
 
     for (int const vertex : m_K) {
-        m_KWeight += m_vVertexWeights[vertex];
+        m_dKWeight += m_vVertexWeights[vertex];
     }
 
     m_bCheckZero = false;
@@ -372,7 +372,7 @@ void PhasedLocalSearch::InitializeFromK2()
 {
     assert(!m_K.Empty());
     //Empty items that dependent on independent set, so they can be initialized.
-    m_KWeight = 0;
+    m_dKWeight = 0;
     m_ScratchSpace.Clear();
     m_NotAdjacentToZero.Clear();
     m_NotAdjacentToOne.Clear();
@@ -382,7 +382,7 @@ void PhasedLocalSearch::InitializeFromK2()
 
     if (m_K.Size() == 1) {
         int const vertexInK(*m_K.begin());
-        m_KWeight = m_vVertexWeights[vertexInK];
+        m_dKWeight = m_vVertexWeights[vertexInK];
         for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
             m_NotAdjacentToZero.Insert(neighbor);
             m_bCheckZero = m_bCheckZero || !m_U.Contains(neighbor);
@@ -401,7 +401,7 @@ void PhasedLocalSearch::InitializeFromK2()
     // update weights, follow neighbors, count them
     // insert into levels sets C_0 and C_1
     for (int const vertex : m_K) {
-        m_KWeight += m_vVertexWeights[vertex];
+        m_dKWeight += m_vVertexWeights[vertex];
 
         for (int const neighbor : m_vAdjacencyArray[vertex]) {
 #ifndef ALLOW_OVERLAP
@@ -437,19 +437,19 @@ void PhasedLocalSearch::InitializeFromK2()
 
 void PhasedLocalSearch::UpdateStatistics()
 {
-    if (m_KWeight > m_uBestWeight) {
+    if (m_dKWeight > m_dBestWeight) {
         m_TimeToReachBestWeight = clock() - m_StartTime;
         m_uSelectionsToBestWeight = m_uSelections;
-        m_uBestWeight = m_KWeight;
+        m_dBestWeight = m_dKWeight;
         if (!m_bQuiet)
-            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best MWIS weight=" << m_uBestWeight << " has size   " << m_K.Size() << endl << flush;
+            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best MWIS weight=" << m_dBestWeight << " has size   " << m_K.Size() << endl << flush;
     }
 
     if (m_K.Size() > m_uBestSize) {
         m_uBestSize = m_K.Size();
         ////                    cout << "Best MWIS Size=" << m_uBestSize << endl << flush;
         if (!m_bQuiet)
-            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best WIS size   =" << m_uBestWeight << " has weight " << m_KWeight << endl << flush;
+            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best WIS size   =" << m_dBestWeight << " has weight " << m_dKWeight << endl << flush;
     }
 }
 
@@ -515,7 +515,7 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
 
             UpdateStatistics();
             // done! independent set weight reached target
-            if (m_KWeight == m_uTargetWeight) {
+            if (m_dKWeight == m_dTargetWeight) {
                 return true;
             }
 
@@ -633,9 +633,9 @@ void PhasedLocalSearch::SetTimeOutInMilliseconds(size_t const timeout)
     m_TimeOut = ((double)(timeout)/1000.0 * CLOCKS_PER_SEC);
 }
 
-void PhasedLocalSearch::SetTargetWeight(size_t const targetWeight)
+void PhasedLocalSearch::SetTargetWeight(double const targetWeight)
 {
-    m_uTargetWeight = targetWeight;
+    m_dTargetWeight = targetWeight;
 }
 
 double PhasedLocalSearch::GetTimeoutInSeconds() const

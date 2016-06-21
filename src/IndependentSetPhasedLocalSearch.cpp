@@ -78,7 +78,7 @@ void IndependentSetPhasedLocalSearch::AddToK(int const vertex)
 ////    }
 ////    cout << endl;
 ////
-    m_KWeight += m_vVertexWeights[vertex];
+    m_dKWeight += m_vVertexWeights[vertex];
 
 #ifdef CHECK_CONSISTENCY
     if (!IsConsistent()) {
@@ -92,12 +92,12 @@ void IndependentSetPhasedLocalSearch::AddToK(int const vertex)
 void IndependentSetPhasedLocalSearch::InitializeFromK()
 {
     //Empty items that dependent on independent set, so they can be initialized.
-    m_KWeight = 0;
+    m_dKWeight = 0;
     m_NotAdjacentToZero.Clear();
     m_NotAdjacentToOne.Clear();
 
     for (int const vertex : m_K) {
-        m_KWeight += m_vVertexWeights[vertex];
+        m_dKWeight += m_vVertexWeights[vertex];
     }
 
     m_bCheckZero = false;
@@ -112,6 +112,7 @@ void IndependentSetPhasedLocalSearch::InitializeFromK()
         size_t neighborCount(0);
         for (int const neighbor : m_vAdjacencyArray[vertex]) {
             if (m_K.Contains(neighbor)) neighborCount++;
+            if (neighborCount > 1) break;
         }
 
         if (neighborCount == 0) {
@@ -136,11 +137,38 @@ void IndependentSetPhasedLocalSearch::InitializeFromK()
 // of over all vertices.
 void IndependentSetPhasedLocalSearch::InitializeFromK2()
 {
-    InitializeFromK();
+    if (m_K.Size() != 1) {
+        InitializeFromK();
+        return;
+    }
+
+    m_dKWeight = 0;
+    m_ScratchSpace.Clear();
+    m_NotAdjacentToZero.Clear();
+    m_NotAdjacentToOne.Clear();
+
+    m_bCheckZero = false;
+    m_bCheckOne  = false;
+
+    int const vertexInK(*m_K.begin());
+    m_dKWeight = m_vVertexWeights[vertexInK];
+    // all neighbors of vertex are in C_1
+    for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
+        m_NotAdjacentToOne.Insert(neighbor);
+        m_bCheckOne = m_bCheckOne || !m_U.Contains(neighbor);
+    }
+
+    // all others are in C_0
+    for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
+        if (m_NotAdjacentToOne.Contains(vertex)) continue;
+        if (vertexInK==vertex) continue;
+        m_NotAdjacentToZero.Insert(vertex);
+        m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
+    }
 }
 ////    assert(!m_K.Empty());
 ////    //Empty items that dependent on independent set, so they can be initialized.
-////    m_KWeight = 0;
+////    m_dKWeight = 0;
 ////    m_ScratchSpace.Clear();
 ////    m_NotAdjacentToZero.Clear();
 ////    m_NotAdjacentToOne.Clear();
@@ -150,7 +178,7 @@ void IndependentSetPhasedLocalSearch::InitializeFromK2()
 ////
 ////    if (m_K.Size() == 1) {
 ////        int const vertexInK(*m_K.begin());
-////        m_KWeight = m_vVertexWeights[vertexInK];
+////        m_dKWeight = m_vVertexWeights[vertexInK];
 ////        // all neighbors of vertex are in C_1
 ////        for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
 ////            m_NotAdjacentToOne.Insert(neighbor);
@@ -171,7 +199,7 @@ void IndependentSetPhasedLocalSearch::InitializeFromK2()
 ////    // update weights, follow neighbors, count them
 ////    // insert into levels sets C_0 and C_1
 ////    for (int const vertex : m_K) {
-////        m_KWeight += m_vVertexWeights[vertex];
+////        m_dKWeight += m_vVertexWeights[vertex];
 ////
 ////        for (int const neighbor : m_vAdjacencyArray[vertex]) {
 ////#ifndef ALLOW_OVERLAP
@@ -227,8 +255,8 @@ bool IndependentSetPhasedLocalSearch::IsConsistent() const
         }
     }
 
-    if (weight != m_KWeight) {
-        cout << "Consistency Error!: weight incorrect -> should be " << weight << ", is " << m_KWeight << endl << flush;
+    if (weight != m_dKWeight) {
+        cout << "Consistency Error!: weight incorrect -> should be " << weight << ", is " << m_dKWeight << endl << flush;
         bConsistent = false;
     }
 
@@ -298,34 +326,33 @@ bool IndependentSetPhasedLocalSearch::IsConsistent() const
 
 void IndependentSetPhasedLocalSearch::ForceIntoK(int const vertex, bool const updateU)
 {
-////                AddToKFromOne(vertex);
+////    AddToKFromOne(vertex);
 
-////                size_t neighborsInK(0);
-////                for (int const neighbor : m_vAdjacencyArray[vertex]) {
-////                    if (m_K.Contains(neighbor)) {
-////                        neighborsInK++;
-////                    }
-////                }
-                // first restrict to neighborhood of $v$
-                vector<int> intersectSet;
-                m_K.DiffInPlace(m_vAdjacencyArray[vertex], intersectSet);
+////    size_t neighborsInK(0);
+////    for (int const neighbor : m_vAdjacencyArray[vertex]) {
+////        if (m_K.Contains(neighbor)) {
+////            neighborsInK++;
+////        }
+////    }
+    // first restrict to neighborhood of $v$
+    vector<int> intersectSet;
+    m_K.DiffInPlace(m_vAdjacencyArray[vertex], intersectSet);
 
-////                if (neighborsInK != m_K.Size()) {
-////                    cout << "Mismatch in independent set." << endl << flush;
-////                }
-////                if (diffSet.size() != 1) {
-////                    cout << "ERROR!: diff set should be one..." << endl << flush;
-////                }
+////    if (neighborsInK != m_K.Size()) {
+////        cout << "Mismatch in independent set." << endl << flush;
+////    }
+////    if (diffSet.size() != 1) {
+////        cout << "ERROR!: diff set should be one..." << endl << flush;
+////    }
 
-                if (updateU) {
-                    for (int const intersectVertex : intersectSet) {
-                        m_U.Insert(intersectVertex);
-                    }
-                }
+    if (updateU) {
+        for (int const intersectVertex : intersectSet) {
+            m_U.Insert(intersectVertex);
+        }
+    }
 
-                // then add v and update helper sets.
-                m_K.Insert(vertex);
-                InitializeFromK2();
-
+    // then add v and update helper sets.
+    m_K.Insert(vertex);
+    InitializeFromK2();
 }
 
