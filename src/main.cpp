@@ -91,6 +91,39 @@ string basename(string const &fileName)
     return sBaseName;
 }
 
+bool ReadSolution(string const &solutionFile, vector<bool> &vSolution)
+{
+    ifstream instream(solutionFile.c_str());
+
+    int vertex(-1);
+    double weight(-1.0); // endvertices, to read edges.
+    size_t uNumRead(0);
+    while (instream.good() && !instream.eof()) {
+        string line;
+        std::getline(instream, line);
+        stringstream strm(line);
+////        bool debug(true); ////u == 40656 || u == 40653);
+////if (debug)        cout << (u+1) << " : " << endl << flush;
+////        if (debug)        cout << "Read     Line: " << line << endl << flush;
+////if (debug)        cout << "Actually Read: ";
+        if (!line.empty() && strm.good() && !strm.eof()) {
+            strm >> vertex;
+            assert(vertex > -1 && vertex < vSolution.size());
+            vSolution[vertex] = true;
+////            if (debug)        cout << "Inserted     : " << vertex << "->" << weight<< endl << flush;
+            uNumRead++;
+////if (debug)        cout << "Actually Read: ";
+        }
+    }
+
+#ifdef DEBUG
+    printArrayOfLinkedLists(adjList, n);
+#endif
+
+    return true;
+}
+
+
 bool ReadWeights(string const &inputFileName, vector<double> &vVertexWeights)
 {
     string const weightFileName(inputFileName + ".weights");
@@ -138,6 +171,7 @@ int main(int argc, char** argv)
     bool   const bWeighted(mapCommandLineArgs.find("--weighted") != mapCommandLineArgs.end());
     bool   const bUseWeightFile(mapCommandLineArgs.find("--use-weight-file") != mapCommandLineArgs.end());
     string const inputFile((mapCommandLineArgs.find("--input-file") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--input-file"] : "");
+    string const solutionFile((mapCommandLineArgs.find("--solution-file") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--solution-file"] : "");
     string const sAlgorithm((mapCommandLineArgs.find("--algorithm") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--algorithm"] : "clique");
     string const sExperimentName((mapCommandLineArgs.find("--experiment") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--experiment"] : "");
     bool   const bPrintHeader(mapCommandLineArgs.find("--header") != mapCommandLineArgs.end());
@@ -231,6 +265,24 @@ int main(int argc, char** argv)
                 vVertexWeights[i] = (i+1)%200 + 1;
             }
         }
+    }
+
+    if (!solutionFile.empty()) {
+        vector<bool> vSolution(adjacencyArray.size(), false);
+        ReadSolution(solutionFile, vSolution);
+        double dSolutionWeight(0.0);
+        for (size_t vertex = 0; vertex < vSolution.size(); ++vertex) {
+            if (!vSolution[vertex]) continue;
+            dSolutionWeight+=vVertexWeights[vertex];
+            for (int const neighbor : adjacencyArray[vertex]) {
+                if (vSolution[neighbor]) {
+                    cout << "Solution is not an independent set" << endl << flush;
+                    exit(1);
+                }
+            }
+        }
+        cout << "Solution is valid and has weight " << dSolutionWeight << endl << flush;
+        exit(0);
     }
 
     bool cliqueAlgorithm(true);

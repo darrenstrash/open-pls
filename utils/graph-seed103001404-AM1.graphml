@@ -1,0 +1,2750 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="key0" for="node" attr.name="id" attr.type="string" />
+  <key id="key1" for="node" attr.name="label" attr.type="string" />
+  <key id="key2" for="node" attr.name="origVisibility" attr.type="string" />
+  <key id="key3" for="node" attr.name="visibility" attr.type="string" />
+  <key id="key4" for="node" attr.name="weight" attr.type="string" />
+  <graph id="G" edgedefault="undirected" parse.nodeids="free" parse.edgeids="canonical" parse.order="nodesfirst">
+    <node id="n0">
+      <data key="key0">1670888224</data>
+      <data key="key1">ING DiBa Automat</data>
+      <data key="key2">[7510 / 7517]</data>
+      <data key="key3">[7510 / 7517]</data>
+      <data key="key4">7</data>
+    </node>
+    <node id="n1">
+      <data key="key0">1007094854</data>
+      <data key="key1">HypoVereinsbank</data>
+      <data key="key2">[7513 / 7527]</data>
+      <data key="key3">[7513 / 7527]</data>
+      <data key="key4">14</data>
+    </node>
+    <node id="n2">
+      <data key="key0">305051601</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7408 / 7420]</data>
+      <data key="key3">[7408 / 7420]</data>
+      <data key="key4">12</data>
+    </node>
+    <node id="n3">
+      <data key="key0">1007094923</data>
+      <data key="key1">Santander Bank</data>
+      <data key="key2">[7386 / 7423]</data>
+      <data key="key3">[7386 / 7423]</data>
+      <data key="key4">37</data>
+    </node>
+    <node id="n4">
+      <data key="key0">1670888224</data>
+      <data key="key1">ING DiBa Automat</data>
+      <data key="key2">[7381 / 7423]</data>
+      <data key="key3">[7381 / 7423]</data>
+      <data key="key4">42</data>
+    </node>
+    <node id="n5">
+      <data key="key0">1007094885</data>
+      <data key="key1">Südwestbank</data>
+      <data key="key2">[7336 / 7337]</data>
+      <data key="key3">[7336 / 7337]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n6">
+      <data key="key0">987655371</data>
+      <data key="key1">Sparda-Bank</data>
+      <data key="key2">[7336 / 7338]</data>
+      <data key="key3">[7336 / 7338]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n7">
+      <data key="key0">1868890990</data>
+      <data key="key1">Santander Consumer Bank</data>
+      <data key="key2">[7337 / 7338]</data>
+      <data key="key3">[7337 / 7338]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n8">
+      <data key="key0">21533394</data>
+      <data key="key1">Kongresszentrum PH2</data>
+      <data key="key2">[7333 / 7334]</data>
+      <data key="key3">[7333 / 7334]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n9">
+      <data key="key0">30029830</data>
+      <data key="key1">Volksbank</data>
+      <data key="key2">[7333 / 7335]</data>
+      <data key="key3">[7333 / 7335]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n10">
+      <data key="key0">30030251</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[7413 / 7419]</data>
+      <data key="key3">[7413 / 7419]</data>
+      <data key="key4">6</data>
+    </node>
+    <node id="n11">
+      <data key="key0">305051601</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7234 / 7250]</data>
+      <data key="key3">[7234 / 7250]</data>
+      <data key="key4">16</data>
+    </node>
+    <node id="n12">
+      <data key="key0">21533394</data>
+      <data key="key1">Kongresszentrum PH2</data>
+      <data key="key2">[7260 / 7262]</data>
+      <data key="key3">[7260 / 7262]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n13">
+      <data key="key0">30029830</data>
+      <data key="key1">Volksbank</data>
+      <data key="key2">[7246 / 7277]</data>
+      <data key="key3">[7246 / 7277]</data>
+      <data key="key4">31</data>
+    </node>
+    <node id="n14">
+      <data key="key0">1868890990</data>
+      <data key="key1">Santander Consumer Bank</data>
+      <data key="key2">[7235 / 7278]</data>
+      <data key="key3">[7235 / 7278]</data>
+      <data key="key4">43</data>
+    </node>
+    <node id="n15">
+      <data key="key0">996110499</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7494 / 7500]</data>
+      <data key="key3">[7494 / 7500]</data>
+      <data key="key4">6</data>
+    </node>
+    <node id="n16">
+      <data key="key0">32519022</data>
+      <data key="key1">Sparkasse Karlsruhe</data>
+      <data key="key2">[7499 / 7510]</data>
+      <data key="key3">[7499 / 7510]</data>
+      <data key="key4">11</data>
+    </node>
+    <node id="n17">
+      <data key="key0">32519022</data>
+      <data key="key1">Sparkasse Karlsruhe</data>
+      <data key="key2">[7457 / 7459]</data>
+      <data key="key3">[7457 / 7459]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n18">
+      <data key="key0">470342842</data>
+      <data key="key1">Magdeburger Haus</data>
+      <data key="key2">[7456 / 7464]</data>
+      <data key="key3">[7456 / 7464]</data>
+      <data key="key4">8</data>
+    </node>
+    <node id="n19">
+      <data key="key0">1007094854</data>
+      <data key="key1">HypoVereinsbank</data>
+      <data key="key2">[7471 / 7476]</data>
+      <data key="key3">[7471 / 7476]</data>
+      <data key="key4">5</data>
+    </node>
+    <node id="n20">
+      <data key="key0">1725394201</data>
+      <data key="key1">Parkhaus Ludwigsplatz</data>
+      <data key="key2">[7479 / 7490]</data>
+      <data key="key3">[7479 / 7490]</data>
+      <data key="key4">11</data>
+    </node>
+    <node id="n21">
+      <data key="key0">304956243</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7474 / 7485]</data>
+      <data key="key3">[7474 / 7485]</data>
+      <data key="key4">11</data>
+    </node>
+    <node id="n22">
+      <data key="key0">2315633987</data>
+      <data key="key1">ReiseBank</data>
+      <data key="key2">[7481 / 7498]</data>
+      <data key="key3">[7481 / 7498]</data>
+      <data key="key4">17</data>
+    </node>
+    <node id="n23">
+      <data key="key0">330848762</data>
+      <data key="key1">Akademiestraße</data>
+      <data key="key2">[7370 / 7425]</data>
+      <data key="key3">[7370 / 7425]</data>
+      <data key="key4">55</data>
+    </node>
+    <node id="n24">
+      <data key="key0">324584258</data>
+      <data key="key1">Deutsche Bundesbank Filiale</data>
+      <data key="key2">[7335 / 7435]</data>
+      <data key="key3">[7335 / 7435]</data>
+      <data key="key4">100</data>
+    </node>
+    <node id="n25">
+      <data key="key0">320238064</data>
+      <data key="key1">gebaka</data>
+      <data key="key2">[7339 / 7431]</data>
+      <data key="key3">[7339 / 7431]</data>
+      <data key="key4">92</data>
+    </node>
+    <node id="n26">
+      <data key="key0">1005101476</data>
+      <data key="key1">Hofgarten</data>
+      <data key="key2">[7338 / 7425]</data>
+      <data key="key3">[7338 / 7425]</data>
+      <data key="key4">87</data>
+    </node>
+    <node id="n27">
+      <data key="key0">258369600</data>
+      <data key="key1">Am ZKM</data>
+      <data key="key2">[7335 / 7427]</data>
+      <data key="key3">[7335 / 7427]</data>
+      <data key="key4">92</data>
+    </node>
+    <node id="n28">
+      <data key="key0">258369604</data>
+      <data key="key1">Filmpalast</data>
+      <data key="key2">[7334 / 7441]</data>
+      <data key="key3">[7334 / 7441]</data>
+      <data key="key4">107</data>
+    </node>
+    <node id="n29">
+      <data key="key0">987655371</data>
+      <data key="key1">Sparda-Bank</data>
+      <data key="key2">[7222 / 7335]</data>
+      <data key="key3">[7222 / 7335]</data>
+      <data key="key4">113</data>
+    </node>
+    <node id="n30">
+      <data key="key0">253395553</data>
+      <data key="key1">Evangelische Kreditgenossenschaft</data>
+      <data key="key2">[7227 / 7336]</data>
+      <data key="key3">[7227 / 7336]</data>
+      <data key="key4">109</data>
+    </node>
+    <node id="n31">
+      <data key="key0">330845736</data>
+      <data key="key1">Landesbibliothek</data>
+      <data key="key2">[7335 / 7336]</data>
+      <data key="key3">[7335 / 7336]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n32">
+      <data key="key0">1868890990</data>
+      <data key="key1">Santander Consumer Bank</data>
+      <data key="key2">[7333 / 7336]</data>
+      <data key="key3">[7333 / 7336]</data>
+      <data key="key4">3</data>
+    </node>
+    <node id="n33">
+      <data key="key0">330848762</data>
+      <data key="key1">Akademiestraße</data>
+      <data key="key2">[7223 / 7339]</data>
+      <data key="key3">[7223 / 7339]</data>
+      <data key="key4">116</data>
+    </node>
+    <node id="n34">
+      <data key="key0">1005101476</data>
+      <data key="key1">Hofgarten</data>
+      <data key="key2">[7209 / 7334]</data>
+      <data key="key3">[7209 / 7334]</data>
+      <data key="key4">125</data>
+    </node>
+    <node id="n35">
+      <data key="key0">320238064</data>
+      <data key="key1">gebaka</data>
+      <data key="key2">[7210 / 7335]</data>
+      <data key="key3">[7210 / 7335]</data>
+      <data key="key4">125</data>
+    </node>
+    <node id="n36">
+      <data key="key0">1725394201</data>
+      <data key="key1">Parkhaus Ludwigsplatz</data>
+      <data key="key2">[7216 / 7337]</data>
+      <data key="key3">[7216 / 7337]</data>
+      <data key="key4">121</data>
+    </node>
+    <node id="n37">
+      <data key="key0">30030251</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[7211 / 7337]</data>
+      <data key="key3">[7211 / 7337]</data>
+      <data key="key4">126</data>
+    </node>
+    <node id="n38">
+      <data key="key0">1007094854</data>
+      <data key="key1">HypoVereinsbank</data>
+      <data key="key2">[7211 / 7338]</data>
+      <data key="key3">[7211 / 7338]</data>
+      <data key="key4">127</data>
+    </node>
+    <node id="n39">
+      <data key="key0">1007094923</data>
+      <data key="key1">Santander Bank</data>
+      <data key="key2">[7207 / 7338]</data>
+      <data key="key3">[7207 / 7338]</data>
+      <data key="key4">131</data>
+    </node>
+    <node id="n40">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[7205 / 7338]</data>
+      <data key="key3">[7205 / 7338]</data>
+      <data key="key4">133</data>
+    </node>
+    <node id="n41">
+      <data key="key0">1670888224</data>
+      <data key="key1">ING DiBa Automat</data>
+      <data key="key2">[7202 / 7339]</data>
+      <data key="key3">[7202 / 7339]</data>
+      <data key="key4">137</data>
+    </node>
+    <node id="n42">
+      <data key="key0">26355248</data>
+      <data key="key1">OMV</data>
+      <data key="key2">[7219 / 7412]</data>
+      <data key="key3">[7219 / 7412]</data>
+      <data key="key4">193</data>
+    </node>
+    <node id="n43">
+      <data key="key0">30023755</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7214 / 7420]</data>
+      <data key="key3">[7214 / 7420]</data>
+      <data key="key4">206</data>
+    </node>
+    <node id="n44">
+      <data key="key0">1777375778</data>
+      <data key="key1">Post Galerie</data>
+      <data key="key2">[7200 / 7434]</data>
+      <data key="key3">[7200 / 7434]</data>
+      <data key="key4">234</data>
+    </node>
+    <node id="n45">
+      <data key="key0">304956243</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7214 / 7436]</data>
+      <data key="key3">[7214 / 7436]</data>
+      <data key="key4">222</data>
+    </node>
+    <node id="n46">
+      <data key="key0">996110499</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7211 / 7445]</data>
+      <data key="key3">[7211 / 7445]</data>
+      <data key="key4">234</data>
+    </node>
+    <node id="n47">
+      <data key="key0">32519022</data>
+      <data key="key1">Sparkasse Karlsruhe</data>
+      <data key="key2">[7202 / 7441]</data>
+      <data key="key3">[7202 / 7441]</data>
+      <data key="key4">239</data>
+    </node>
+    <node id="n48">
+      <data key="key0">2315633987</data>
+      <data key="key1">ReiseBank</data>
+      <data key="key2">[7204 / 7448]</data>
+      <data key="key3">[7204 / 7448]</data>
+      <data key="key4">244</data>
+    </node>
+    <node id="n49">
+      <data key="key0">1749651556</data>
+      <data key="key1">Stephanplatz</data>
+      <data key="key2">[7200 / 7450]</data>
+      <data key="key3">[7200 / 7450]</data>
+      <data key="key4">250</data>
+    </node>
+    <node id="n50">
+      <data key="key0">470342842</data>
+      <data key="key1">Magdeburger Haus</data>
+      <data key="key2">[7082 / 7451]</data>
+      <data key="key3">[7082 / 7451]</data>
+      <data key="key4">369</data>
+    </node>
+    <node id="n51">
+      <data key="key0">305051601</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7270 / 7334]</data>
+      <data key="key3">[7270 / 7334]</data>
+      <data key="key4">64</data>
+    </node>
+    <node id="n52">
+      <data key="key0">1007094885</data>
+      <data key="key1">Südwestbank</data>
+      <data key="key2">[7227 / 7334]</data>
+      <data key="key3">[7227 / 7334]</data>
+      <data key="key4">107</data>
+    </node>
+    <node id="n53">
+      <data key="key0">30030251</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[8502 / 8503]</data>
+      <data key="key3">[8502 / 8503]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n54">
+      <data key="key0">21533393</data>
+      <data key="key1">Kongresszentrum PH1</data>
+      <data key="key2">[8509 / 8512]</data>
+      <data key="key3">[8509 / 8512]</data>
+      <data key="key4">3</data>
+    </node>
+    <node id="n55">
+      <data key="key0">32519022</data>
+      <data key="key1">Sparkasse Karlsruhe</data>
+      <data key="key2">[7576 / 7577]</data>
+      <data key="key3">[7576 / 7577]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n56">
+      <data key="key0">3338537003</data>
+      <data key="key1">Aral</data>
+      <data key="key2">[7576 / 7580]</data>
+      <data key="key3">[7576 / 7580]</data>
+      <data key="key4">4</data>
+    </node>
+    <node id="n57">
+      <data key="key0">1749651556</data>
+      <data key="key1">Stephanplatz</data>
+      <data key="key2">[7573 / 7580]</data>
+      <data key="key3">[7573 / 7580]</data>
+      <data key="key4">7</data>
+    </node>
+    <node id="n58">
+      <data key="key0">1725394201</data>
+      <data key="key1">Parkhaus Ludwigsplatz</data>
+      <data key="key2">[7582 / 7583]</data>
+      <data key="key3">[7582 / 7583]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n59">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[7582 / 7584]</data>
+      <data key="key3">[7582 / 7584]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n60">
+      <data key="key0">305051601</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7561 / 7572]</data>
+      <data key="key3">[7561 / 7572]</data>
+      <data key="key4">11</data>
+    </node>
+    <node id="n61">
+      <data key="key0">1007094854</data>
+      <data key="key1">HypoVereinsbank</data>
+      <data key="key2">[7573 / 7574]</data>
+      <data key="key3">[7573 / 7574]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n62">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[7572 / 7576]</data>
+      <data key="key3">[7572 / 7576]</data>
+      <data key="key4">4</data>
+    </node>
+    <node id="n63">
+      <data key="key0">1777375778</data>
+      <data key="key1">Post Galerie</data>
+      <data key="key2">[7573 / 7577]</data>
+      <data key="key3">[7573 / 7577]</data>
+      <data key="key4">4</data>
+    </node>
+    <node id="n64">
+      <data key="key0">1777375778</data>
+      <data key="key1">Post Galerie</data>
+      <data key="key2">[7461 / 7528]</data>
+      <data key="key3">[7461 / 7528]</data>
+      <data key="key4">67</data>
+    </node>
+    <node id="n65">
+      <data key="key0">1749651556</data>
+      <data key="key1">Stephanplatz</data>
+      <data key="key2">[7454 / 7529]</data>
+      <data key="key3">[7454 / 7529]</data>
+      <data key="key4">75</data>
+    </node>
+    <node id="n66">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[7472 / 7550]</data>
+      <data key="key3">[7472 / 7550]</data>
+      <data key="key4">78</data>
+    </node>
+    <node id="n67">
+      <data key="key0">1725394201</data>
+      <data key="key1">Parkhaus Ludwigsplatz</data>
+      <data key="key2">[7515 / 7574]</data>
+      <data key="key3">[7515 / 7574]</data>
+      <data key="key4">59</data>
+    </node>
+    <node id="n68">
+      <data key="key0">320238064</data>
+      <data key="key1">gebaka</data>
+      <data key="key2">[7512 / 7577]</data>
+      <data key="key3">[7512 / 7577]</data>
+      <data key="key4">65</data>
+    </node>
+    <node id="n69">
+      <data key="key0">30030251</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[7491 / 7581]</data>
+      <data key="key3">[7491 / 7581]</data>
+      <data key="key4">90</data>
+    </node>
+    <node id="n70">
+      <data key="key0">1007094923</data>
+      <data key="key1">Santander Bank</data>
+      <data key="key2">[7471 / 7585]</data>
+      <data key="key3">[7471 / 7585]</data>
+      <data key="key4">114</data>
+    </node>
+    <node id="n71">
+      <data key="key0">304956243</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7579 / 7581]</data>
+      <data key="key3">[7579 / 7581]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n72">
+      <data key="key0">1725394201</data>
+      <data key="key1">Parkhaus Ludwigsplatz</data>
+      <data key="key2">[7592 / 7593]</data>
+      <data key="key3">[7592 / 7593]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n73">
+      <data key="key0">1777375778</data>
+      <data key="key1">Post Galerie</data>
+      <data key="key2">[7585 / 7587]</data>
+      <data key="key3">[7585 / 7587]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n74">
+      <data key="key0">258369604</data>
+      <data key="key1">Filmpalast</data>
+      <data key="key2">[7586 / 7589]</data>
+      <data key="key3">[7586 / 7589]</data>
+      <data key="key4">3</data>
+    </node>
+    <node id="n75">
+      <data key="key0">1749651556</data>
+      <data key="key1">Stephanplatz</data>
+      <data key="key2">[7583 / 7593]</data>
+      <data key="key3">[7583 / 7593]</data>
+      <data key="key4">10</data>
+    </node>
+    <node id="n76">
+      <data key="key0">1777375778</data>
+      <data key="key1">Post Galerie</data>
+      <data key="key2">[7589 / 7591]</data>
+      <data key="key3">[7589 / 7591]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n77">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[7591 / 7594]</data>
+      <data key="key3">[7591 / 7594]</data>
+      <data key="key4">3</data>
+    </node>
+    <node id="n78">
+      <data key="key0">1007094861</data>
+      <data key="key1">Autosilo Meyer</data>
+      <data key="key2">[7576 / 7599]</data>
+      <data key="key3">[7576 / 7599]</data>
+      <data key="key4">23</data>
+    </node>
+    <node id="n79">
+      <data key="key0">3338537003</data>
+      <data key="key1">Aral</data>
+      <data key="key2">[7595 / 7599]</data>
+      <data key="key3">[7595 / 7599]</data>
+      <data key="key4">4</data>
+    </node>
+    <node id="n80">
+      <data key="key0">304956243</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7595 / 7596]</data>
+      <data key="key3">[7595 / 7596]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n81">
+      <data key="key0">32519022</data>
+      <data key="key1">Sparkasse Karlsruhe</data>
+      <data key="key2">[7598 / 7599]</data>
+      <data key="key3">[7598 / 7599]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n82">
+      <data key="key0">1007094854</data>
+      <data key="key1">HypoVereinsbank</data>
+      <data key="key2">[7601 / 7602]</data>
+      <data key="key3">[7601 / 7602]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n83">
+      <data key="key0">1725394201</data>
+      <data key="key1">Parkhaus Ludwigsplatz</data>
+      <data key="key2">[7601 / 7606]</data>
+      <data key="key3">[7601 / 7606]</data>
+      <data key="key4">5</data>
+    </node>
+    <node id="n84">
+      <data key="key0">1777375778</data>
+      <data key="key1">Post Galerie</data>
+      <data key="key2">[7598 / 7602]</data>
+      <data key="key3">[7598 / 7602]</data>
+      <data key="key4">4</data>
+    </node>
+    <node id="n85">
+      <data key="key0">1749651556</data>
+      <data key="key1">Stephanplatz</data>
+      <data key="key2">[7594 / 7602]</data>
+      <data key="key3">[7594 / 7602]</data>
+      <data key="key4">8</data>
+    </node>
+    <node id="n86">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[7598 / 7603]</data>
+      <data key="key3">[7598 / 7603]</data>
+      <data key="key4">5</data>
+    </node>
+    <node id="n87">
+      <data key="key0">1007094923</data>
+      <data key="key1">Santander Bank</data>
+      <data key="key2">[7590 / 7636]</data>
+      <data key="key3">[7590 / 7636]</data>
+      <data key="key4">46</data>
+    </node>
+    <node id="n88">
+      <data key="key0">305051601</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7603 / 7726]</data>
+      <data key="key3">[7603 / 7726]</data>
+      <data key="key4">123</data>
+    </node>
+    <node id="n89">
+      <data key="key0">1007094923</data>
+      <data key="key1">Santander Bank</data>
+      <data key="key2">[7725 / 7726]</data>
+      <data key="key3">[7725 / 7726]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n90">
+      <data key="key0">21533393</data>
+      <data key="key1">Kongresszentrum PH1</data>
+      <data key="key2">[8562 / 8676]</data>
+      <data key="key3">[8562 / 8676]</data>
+      <data key="key4">114</data>
+    </node>
+    <node id="n91">
+      <data key="key0">21533394</data>
+      <data key="key1">Kongresszentrum PH2</data>
+      <data key="key2">[8548 / 8749]</data>
+      <data key="key3">[8548 / 8749]</data>
+      <data key="key4">201</data>
+    </node>
+    <node id="n92">
+      <data key="key0">320238064</data>
+      <data key="key1">gebaka</data>
+      <data key="key2">[8547 / 8773]</data>
+      <data key="key3">[8547 / 8773]</data>
+      <data key="key4">226</data>
+    </node>
+    <node id="n93">
+      <data key="key0">987707456</data>
+      <data key="key1">Sparda-Bank</data>
+      <data key="key2">[8212 / 8213]</data>
+      <data key="key3">[8212 / 8213]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n94">
+      <data key="key0">30023109</data>
+      <data key="key1">Volksbank</data>
+      <data key="key2">[8209 / 8271]</data>
+      <data key="key3">[8209 / 8271]</data>
+      <data key="key4">62</data>
+    </node>
+    <node id="n95">
+      <data key="key0">258369604</data>
+      <data key="key1">Filmpalast</data>
+      <data key="key2">[8203 / 8277]</data>
+      <data key="key3">[8203 / 8277]</data>
+      <data key="key4">74</data>
+    </node>
+    <node id="n96">
+      <data key="key0">30030251</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[8198 / 8274]</data>
+      <data key="key3">[8198 / 8274]</data>
+      <data key="key4">76</data>
+    </node>
+    <node id="n97">
+      <data key="key0">324584258</data>
+      <data key="key1">Deutsche Bundesbank Filiale</data>
+      <data key="key2">[8202 / 8278]</data>
+      <data key="key3">[8202 / 8278]</data>
+      <data key="key4">76</data>
+    </node>
+    <node id="n98">
+      <data key="key0">21533393</data>
+      <data key="key1">Kongresszentrum PH1</data>
+      <data key="key2">[8181 / 8289]</data>
+      <data key="key3">[8181 / 8289]</data>
+      <data key="key4">108</data>
+    </node>
+    <node id="n99">
+      <data key="key0">25969885</data>
+      <data key="key1">Am Staatstheater</data>
+      <data key="key2">[8207 / 8273]</data>
+      <data key="key3">[8207 / 8273]</data>
+      <data key="key4">66</data>
+    </node>
+    <node id="n100">
+      <data key="key0">30023110</data>
+      <data key="key1">Spar- und Kreditbank</data>
+      <data key="key2">[8207 / 8273]</data>
+      <data key="key3">[8207 / 8273]</data>
+      <data key="key4">66</data>
+    </node>
+    <node id="n101">
+      <data key="key0">312799364</data>
+      <data key="key1">Spar- und Kreditbank</data>
+      <data key="key2">[8207 / 8273]</data>
+      <data key="key3">[8207 / 8273]</data>
+      <data key="key4">66</data>
+    </node>
+    <node id="n102">
+      <data key="key0">16726014</data>
+      <data key="key1">Luisenstraße</data>
+      <data key="key2">[8206 / 8274]</data>
+      <data key="key3">[8206 / 8274]</data>
+      <data key="key4">68</data>
+    </node>
+    <node id="n103">
+      <data key="key0">258369600</data>
+      <data key="key1">Am ZKM</data>
+      <data key="key2">[8206 / 8274]</data>
+      <data key="key3">[8206 / 8274]</data>
+      <data key="key4">68</data>
+    </node>
+    <node id="n104">
+      <data key="key0">25969880</data>
+      <data key="key1">Postbank</data>
+      <data key="key2">[8210 / 8231]</data>
+      <data key="key3">[8210 / 8231]</data>
+      <data key="key4">21</data>
+    </node>
+    <node id="n105">
+      <data key="key0">304956243</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7726 / 7727]</data>
+      <data key="key3">[7726 / 7727]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n106">
+      <data key="key0">1749651556</data>
+      <data key="key1">Stephanplatz</data>
+      <data key="key2">[7726 / 7727]</data>
+      <data key="key3">[7726 / 7727]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n107">
+      <data key="key0">1007094861</data>
+      <data key="key1">Autosilo Meyer</data>
+      <data key="key2">[7727 / 7728]</data>
+      <data key="key3">[7727 / 7728]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n108">
+      <data key="key0">258369604</data>
+      <data key="key1">Filmpalast</data>
+      <data key="key2">[7725 / 8065]</data>
+      <data key="key3">[7725 / 8065]</data>
+      <data key="key4">340</data>
+    </node>
+    <node id="n109">
+      <data key="key0">30030251</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[7594 / 8176]</data>
+      <data key="key3">[7594 / 8176]</data>
+      <data key="key4">582</data>
+    </node>
+    <node id="n110">
+      <data key="key0">320238064</data>
+      <data key="key1">gebaka</data>
+      <data key="key2">[7597 / 8302]</data>
+      <data key="key3">[7597 / 8302]</data>
+      <data key="key4">705</data>
+    </node>
+    <node id="n111">
+      <data key="key0">21533394</data>
+      <data key="key1">Kongresszentrum PH2</data>
+      <data key="key2">[8037 / 8302]</data>
+      <data key="key3">[8037 / 8302]</data>
+      <data key="key4">265</data>
+    </node>
+    <node id="n112">
+      <data key="key0">826586531</data>
+      <data key="key1">BB Bank</data>
+      <data key="key2">[8177 / 8303]</data>
+      <data key="key3">[8177 / 8303]</data>
+      <data key="key4">126</data>
+    </node>
+    <node id="n113">
+      <data key="key0">15520063</data>
+      <data key="key1">Aral</data>
+      <data key="key2">[8307 / 8308]</data>
+      <data key="key3">[8307 / 8308]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n114">
+      <data key="key0">305021965</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[8309 / 8311]</data>
+      <data key="key3">[8309 / 8311]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n115">
+      <data key="key0">826586531</data>
+      <data key="key1">BB Bank</data>
+      <data key="key2">[8304 / 8311]</data>
+      <data key="key3">[8304 / 8311]</data>
+      <data key="key4">7</data>
+    </node>
+    <node id="n116">
+      <data key="key0">24913341</data>
+      <data key="key1">Hauptbahnhof P2</data>
+      <data key="key2">[8726 / 8965]</data>
+      <data key="key3">[8726 / 8965]</data>
+      <data key="key4">239</data>
+    </node>
+    <node id="n117">
+      <data key="key0">30030271</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[8951 / 8965]</data>
+      <data key="key3">[8951 / 8965]</data>
+      <data key="key4">13.997</data>
+    </node>
+    <node id="n118">
+      <data key="key0">302926708</data>
+      <data key="key1">Esso</data>
+      <data key="key2">[8841 / 8965]</data>
+      <data key="key3">[8841 / 8965]</data>
+      <data key="key4">124</data>
+    </node>
+    <node id="n119">
+      <data key="key0">1215431413</data>
+      <data key="key1">Hauptbahnhof P3</data>
+      <data key="key2">[8746 / 8965]</data>
+      <data key="key3">[8746 / 8965]</data>
+      <data key="key4">219</data>
+    </node>
+    <node id="n120">
+      <data key="key0">29026478</data>
+      <data key="key1">Hauptbahnhof P1</data>
+      <data key="key2">[8667 / 8965]</data>
+      <data key="key3">[8667 / 8965]</data>
+      <data key="key4">298</data>
+    </node>
+    <node id="n121">
+      <data key="key0">15520063</data>
+      <data key="key1">Aral</data>
+      <data key="key2">[8568 / 8965]</data>
+      <data key="key3">[8568 / 8965]</data>
+      <data key="key4">397</data>
+    </node>
+    <node id="n122">
+      <data key="key0">305021965</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[8565 / 8965]</data>
+      <data key="key3">[8565 / 8965]</data>
+      <data key="key4">400</data>
+    </node>
+    <node id="n123">
+      <data key="key0">305051601</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7855 / 8930]</data>
+      <data key="key3">[7855 / 8930]</data>
+      <data key="key4">1075</data>
+    </node>
+    <node id="n124">
+      <data key="key0">826586531</data>
+      <data key="key1">BB Bank</data>
+      <data key="key2">[8314 / 8965]</data>
+      <data key="key3">[8314 / 8965]</data>
+      <data key="key4">651</data>
+    </node>
+    <node id="n125">
+      <data key="key0">556837274</data>
+      <data key="key1">Postbank</data>
+      <data key="key2">[8564 / 8965]</data>
+      <data key="key3">[8564 / 8965]</data>
+      <data key="key4">401</data>
+    </node>
+    <node id="n126">
+      <data key="key0">16726014</data>
+      <data key="key1">Luisenstraße</data>
+      <data key="key2">[8545 / 8965]</data>
+      <data key="key3">[8545 / 8965]</data>
+      <data key="key4">420</data>
+    </node>
+    <node id="n127">
+      <data key="key0">30023109</data>
+      <data key="key1">Volksbank</data>
+      <data key="key2">[8550 / 8965]</data>
+      <data key="key3">[8550 / 8965]</data>
+      <data key="key4">415</data>
+    </node>
+    <node id="n128">
+      <data key="key0">30023110</data>
+      <data key="key1">Spar- und Kreditbank</data>
+      <data key="key2">[8548 / 8965]</data>
+      <data key="key3">[8548 / 8965]</data>
+      <data key="key4">417</data>
+    </node>
+    <node id="n129">
+      <data key="key0">312799364</data>
+      <data key="key1">Spar- und Kreditbank</data>
+      <data key="key2">[8548 / 8965]</data>
+      <data key="key3">[8548 / 8965]</data>
+      <data key="key4">417</data>
+    </node>
+    <node id="n130">
+      <data key="key0">30030271</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[8561 / 8883]</data>
+      <data key="key3">[8561 / 8883]</data>
+      <data key="key4">322</data>
+    </node>
+    <node id="n131">
+      <data key="key0">320238064</data>
+      <data key="key1">gebaka</data>
+      <data key="key2">[8303 / 8504]</data>
+      <data key="key3">[8303 / 8504]</data>
+      <data key="key4">201</data>
+    </node>
+    <node id="n132">
+      <data key="key0">21533394</data>
+      <data key="key1">Kongresszentrum PH2</data>
+      <data key="key2">[8399 / 8513]</data>
+      <data key="key3">[8399 / 8513]</data>
+      <data key="key4">114</data>
+    </node>
+    <node id="n133">
+      <data key="key0">320238064</data>
+      <data key="key1">gebaka</data>
+      <data key="key2">[8514 / 8523]</data>
+      <data key="key3">[8514 / 8523]</data>
+      <data key="key4">9</data>
+    </node>
+    <node id="n134">
+      <data key="key0">305055372</data>
+      <data key="key1">Sparkasse Karlsruhe Ettlingen</data>
+      <data key="key2">[0 / 208]</data>
+      <data key="key3">[0 / 208]</data>
+      <data key="key4">208</data>
+    </node>
+    <node id="n135">
+      <data key="key0">832309206</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[0 / 218]</data>
+      <data key="key3">[0 / 218]</data>
+      <data key="key4">218</data>
+    </node>
+    <node id="n136">
+      <data key="key0">832309205</data>
+      <data key="key1">BBBank</data>
+      <data key="key2">[0 / 253]</data>
+      <data key="key3">[0 / 253]</data>
+      <data key="key4">253</data>
+    </node>
+    <node id="n137">
+      <data key="key0">832309206</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[387 / 395]</data>
+      <data key="key3">[387 / 395]</data>
+      <data key="key4">8</data>
+    </node>
+    <node id="n138">
+      <data key="key0">832309205</data>
+      <data key="key1">BBBank</data>
+      <data key="key2">[380 / 415]</data>
+      <data key="key3">[380 / 415]</data>
+      <data key="key4">35</data>
+    </node>
+    <node id="n139">
+      <data key="key0">25379635</data>
+      <data key="key1">Avia</data>
+      <data key="key2">[1587 / 1591]</data>
+      <data key="key3">[1587 / 1591]</data>
+      <data key="key4">4</data>
+    </node>
+    <node id="n140">
+      <data key="key0">25379635</data>
+      <data key="key1">Avia</data>
+      <data key="key2">[1655 / 1951]</data>
+      <data key="key3">[1655 / 1951]</data>
+      <data key="key4">296</data>
+    </node>
+    <node id="n141">
+      <data key="key0">1210770269</data>
+      <data key="key1">Fasanengarten</data>
+      <data key="key2">[2654 / 2672]</data>
+      <data key="key3">[2654 / 2672]</data>
+      <data key="key4">18</data>
+    </node>
+    <node id="n142">
+      <data key="key0">25932429</data>
+      <data key="key1">Sparkasse Karlsruhe Ettlingen</data>
+      <data key="key2">[3052 / 3053]</data>
+      <data key="key3">[3052 / 3053]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n143">
+      <data key="key0">1681698050</data>
+      <data key="key1">Tiefgarage Universität</data>
+      <data key="key2">[3056 / 3259]</data>
+      <data key="key3">[3056 / 3259]</data>
+      <data key="key4">203</data>
+    </node>
+    <node id="n144">
+      <data key="key0">1681698050</data>
+      <data key="key1">Tiefgarage Universität</data>
+      <data key="key2">[3052 / 3054]</data>
+      <data key="key3">[3052 / 3054]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n145">
+      <data key="key0">1210770269</data>
+      <data key="key1">Fasanengarten</data>
+      <data key="key2">[2693 / 3056]</data>
+      <data key="key3">[2693 / 3056]</data>
+      <data key="key4">363</data>
+    </node>
+    <node id="n146">
+      <data key="key0">304964092</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[4472 / 4570]</data>
+      <data key="key3">[4472 / 4570]</data>
+      <data key="key4">98</data>
+    </node>
+    <node id="n147">
+      <data key="key0">25946389</data>
+      <data key="key1">EFA/bft</data>
+      <data key="key2">[4081 / 4571]</data>
+      <data key="key3">[4081 / 4571]</data>
+      <data key="key4">490</data>
+    </node>
+    <node id="n148">
+      <data key="key0">321573212</data>
+      <data key="key1">Volksbank</data>
+      <data key="key2">[4574 / 4576]</data>
+      <data key="key3">[4574 / 4576]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n149">
+      <data key="key0">304964092</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[4572 / 4650]</data>
+      <data key="key3">[4572 / 4650]</data>
+      <data key="key4">78</data>
+    </node>
+    <node id="n150">
+      <data key="key0">296295113</data>
+      <data key="key1">Sparkasse Karlsruhe Ettlingen</data>
+      <data key="key2">[5553 / 5565]</data>
+      <data key="key3">[5553 / 5565]</data>
+      <data key="key4">12</data>
+    </node>
+    <node id="n151">
+      <data key="key0">1007094861</data>
+      <data key="key1">Autosilo Meyer</data>
+      <data key="key2">[5551 / 5565]</data>
+      <data key="key3">[5551 / 5565]</data>
+      <data key="key4">14</data>
+    </node>
+    <node id="n152">
+      <data key="key0">1210315351</data>
+      <data key="key1">Targobank</data>
+      <data key="key2">[5545 / 5565]</data>
+      <data key="key3">[5545 / 5565]</data>
+      <data key="key4">20</data>
+    </node>
+    <node id="n153">
+      <data key="key0">296295114</data>
+      <data key="key1">Sparkasse Karlsruhe Ettlingen</data>
+      <data key="key2">[5536 / 5567]</data>
+      <data key="key3">[5536 / 5567]</data>
+      <data key="key4">31</data>
+    </node>
+    <node id="n154">
+      <data key="key0">1298856453</data>
+      <data key="key1">Postbank</data>
+      <data key="key2">[5538 / 5567]</data>
+      <data key="key3">[5538 / 5567]</data>
+      <data key="key4">29</data>
+    </node>
+    <node id="n155">
+      <data key="key0">305533088</data>
+      <data key="key1">Santander Consumer Bank</data>
+      <data key="key2">[5531 / 5568]</data>
+      <data key="key3">[5531 / 5568]</data>
+      <data key="key4">37</data>
+    </node>
+    <node id="n156">
+      <data key="key0">305533090</data>
+      <data key="key1">Western Union</data>
+      <data key="key2">[5530 / 5568]</data>
+      <data key="key3">[5530 / 5568]</data>
+      <data key="key4">38</data>
+    </node>
+    <node id="n157">
+      <data key="key0">1543042671</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[5518 / 5570]</data>
+      <data key="key3">[5518 / 5570]</data>
+      <data key="key4">52</data>
+    </node>
+    <node id="n158">
+      <data key="key0">2843795280</data>
+      <data key="key1">Money Gram</data>
+      <data key="key2">[5580 / 5582]</data>
+      <data key="key3">[5580 / 5582]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n159">
+      <data key="key0">1481190975</data>
+      <data key="key1">ZG Raiffeisen</data>
+      <data key="key2">[5578 / 5581]</data>
+      <data key="key3">[5578 / 5581]</data>
+      <data key="key4">3</data>
+    </node>
+    <node id="n160">
+      <data key="key0">21492725</data>
+      <data key="key1">Am Marktplatz</data>
+      <data key="key2">[5574 / 5577]</data>
+      <data key="key3">[5574 / 5577]</data>
+      <data key="key4">3</data>
+    </node>
+    <node id="n161">
+      <data key="key0">282566684</data>
+      <data key="key1">Ettlinger Tor</data>
+      <data key="key2">[5577 / 5578]</data>
+      <data key="key3">[5577 / 5578]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n162">
+      <data key="key0">330830310</data>
+      <data key="key1">IHK</data>
+      <data key="key2">[5576 / 5577]</data>
+      <data key="key3">[5576 / 5577]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n163">
+      <data key="key0">1007094861</data>
+      <data key="key1">Autosilo Meyer</data>
+      <data key="key2">[5590 / 5741]</data>
+      <data key="key3">[5590 / 5741]</data>
+      <data key="key4">151</data>
+    </node>
+    <node id="n164">
+      <data key="key0">3338537003</data>
+      <data key="key1">Aral</data>
+      <data key="key2">[5589 / 5735]</data>
+      <data key="key3">[5589 / 5735]</data>
+      <data key="key4">146</data>
+    </node>
+    <node id="n165">
+      <data key="key0">1007094923</data>
+      <data key="key1">Santander Bank</data>
+      <data key="key2">[5580 / 5728]</data>
+      <data key="key3">[5580 / 5728]</data>
+      <data key="key4">148</data>
+    </node>
+    <node id="n166">
+      <data key="key0">330845736</data>
+      <data key="key1">Landesbibliothek</data>
+      <data key="key2">[5578 / 5729]</data>
+      <data key="key3">[5578 / 5729]</data>
+      <data key="key4">151</data>
+    </node>
+    <node id="n167">
+      <data key="key0">2315633987</data>
+      <data key="key1">ReiseBank</data>
+      <data key="key2">[5625 / 5738]</data>
+      <data key="key3">[5625 / 5738]</data>
+      <data key="key4">113</data>
+    </node>
+    <node id="n168">
+      <data key="key0">305533088</data>
+      <data key="key1">Santander Consumer Bank</data>
+      <data key="key2">[5573 / 5590]</data>
+      <data key="key3">[5573 / 5590]</data>
+      <data key="key4">17</data>
+    </node>
+    <node id="n169">
+      <data key="key0">305533090</data>
+      <data key="key1">Western Union</data>
+      <data key="key2">[5573 / 5596]</data>
+      <data key="key3">[5573 / 5596]</data>
+      <data key="key4">23</data>
+    </node>
+    <node id="n170">
+      <data key="key0">1210315351</data>
+      <data key="key1">Targobank</data>
+      <data key="key2">[5573 / 5615]</data>
+      <data key="key3">[5573 / 5615]</data>
+      <data key="key4">42</data>
+    </node>
+    <node id="n171">
+      <data key="key0">21492725</data>
+      <data key="key1">Am Marktplatz</data>
+      <data key="key2">[5580 / 5641]</data>
+      <data key="key3">[5580 / 5641]</data>
+      <data key="key4">61</data>
+    </node>
+    <node id="n172">
+      <data key="key0">330830310</data>
+      <data key="key1">IHK</data>
+      <data key="key2">[5590 / 5723]</data>
+      <data key="key3">[5590 / 5723]</data>
+      <data key="key4">133</data>
+    </node>
+    <node id="n173">
+      <data key="key0">537954464</data>
+      <data key="key1">Commerzbank</data>
+      <data key="key2">[5574 / 5724]</data>
+      <data key="key3">[5574 / 5724]</data>
+      <data key="key4">150</data>
+    </node>
+    <node id="n174">
+      <data key="key0">1543042671</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[5573 / 5724]</data>
+      <data key="key3">[5573 / 5724]</data>
+      <data key="key4">151</data>
+    </node>
+    <node id="n175">
+      <data key="key0">30030251</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[6168 / 6173]</data>
+      <data key="key3">[6168 / 6173]</data>
+      <data key="key4">5</data>
+    </node>
+    <node id="n176">
+      <data key="key0">60019238</data>
+      <data key="key1">Am Zirkel (P&amp;C)</data>
+      <data key="key2">[6167 / 6173]</data>
+      <data key="key3">[6167 / 6173]</data>
+      <data key="key4">6</data>
+    </node>
+    <node id="n177">
+      <data key="key0">296295114</data>
+      <data key="key1">Sparkasse Karlsruhe Ettlingen</data>
+      <data key="key2">[6167 / 6173]</data>
+      <data key="key3">[6167 / 6173]</data>
+      <data key="key4">6</data>
+    </node>
+    <node id="n178">
+      <data key="key0">253395553</data>
+      <data key="key1">Evangelische Kreditgenossenschaft</data>
+      <data key="key2">[6369 / 6379]</data>
+      <data key="key3">[6369 / 6379]</data>
+      <data key="key4">10</data>
+    </node>
+    <node id="n179">
+      <data key="key0">60019235</data>
+      <data key="key1">Karstadt am Zirkel</data>
+      <data key="key2">[6383 / 6384]</data>
+      <data key="key3">[6383 / 6384]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n180">
+      <data key="key0">3174659861</data>
+      <data key="key1">BBBank</data>
+      <data key="key2">[6381 / 6388]</data>
+      <data key="key3">[6381 / 6388]</data>
+      <data key="key4">7</data>
+    </node>
+    <node id="n181">
+      <data key="key0">3174661864</data>
+      <data key="key1">BBank EC-Automat</data>
+      <data key="key2">[6383 / 6391]</data>
+      <data key="key3">[6383 / 6391]</data>
+      <data key="key4">8</data>
+    </node>
+    <node id="n182">
+      <data key="key0">253395553</data>
+      <data key="key1">Evangelische Kreditgenossenschaft</data>
+      <data key="key2">[6389 / 6395]</data>
+      <data key="key3">[6389 / 6395]</data>
+      <data key="key4">6</data>
+    </node>
+    <node id="n183">
+      <data key="key0">3692230307</data>
+      <data key="key1">BW-Bank</data>
+      <data key="key2">[6289 / 6294]</data>
+      <data key="key3">[6289 / 6294]</data>
+      <data key="key4">5</data>
+    </node>
+    <node id="n184">
+      <data key="key0">330845736</data>
+      <data key="key1">Landesbibliothek</data>
+      <data key="key2">[6301 / 6310]</data>
+      <data key="key3">[6301 / 6310]</data>
+      <data key="key4">9</data>
+    </node>
+    <node id="n185">
+      <data key="key0">1007094923</data>
+      <data key="key1">Santander Bank</data>
+      <data key="key2">[6259 / 6391]</data>
+      <data key="key3">[6259 / 6391]</data>
+      <data key="key4">132</data>
+    </node>
+    <node id="n186">
+      <data key="key0">1725394201</data>
+      <data key="key1">Parkhaus Ludwigsplatz</data>
+      <data key="key2">[6248 / 6394]</data>
+      <data key="key3">[6248 / 6394]</data>
+      <data key="key4">146</data>
+    </node>
+    <node id="n187">
+      <data key="key0">60019235</data>
+      <data key="key1">Karstadt am Zirkel</data>
+      <data key="key2">[6196 / 6199]</data>
+      <data key="key3">[6196 / 6199]</data>
+      <data key="key4">3</data>
+    </node>
+    <node id="n188">
+      <data key="key0">25946389</data>
+      <data key="key1">EFA/bft</data>
+      <data key="key2">[6201 / 6202]</data>
+      <data key="key3">[6201 / 6202]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n189">
+      <data key="key0">60019235</data>
+      <data key="key1">Karstadt am Zirkel</data>
+      <data key="key2">[6200 / 6206]</data>
+      <data key="key3">[6200 / 6206]</data>
+      <data key="key4">6</data>
+    </node>
+    <node id="n190">
+      <data key="key0">1007094861</data>
+      <data key="key1">Autosilo Meyer</data>
+      <data key="key2">[6200 / 6206]</data>
+      <data key="key3">[6200 / 6206]</data>
+      <data key="key4">6</data>
+    </node>
+    <node id="n191">
+      <data key="key0">3338537003</data>
+      <data key="key1">Aral</data>
+      <data key="key2">[6200 / 6207]</data>
+      <data key="key3">[6200 / 6207]</data>
+      <data key="key4">7</data>
+    </node>
+    <node id="n192">
+      <data key="key0">1007094861</data>
+      <data key="key1">Autosilo Meyer</data>
+      <data key="key2">[6218 / 6235]</data>
+      <data key="key3">[6218 / 6235]</data>
+      <data key="key4">17</data>
+    </node>
+    <node id="n193">
+      <data key="key0">60019235</data>
+      <data key="key1">Karstadt am Zirkel</data>
+      <data key="key2">[6241 / 6278]</data>
+      <data key="key3">[6241 / 6278]</data>
+      <data key="key4">37</data>
+    </node>
+    <node id="n194">
+      <data key="key0">253395553</data>
+      <data key="key1">Evangelische Kreditgenossenschaft</data>
+      <data key="key2">[6242 / 6318]</data>
+      <data key="key3">[6242 / 6318]</data>
+      <data key="key4">76</data>
+    </node>
+    <node id="n195">
+      <data key="key0">3174661864</data>
+      <data key="key1">BBank EC-Automat</data>
+      <data key="key2">[6030 / 6284]</data>
+      <data key="key3">[6030 / 6284]</data>
+      <data key="key4">254</data>
+    </node>
+    <node id="n196">
+      <data key="key0">3174659861</data>
+      <data key="key1">BBBank</data>
+      <data key="key2">[6049 / 6291]</data>
+      <data key="key3">[6049 / 6291]</data>
+      <data key="key4">242</data>
+    </node>
+    <node id="n197">
+      <data key="key0">1725394191</data>
+      <data key="key1">Karstadt</data>
+      <data key="key2">[6149 / 6185]</data>
+      <data key="key3">[6149 / 6185]</data>
+      <data key="key4">36</data>
+    </node>
+    <node id="n198">
+      <data key="key0">1007094861</data>
+      <data key="key1">Autosilo Meyer</data>
+      <data key="key2">[6152 / 6196]</data>
+      <data key="key3">[6152 / 6196]</data>
+      <data key="key4">44</data>
+    </node>
+    <node id="n199">
+      <data key="key0">3338537003</data>
+      <data key="key1">Aral</data>
+      <data key="key2">[6150 / 6196]</data>
+      <data key="key3">[6150 / 6196]</data>
+      <data key="key4">46</data>
+    </node>
+    <node id="n200">
+      <data key="key0">1725394170</data>
+      <data key="key1">Friedrichsplatz</data>
+      <data key="key2">[6148 / 6192]</data>
+      <data key="key3">[6148 / 6192]</data>
+      <data key="key4">44</data>
+    </node>
+    <node id="n201">
+      <data key="key0">1749651556</data>
+      <data key="key1">Stephanplatz</data>
+      <data key="key2">[6137 / 6197]</data>
+      <data key="key3">[6137 / 6197]</data>
+      <data key="key4">60</data>
+    </node>
+    <node id="n202">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[6127 / 6198]</data>
+      <data key="key3">[6127 / 6198]</data>
+      <data key="key4">71</data>
+    </node>
+    <node id="n203">
+      <data key="key0">1725394201</data>
+      <data key="key1">Parkhaus Ludwigsplatz</data>
+      <data key="key2">[6126 / 6198]</data>
+      <data key="key3">[6126 / 6198]</data>
+      <data key="key4">72</data>
+    </node>
+    <node id="n204">
+      <data key="key0">253395553</data>
+      <data key="key1">Evangelische Kreditgenossenschaft</data>
+      <data key="key2">[6120 / 6199]</data>
+      <data key="key3">[6120 / 6199]</data>
+      <data key="key4">79</data>
+    </node>
+    <node id="n205">
+      <data key="key0">1007094854</data>
+      <data key="key1">HypoVereinsbank</data>
+      <data key="key2">[6123 / 6199]</data>
+      <data key="key3">[6123 / 6199]</data>
+      <data key="key4">76</data>
+    </node>
+    <node id="n206">
+      <data key="key0">1007094923</data>
+      <data key="key1">Santander Bank</data>
+      <data key="key2">[6133 / 6197]</data>
+      <data key="key3">[6133 / 6197]</data>
+      <data key="key4">64</data>
+    </node>
+    <node id="n207">
+      <data key="key0">1777375778</data>
+      <data key="key1">Post Galerie</data>
+      <data key="key2">[6132 / 6198]</data>
+      <data key="key3">[6132 / 6198]</data>
+      <data key="key4">66</data>
+    </node>
+    <node id="n208">
+      <data key="key0">3692230307</data>
+      <data key="key1">BW-Bank</data>
+      <data key="key2">[6144 / 6196]</data>
+      <data key="key3">[6144 / 6196]</data>
+      <data key="key4">52</data>
+    </node>
+    <node id="n209">
+      <data key="key0">60019235</data>
+      <data key="key1">Karstadt am Zirkel</data>
+      <data key="key2">[6147 / 6186]</data>
+      <data key="key3">[6147 / 6186]</data>
+      <data key="key4">39</data>
+    </node>
+    <node id="n210">
+      <data key="key0">25946389</data>
+      <data key="key1">EFA/bft</data>
+      <data key="key2">[6143 / 6190]</data>
+      <data key="key3">[6143 / 6190]</data>
+      <data key="key4">47</data>
+    </node>
+    <node id="n211">
+      <data key="key0">330845736</data>
+      <data key="key1">Landesbibliothek</data>
+      <data key="key2">[6156 / 6185]</data>
+      <data key="key3">[6156 / 6185]</data>
+      <data key="key4">29</data>
+    </node>
+    <node id="n212">
+      <data key="key0">1777375778</data>
+      <data key="key1">Post Galerie</data>
+      <data key="key2">[5989 / 5990]</data>
+      <data key="key3">[5989 / 5990]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n213">
+      <data key="key0">1007094861</data>
+      <data key="key1">Autosilo Meyer</data>
+      <data key="key2">[5983 / 5988]</data>
+      <data key="key3">[5983 / 5988]</data>
+      <data key="key4">5</data>
+    </node>
+    <node id="n214">
+      <data key="key0">3338537003</data>
+      <data key="key1">Aral</data>
+      <data key="key2">[5975 / 5988]</data>
+      <data key="key3">[5975 / 5988]</data>
+      <data key="key4">13</data>
+    </node>
+    <node id="n215">
+      <data key="key0">60019235</data>
+      <data key="key1">Karstadt am Zirkel</data>
+      <data key="key2">[5989 / 5991]</data>
+      <data key="key3">[5989 / 5991]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n216">
+      <data key="key0">1007094854</data>
+      <data key="key1">HypoVereinsbank</data>
+      <data key="key2">[5989 / 5991]</data>
+      <data key="key3">[5989 / 5991]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n217">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[5989 / 5991]</data>
+      <data key="key3">[5989 / 5991]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n218">
+      <data key="key0">60019235</data>
+      <data key="key1">Karstadt am Zirkel</data>
+      <data key="key2">[5994 / 5995]</data>
+      <data key="key3">[5994 / 5995]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n219">
+      <data key="key0">1670888224</data>
+      <data key="key1">ING DiBa Automat</data>
+      <data key="key2">[6086 / 6095]</data>
+      <data key="key3">[6086 / 6095]</data>
+      <data key="key4">9</data>
+    </node>
+    <node id="n220">
+      <data key="key0">1007094861</data>
+      <data key="key1">Autosilo Meyer</data>
+      <data key="key2">[6054 / 6096]</data>
+      <data key="key3">[6054 / 6096]</data>
+      <data key="key4">42</data>
+    </node>
+    <node id="n221">
+      <data key="key0">3338537003</data>
+      <data key="key1">Aral</data>
+      <data key="key2">[6048 / 6097]</data>
+      <data key="key3">[6048 / 6097]</data>
+      <data key="key4">49</data>
+    </node>
+    <node id="n222">
+      <data key="key0">1749651556</data>
+      <data key="key1">Stephanplatz</data>
+      <data key="key2">[5988 / 5989]</data>
+      <data key="key3">[5988 / 5989]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n223">
+      <data key="key0">60019238</data>
+      <data key="key1">Am Zirkel (P&amp;C)</data>
+      <data key="key2">[5874 / 5885]</data>
+      <data key="key3">[5874 / 5885]</data>
+      <data key="key4">11</data>
+    </node>
+    <node id="n224">
+      <data key="key0">60019238</data>
+      <data key="key1">Am Zirkel (P&amp;C)</data>
+      <data key="key2">[5889 / 5890]</data>
+      <data key="key3">[5889 / 5890]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n225">
+      <data key="key0">296295114</data>
+      <data key="key1">Sparkasse Karlsruhe Ettlingen</data>
+      <data key="key2">[5889 / 5890]</data>
+      <data key="key3">[5889 / 5890]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n226">
+      <data key="key0">1777375778</data>
+      <data key="key1">Post Galerie</data>
+      <data key="key2">[5889 / 5890]</data>
+      <data key="key3">[5889 / 5890]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n227">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[5889 / 5890]</data>
+      <data key="key3">[5889 / 5890]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n228">
+      <data key="key0">1007094854</data>
+      <data key="key1">HypoVereinsbank</data>
+      <data key="key2">[5888 / 5890]</data>
+      <data key="key3">[5888 / 5890]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n229">
+      <data key="key0">60019235</data>
+      <data key="key1">Karstadt am Zirkel</data>
+      <data key="key2">[5847 / 5951]</data>
+      <data key="key3">[5847 / 5951]</data>
+      <data key="key4">104</data>
+    </node>
+    <node id="n230">
+      <data key="key0">996110499</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[5929 / 5989]</data>
+      <data key="key3">[5929 / 5989]</data>
+      <data key="key4">60</data>
+    </node>
+    <node id="n231">
+      <data key="key0">1670888224</data>
+      <data key="key1">ING DiBa Automat</data>
+      <data key="key2">[5888 / 5991]</data>
+      <data key="key3">[5888 / 5991]</data>
+      <data key="key4">103</data>
+    </node>
+    <node id="n232">
+      <data key="key0">987655371</data>
+      <data key="key1">Sparda-Bank</data>
+      <data key="key2">[5886 / 5993]</data>
+      <data key="key3">[5886 / 5993]</data>
+      <data key="key4">107</data>
+    </node>
+    <node id="n233">
+      <data key="key0">1007094885</data>
+      <data key="key1">Südwestbank</data>
+      <data key="key2">[5886 / 5993]</data>
+      <data key="key3">[5886 / 5993]</data>
+      <data key="key4">107</data>
+    </node>
+    <node id="n234">
+      <data key="key0">3174659861</data>
+      <data key="key1">BBBank</data>
+      <data key="key2">[5836 / 5995]</data>
+      <data key="key3">[5836 / 5995]</data>
+      <data key="key4">159</data>
+    </node>
+    <node id="n235">
+      <data key="key0">3174661864</data>
+      <data key="key1">BBank EC-Automat</data>
+      <data key="key2">[5808 / 5995]</data>
+      <data key="key3">[5808 / 5995]</data>
+      <data key="key4">187</data>
+    </node>
+    <node id="n236">
+      <data key="key0">32519022</data>
+      <data key="key1">Sparkasse Karlsruhe</data>
+      <data key="key2">[5889 / 5991]</data>
+      <data key="key3">[5889 / 5991]</data>
+      <data key="key4">102</data>
+    </node>
+    <node id="n237">
+      <data key="key0">1670888224</data>
+      <data key="key1">ING DiBa Automat</data>
+      <data key="key2">[7051 / 7074]</data>
+      <data key="key3">[7051 / 7074]</data>
+      <data key="key4">23</data>
+    </node>
+    <node id="n238">
+      <data key="key0">320238064</data>
+      <data key="key1">gebaka</data>
+      <data key="key2">[7040 / 7070]</data>
+      <data key="key3">[7040 / 7070]</data>
+      <data key="key4">30</data>
+    </node>
+    <node id="n239">
+      <data key="key0">330848762</data>
+      <data key="key1">Akademiestraße</data>
+      <data key="key2">[7050 / 7095]</data>
+      <data key="key3">[7050 / 7095]</data>
+      <data key="key4">45</data>
+    </node>
+    <node id="n240">
+      <data key="key0">253395553</data>
+      <data key="key1">Evangelische Kreditgenossenschaft</data>
+      <data key="key2">[7019 / 7024]</data>
+      <data key="key3">[7019 / 7024]</data>
+      <data key="key4">5</data>
+    </node>
+    <node id="n241">
+      <data key="key0">320238064</data>
+      <data key="key1">gebaka</data>
+      <data key="key2">[7016 / 7024]</data>
+      <data key="key3">[7016 / 7024]</data>
+      <data key="key4">8</data>
+    </node>
+    <node id="n242">
+      <data key="key0">1670888224</data>
+      <data key="key1">ING DiBa Automat</data>
+      <data key="key2">[6946 / 7018]</data>
+      <data key="key3">[6946 / 7018]</data>
+      <data key="key4">72</data>
+    </node>
+    <node id="n243">
+      <data key="key0">1007094854</data>
+      <data key="key1">HypoVereinsbank</data>
+      <data key="key2">[6940 / 7025]</data>
+      <data key="key3">[6940 / 7025]</data>
+      <data key="key4">85</data>
+    </node>
+    <node id="n244">
+      <data key="key0">1725394201</data>
+      <data key="key1">Parkhaus Ludwigsplatz</data>
+      <data key="key2">[6939 / 7029]</data>
+      <data key="key3">[6939 / 7029]</data>
+      <data key="key4">90</data>
+    </node>
+    <node id="n245">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[6935 / 7029]</data>
+      <data key="key3">[6935 / 7029]</data>
+      <data key="key4">94</data>
+    </node>
+    <node id="n246">
+      <data key="key0">987655371</data>
+      <data key="key1">Sparda-Bank</data>
+      <data key="key2">[6953 / 7013]</data>
+      <data key="key3">[6953 / 7013]</data>
+      <data key="key4">60</data>
+    </node>
+    <node id="n247">
+      <data key="key0">253395553</data>
+      <data key="key1">Evangelische Kreditgenossenschaft</data>
+      <data key="key2">[6946 / 6950]</data>
+      <data key="key3">[6946 / 6950]</data>
+      <data key="key4">4</data>
+    </node>
+    <node id="n248">
+      <data key="key0">320238064</data>
+      <data key="key1">gebaka</data>
+      <data key="key2">[6950 / 6951]</data>
+      <data key="key3">[6950 / 6951]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n249">
+      <data key="key0">1007094885</data>
+      <data key="key1">Südwestbank</data>
+      <data key="key2">[6954 / 6955]</data>
+      <data key="key3">[6954 / 6955]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n250">
+      <data key="key0">330848762</data>
+      <data key="key1">Akademiestraße</data>
+      <data key="key2">[6809 / 6931]</data>
+      <data key="key3">[6809 / 6931]</data>
+      <data key="key4">122</data>
+    </node>
+    <node id="n251">
+      <data key="key0">1749651556</data>
+      <data key="key1">Stephanplatz</data>
+      <data key="key2">[7189 / 7195]</data>
+      <data key="key3">[7189 / 7195]</data>
+      <data key="key4">6</data>
+    </node>
+    <node id="n252">
+      <data key="key0">32519022</data>
+      <data key="key1">Sparkasse Karlsruhe</data>
+      <data key="key2">[7043 / 7166]</data>
+      <data key="key3">[7043 / 7166]</data>
+      <data key="key4">123</data>
+    </node>
+    <node id="n253">
+      <data key="key0">30030251</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[7198 / 7199]</data>
+      <data key="key3">[7198 / 7199]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n254">
+      <data key="key0">1007094923</data>
+      <data key="key1">Santander Bank</data>
+      <data key="key2">[7200 / 7201]</data>
+      <data key="key3">[7200 / 7201]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n255">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[7200 / 7202]</data>
+      <data key="key3">[7200 / 7202]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n256">
+      <data key="key0">996110499</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[7031 / 7197]</data>
+      <data key="key3">[7031 / 7197]</data>
+      <data key="key4">166</data>
+    </node>
+    <node id="n257">
+      <data key="key0">3338537003</data>
+      <data key="key1">Aral</data>
+      <data key="key2">[5501 / 5565]</data>
+      <data key="key3">[5501 / 5565]</data>
+      <data key="key4">64</data>
+    </node>
+    <node id="n258">
+      <data key="key0">296295113</data>
+      <data key="key1">Sparkasse Karlsruhe Ettlingen</data>
+      <data key="key2">[5574 / 5730]</data>
+      <data key="key3">[5574 / 5730]</data>
+      <data key="key4">156</data>
+    </node>
+    <node id="n259">
+      <data key="key0">1749651556</data>
+      <data key="key1">Stephanplatz</data>
+      <data key="key2">[5581 / 5734]</data>
+      <data key="key3">[5581 / 5734]</data>
+      <data key="key4">153</data>
+    </node>
+    <node id="n260">
+      <data key="key0">1777375778</data>
+      <data key="key1">Post Galerie</data>
+      <data key="key2">[5581 / 5734]</data>
+      <data key="key3">[5581 / 5734]</data>
+      <data key="key4">153</data>
+    </node>
+    <node id="n261">
+      <data key="key0">987655371</data>
+      <data key="key1">Sparda-Bank</data>
+      <data key="key2">[5759 / 5761]</data>
+      <data key="key3">[5759 / 5761]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n262">
+      <data key="key0">1007094885</data>
+      <data key="key1">Südwestbank</data>
+      <data key="key2">[5760 / 5761]</data>
+      <data key="key3">[5760 / 5761]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n263">
+      <data key="key0">60019235</data>
+      <data key="key1">Karstadt am Zirkel</data>
+      <data key="key2">[5762 / 5763]</data>
+      <data key="key3">[5762 / 5763]</data>
+      <data key="key4">1</data>
+    </node>
+    <node id="n264">
+      <data key="key0">1725394201</data>
+      <data key="key1">Parkhaus Ludwigsplatz</data>
+      <data key="key2">[5579 / 5733]</data>
+      <data key="key3">[5579 / 5733]</data>
+      <data key="key4">154</data>
+    </node>
+    <node id="n265">
+      <data key="key0">996110499</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[5584 / 5758]</data>
+      <data key="key3">[5584 / 5758]</data>
+      <data key="key4">174</data>
+    </node>
+    <node id="n266">
+      <data key="key0">1670888224</data>
+      <data key="key1">ING DiBa Automat</data>
+      <data key="key2">[5579 / 5752]</data>
+      <data key="key3">[5579 / 5752]</data>
+      <data key="key4">173</data>
+    </node>
+    <node id="n267">
+      <data key="key0">987655371</data>
+      <data key="key1">Sparda-Bank</data>
+      <data key="key2">[5576 / 5757]</data>
+      <data key="key3">[5576 / 5757]</data>
+      <data key="key4">181</data>
+    </node>
+    <node id="n268">
+      <data key="key0">1007094885</data>
+      <data key="key1">Südwestbank</data>
+      <data key="key2">[5575 / 5758]</data>
+      <data key="key3">[5575 / 5758]</data>
+      <data key="key4">183</data>
+    </node>
+    <node id="n269">
+      <data key="key0">32519022</data>
+      <data key="key1">Sparkasse Karlsruhe</data>
+      <data key="key2">[5580 / 5759]</data>
+      <data key="key3">[5580 / 5759]</data>
+      <data key="key4">179</data>
+    </node>
+    <node id="n270">
+      <data key="key0">1007094854</data>
+      <data key="key1">HypoVereinsbank</data>
+      <data key="key2">[5580 / 5739]</data>
+      <data key="key3">[5580 / 5739]</data>
+      <data key="key4">159</data>
+    </node>
+    <node id="n271">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[5580 / 5739]</data>
+      <data key="key3">[5580 / 5739]</data>
+      <data key="key4">159</data>
+    </node>
+    <node id="n272">
+      <data key="key0">253395553</data>
+      <data key="key1">Evangelische Kreditgenossenschaft</data>
+      <data key="key2">[5578 / 5738]</data>
+      <data key="key3">[5578 / 5738]</data>
+      <data key="key4">160</data>
+    </node>
+    <node id="n273">
+      <data key="key0">1725394170</data>
+      <data key="key1">Friedrichsplatz</data>
+      <data key="key2">[5575 / 5739]</data>
+      <data key="key3">[5575 / 5739]</data>
+      <data key="key4">164</data>
+    </node>
+    <node id="n274">
+      <data key="key0">3692230307</data>
+      <data key="key1">BW-Bank</data>
+      <data key="key2">[5575 / 5740]</data>
+      <data key="key3">[5575 / 5740]</data>
+      <data key="key4">165</data>
+    </node>
+    <node id="n275">
+      <data key="key0">296295114</data>
+      <data key="key1">Sparkasse Karlsruhe Ettlingen</data>
+      <data key="key2">[5573 / 5736]</data>
+      <data key="key3">[5573 / 5736]</data>
+      <data key="key4">163</data>
+    </node>
+    <node id="n276">
+      <data key="key0">1725394191</data>
+      <data key="key1">Karstadt</data>
+      <data key="key2">[5574 / 5744]</data>
+      <data key="key3">[5574 / 5744]</data>
+      <data key="key4">170</data>
+    </node>
+    <node id="n277">
+      <data key="key0">1811526408</data>
+      <data key="key1">Kreuzstraße (C&amp;A)</data>
+      <data key="key2">[5507 / 5681]</data>
+      <data key="key3">[5507 / 5681]</data>
+      <data key="key4">174</data>
+    </node>
+    <node id="n278">
+      <data key="key0">60019238</data>
+      <data key="key1">Am Zirkel (P&amp;C)</data>
+      <data key="key2">[5441 / 5741]</data>
+      <data key="key3">[5441 / 5741]</data>
+      <data key="key4">300</data>
+    </node>
+    <node id="n279">
+      <data key="key0">1725432891</data>
+      <data key="key1">Schlossplatz</data>
+      <data key="key2">[5398 / 5727]</data>
+      <data key="key3">[5398 / 5727]</data>
+      <data key="key4">329</data>
+    </node>
+    <node id="n280">
+      <data key="key0">60019235</data>
+      <data key="key1">Karstadt am Zirkel</data>
+      <data key="key2">[5394 / 5759]</data>
+      <data key="key3">[5394 / 5759]</data>
+      <data key="key4">365</data>
+    </node>
+    <node id="n281">
+      <data key="key0">330848762</data>
+      <data key="key1">Akademiestraße</data>
+      <data key="key2">[5331 / 5760]</data>
+      <data key="key3">[5331 / 5760]</data>
+      <data key="key4">429</data>
+    </node>
+    <node id="n282">
+      <data key="key0">3174659861</data>
+      <data key="key1">BBBank</data>
+      <data key="key2">[5365 / 5763]</data>
+      <data key="key3">[5365 / 5763]</data>
+      <data key="key4">398</data>
+    </node>
+    <node id="n283">
+      <data key="key0">3174661864</data>
+      <data key="key1">BBank EC-Automat</data>
+      <data key="key2">[5341 / 5764]</data>
+      <data key="key3">[5341 / 5764]</data>
+      <data key="key4">423</data>
+    </node>
+    <node id="n284">
+      <data key="key0">1670888224</data>
+      <data key="key1">ING DiBa Automat</data>
+      <data key="key2">[5485 / 5569]</data>
+      <data key="key3">[5485 / 5569]</data>
+      <data key="key4">84</data>
+    </node>
+    <node id="n285">
+      <data key="key0">1007094885</data>
+      <data key="key1">Südwestbank</data>
+      <data key="key2">[5472 / 5572]</data>
+      <data key="key3">[5472 / 5572]</data>
+      <data key="key4">100</data>
+    </node>
+    <node id="n286">
+      <data key="key0">987655371</data>
+      <data key="key1">Sparda-Bank</data>
+      <data key="key2">[5448 / 5573]</data>
+      <data key="key3">[5448 / 5573]</data>
+      <data key="key4">125</data>
+    </node>
+    <node id="n287">
+      <data key="key0">1481190975</data>
+      <data key="key1">ZG Raiffeisen</data>
+      <data key="key2">[5503 / 5573]</data>
+      <data key="key3">[5503 / 5573]</data>
+      <data key="key4">70</data>
+    </node>
+    <node id="n288">
+      <data key="key0">32519022</data>
+      <data key="key1">Sparkasse Karlsruhe</data>
+      <data key="key2">[5426 / 5573]</data>
+      <data key="key3">[5426 / 5573]</data>
+      <data key="key4">147</data>
+    </node>
+    <node id="n289">
+      <data key="key0">2315633987</data>
+      <data key="key1">ReiseBank</data>
+      <data key="key2">[5369 / 5573]</data>
+      <data key="key3">[5369 / 5573]</data>
+      <data key="key4">204</data>
+    </node>
+    <node id="n290">
+      <data key="key0">996110499</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[5358 / 5573]</data>
+      <data key="key3">[5358 / 5573]</data>
+      <data key="key4">215</data>
+    </node>
+    <node id="n291">
+      <data key="key0">1681698050</data>
+      <data key="key1">Tiefgarage Universität</data>
+      <data key="key2">[5349 / 5582]</data>
+      <data key="key3">[5349 / 5582]</data>
+      <data key="key4">233</data>
+    </node>
+    <node id="n292">
+      <data key="key0">2315633987</data>
+      <data key="key1">ReiseBank</data>
+      <data key="key2">[5995 / 6114]</data>
+      <data key="key3">[5995 / 6114]</data>
+      <data key="key4">119</data>
+    </node>
+    <node id="n293">
+      <data key="key0">60019238</data>
+      <data key="key1">Am Zirkel (P&amp;C)</data>
+      <data key="key2">[6131 / 6137]</data>
+      <data key="key3">[6131 / 6137]</data>
+      <data key="key4">6</data>
+    </node>
+    <node id="n294">
+      <data key="key0">296295114</data>
+      <data key="key1">Sparkasse Karlsruhe Ettlingen</data>
+      <data key="key2">[6136 / 6138]</data>
+      <data key="key3">[6136 / 6138]</data>
+      <data key="key4">2</data>
+    </node>
+    <node id="n295">
+      <data key="key0">60019235</data>
+      <data key="key1">Karstadt am Zirkel</data>
+      <data key="key2">[6092 / 6145]</data>
+      <data key="key3">[6092 / 6145]</data>
+      <data key="key4">53</data>
+    </node>
+    <node id="n296">
+      <data key="key0">1007094923</data>
+      <data key="key1">Santander Bank</data>
+      <data key="key2">[6449 / 7040]</data>
+      <data key="key3">[6449 / 7040]</data>
+      <data key="key4">591</data>
+    </node>
+    <node id="n297">
+      <data key="key0">30030251</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[6926 / 7047]</data>
+      <data key="key3">[6926 / 7047]</data>
+      <data key="key4">121</data>
+    </node>
+    <node id="n298">
+      <data key="key0">470342842</data>
+      <data key="key1">Magdeburger Haus</data>
+      <data key="key2">[6930 / 7051]</data>
+      <data key="key3">[6930 / 7051]</data>
+      <data key="key4">121</data>
+    </node>
+    <node id="n299">
+      <data key="key0">470342842</data>
+      <data key="key1">Magdeburger Haus</data>
+      <data key="key2">[6387 / 6784]</data>
+      <data key="key3">[6387 / 6784]</data>
+      <data key="key4">397</data>
+    </node>
+    <node id="n300">
+      <data key="key0">470342842</data>
+      <data key="key1">Magdeburger Haus</data>
+      <data key="key2">[5307 / 5566]</data>
+      <data key="key3">[5307 / 5566]</data>
+      <data key="key4">259</data>
+    </node>
+    <node id="n301">
+      <data key="key0">367025852</data>
+      <data key="key1">Volksbank</data>
+      <data key="key2">[4572 / 5568]</data>
+      <data key="key3">[4572 / 5568]</data>
+      <data key="key4">996</data>
+    </node>
+    <node id="n302">
+      <data key="key0">25946389</data>
+      <data key="key1">EFA/bft</data>
+      <data key="key2">[4811 / 6102]</data>
+      <data key="key3">[4811 / 6102]</data>
+      <data key="key4">1291</data>
+    </node>
+    <node id="n303">
+      <data key="key0">1868890990</data>
+      <data key="key1">Santander Consumer Bank</data>
+      <data key="key2">[5237 / 6668]</data>
+      <data key="key3">[5237 / 6668]</data>
+      <data key="key4">1431</data>
+    </node>
+    <node id="n304">
+      <data key="key0">330848762</data>
+      <data key="key1">Akademiestraße</data>
+      <data key="key2">[5864 / 6777]</data>
+      <data key="key3">[5864 / 6777]</data>
+      <data key="key4">913</data>
+    </node>
+    <node id="n305">
+      <data key="key0">1007094885</data>
+      <data key="key1">Südwestbank</data>
+      <data key="key2">[6097 / 6789]</data>
+      <data key="key3">[6097 / 6789]</data>
+      <data key="key4">692</data>
+    </node>
+    <node id="n306">
+      <data key="key0">987655371</data>
+      <data key="key1">Sparda-Bank</data>
+      <data key="key2">[6080 / 6790]</data>
+      <data key="key3">[6080 / 6790]</data>
+      <data key="key4">710</data>
+    </node>
+    <node id="n307">
+      <data key="key0">253395553</data>
+      <data key="key1">Evangelische Kreditgenossenschaft</data>
+      <data key="key2">[6428 / 6802]</data>
+      <data key="key3">[6428 / 6802]</data>
+      <data key="key4">374</data>
+    </node>
+    <node id="n308">
+      <data key="key0">30030251</data>
+      <data key="key1">Volksbank Karlsruhe</data>
+      <data key="key2">[6693 / 6874]</data>
+      <data key="key3">[6693 / 6874]</data>
+      <data key="key4">181</data>
+    </node>
+    <node id="n309">
+      <data key="key0">1725394201</data>
+      <data key="key1">Parkhaus Ludwigsplatz</data>
+      <data key="key2">[6420 / 6919]</data>
+      <data key="key3">[6420 / 6919]</data>
+      <data key="key4">499</data>
+    </node>
+    <node id="n310">
+      <data key="key0">987655371</data>
+      <data key="key1">Sparda-Bank</data>
+      <data key="key2">[6821 / 6923]</data>
+      <data key="key3">[6821 / 6923]</data>
+      <data key="key4">102</data>
+    </node>
+    <node id="n311">
+      <data key="key0">3169028661</data>
+      <data key="key1">DenizBank Filiale Karlsruhe</data>
+      <data key="key2">[6243 / 6929]</data>
+      <data key="key3">[6243 / 6929]</data>
+      <data key="key4">686</data>
+    </node>
+    <node id="n312">
+      <data key="key0">1777375778</data>
+      <data key="key1">Post Galerie</data>
+      <data key="key2">[6244 / 7125]</data>
+      <data key="key3">[6244 / 7125]</data>
+      <data key="key4">881</data>
+    </node>
+    <node id="n313">
+      <data key="key0">1007094854</data>
+      <data key="key1">HypoVereinsbank</data>
+      <data key="key2">[6233 / 6928]</data>
+      <data key="key3">[6233 / 6928]</data>
+      <data key="key4">695</data>
+    </node>
+    <node id="n314">
+      <data key="key0">1670888224</data>
+      <data key="key1">ING DiBa Automat</data>
+      <data key="key2">[6105 / 6933]</data>
+      <data key="key3">[6105 / 6933]</data>
+      <data key="key4">828</data>
+    </node>
+    <node id="n315">
+      <data key="key0">996110499</data>
+      <data key="key1">Sparkasse</data>
+      <data key="key2">[5995 / 7007]</data>
+      <data key="key3">[5995 / 7007]</data>
+      <data key="key4">1012</data>
+    </node>
+    <node id="n316">
+      <data key="key0">32519022</data>
+      <data key="key1">Sparkasse Karlsruhe</data>
+      <data key="key2">[6013 / 7016]</data>
+      <data key="key3">[6013 / 7016]</data>
+      <data key="key4">1003</data>
+    </node>
+    <node id="n317">
+      <data key="key0">1749651556</data>
+      <data key="key1">Stephanplatz</data>
+      <data key="key2">[6252 / 7185]</data>
+      <data key="key3">[6252 / 7185]</data>
+      <data key="key4">933</data>
+    </node>
+    <node id="n318">
+      <data key="key0">1007094861</data>
+      <data key="key1">Autosilo Meyer</data>
+      <data key="key2">[6265 / 7517]</data>
+      <data key="key3">[6265 / 7517]</data>
+      <data key="key4">1252</data>
+    </node>
+    <node id="n319">
+      <data key="key0">2315633987</data>
+      <data key="key1">ReiseBank</data>
+      <data key="key2">[6153 / 7198]</data>
+      <data key="key3">[6153 / 7198]</data>
+      <data key="key4">1045</data>
+    </node>
+    <node id="n320">
+      <data key="key0">3338537003</data>
+      <data key="key1">Aral</data>
+      <data key="key2">[6209 / 7516]</data>
+      <data key="key3">[6209 / 7516]</data>
+      <data key="key4">1307</data>
+    </node>
+    <node id="n321">
+      <data key="key0">1868890990</data>
+      <data key="key1">Santander Consumer Bank</data>
+      <data key="key2">[6923 / 6927]</data>
+      <data key="key3">[6923 / 6927]</data>
+      <data key="key4">4</data>
+    </node>
+    <node id="n322">
+      <data key="key0">320238064</data>
+      <data key="key1">gebaka</data>
+      <data key="key2">[6923 / 6928]</data>
+      <data key="key3">[6923 / 6928]</data>
+      <data key="key4">5</data>
+    </node>
+    <node id="n323">
+      <data key="key0">1007094885</data>
+      <data key="key1">Südwestbank</data>
+      <data key="key2">[6827 / 6920]</data>
+      <data key="key3">[6827 / 6920]</data>
+      <data key="key4">93</data>
+    </node>
+    <node id="n324">
+      <data key="key0">1868890990</data>
+      <data key="key1">Santander Consumer Bank</data>
+      <data key="key2">[6818 / 6826]</data>
+      <data key="key3">[6818 / 6826]</data>
+      <data key="key4">8</data>
+    </node>
+    <node id="n325">
+      <data key="key0">470342842</data>
+      <data key="key1">Magdeburger Haus</data>
+      <data key="key2">[6810 / 6813]</data>
+      <data key="key3">[6810 / 6813]</data>
+      <data key="key4">3</data>
+    </node>
+    <node id="n326">
+      <data key="key0">320238064</data>
+      <data key="key1">gebaka</data>
+      <data key="key2">[6793 / 6846]</data>
+      <data key="key3">[6793 / 6846]</data>
+      <data key="key4">53</data>
+    </node>
+    <node id="n327">
+      <data key="key0">330845736</data>
+      <data key="key1">Landesbibliothek</data>
+      <data key="key2">[6791 / 6799]</data>
+      <data key="key3">[6791 / 6799]</data>
+      <data key="key4">8</data>
+    </node>
+    <edge id="e0" source="n33" target="n7">
+    </edge>
+    <edge id="e1" source="n37" target="n36">
+    </edge>
+    <edge id="e2" source="n38" target="n5">
+    </edge>
+    <edge id="e3" source="n5" target="n40">
+    </edge>
+    <edge id="e4" source="n6" target="n36">
+    </edge>
+    <edge id="e5" source="n5" target="n36">
+    </edge>
+    <edge id="e6" source="n6" target="n40">
+    </edge>
+    <edge id="e7" source="n6" target="n38">
+    </edge>
+    <edge id="e8" source="n220" target="n292">
+    </edge>
+    <edge id="e9" source="n220" target="n221">
+    </edge>
+    <edge id="e10" source="n295" target="n196">
+    </edge>
+    <edge id="e11" source="n306" target="n305">
+    </edge>
+    <edge id="e12" source="n304" target="n314">
+    </edge>
+    <edge id="e13" source="n176" target="n177">
+    </edge>
+    <edge id="e14" source="n306" target="n303">
+    </edge>
+    <edge id="e15" source="n204" target="n305">
+    </edge>
+    <edge id="e16" source="n314" target="n203">
+    </edge>
+    <edge id="e17" source="n198" target="n319">
+    </edge>
+    <edge id="e18" source="n316" target="n207">
+    </edge>
+    <edge id="e19" source="n198" target="n199">
+    </edge>
+    <edge id="e20" source="n206" target="n207">
+    </edge>
+    <edge id="e21" source="n200" target="n208">
+    </edge>
+    <edge id="e22" source="n314" target="n202">
+    </edge>
+    <edge id="e23" source="n205" target="n314">
+    </edge>
+    <edge id="e24" source="n205" target="n203">
+    </edge>
+    <edge id="e25" source="n306" target="n203">
+    </edge>
+    <edge id="e26" source="n307" target="n311">
+    </edge>
+    <edge id="e27" source="n44" target="n255">
+    </edge>
+    <edge id="e28" source="n307" target="n327">
+    </edge>
+    <edge id="e29" source="n313" target="n309">
+    </edge>
+    <edge id="e30" source="n313" target="n314">
+    </edge>
+    <edge id="e31" source="n314" target="n311">
+    </edge>
+    <edge id="e32" source="n316" target="n250">
+    </edge>
+    <edge id="e33" source="n310" target="n309">
+    </edge>
+    <edge id="e34" source="n296" target="n311">
+    </edge>
+    <edge id="e35" source="n313" target="n296">
+    </edge>
+    <edge id="e36" source="n243" target="n244">
+    </edge>
+    <edge id="e37" source="n240" target="n245">
+    </edge>
+    <edge id="e38" source="n246" target="n249">
+    </edge>
+    <edge id="e39" source="n246" target="n244">
+    </edge>
+    <edge id="e40" source="n243" target="n312">
+    </edge>
+    <edge id="e41" source="n317" target="n312">
+    </edge>
+    <edge id="e42" source="n312" target="n245">
+    </edge>
+    <edge id="e43" source="n207" target="n202">
+    </edge>
+    <edge id="e44" source="n187" target="n196">
+    </edge>
+    <edge id="e45" source="n189" target="n196">
+    </edge>
+    <edge id="e46" source="n189" target="n196">
+    </edge>
+    <edge id="e47" source="n190" target="n191">
+    </edge>
+    <edge id="e48" source="n317" target="n312">
+    </edge>
+    <edge id="e49" source="n194" target="n311">
+    </edge>
+    <edge id="e50" source="n193" target="n196">
+    </edge>
+    <edge id="e51" source="n190" target="n191">
+    </edge>
+    <edge id="e52" source="n192" target="n320">
+    </edge>
+    <edge id="e53" source="n306" target="n305">
+    </edge>
+    <edge id="e54" source="n312" target="n311">
+    </edge>
+    <edge id="e55" source="n313" target="n186">
+    </edge>
+    <edge id="e56" source="n313" target="n314">
+    </edge>
+    <edge id="e57" source="n314" target="n311">
+    </edge>
+    <edge id="e58" source="n306" target="n186">
+    </edge>
+    <edge id="e59" source="n314" target="n311">
+    </edge>
+    <edge id="e60" source="n313" target="n314">
+    </edge>
+    <edge id="e61" source="n313" target="n186">
+    </edge>
+    <edge id="e62" source="n182" target="n311">
+    </edge>
+    <edge id="e63" source="n182" target="n186">
+    </edge>
+    <edge id="e64" source="n313" target="n312">
+    </edge>
+    <edge id="e65" source="n307" target="n309">
+    </edge>
+    <edge id="e66" source="n306" target="n309">
+    </edge>
+    <edge id="e67" source="n306" target="n305">
+    </edge>
+    <edge id="e68" source="n317" target="n312">
+    </edge>
+    <edge id="e69" source="n312" target="n311">
+    </edge>
+    <edge id="e70" source="n318" target="n320">
+    </edge>
+    <edge id="e71" source="n29" target="n41">
+    </edge>
+    <edge id="e72" source="n318" target="n320">
+    </edge>
+    <edge id="e73" source="n52" target="n41">
+    </edge>
+    <edge id="e74" source="n318" target="n320">
+    </edge>
+    <edge id="e75" source="n30" target="n36">
+    </edge>
+    <edge id="e76" source="n29" target="n52">
+    </edge>
+    <edge id="e77" source="n29" target="n36">
+    </edge>
+    <edge id="e78" source="n44" target="n40">
+    </edge>
+    <edge id="e79" source="n38" target="n44">
+    </edge>
+    <edge id="e80" source="n46" target="n48">
+    </edge>
+    <edge id="e81" source="n49" target="n44">
+    </edge>
+    <edge id="e82" source="n29" target="n41">
+    </edge>
+    <edge id="e83" source="n47" target="n318">
+    </edge>
+    <edge id="e84" source="n47" target="n32">
+    </edge>
+    <edge id="e85" source="n116" target="n119">
+    </edge>
+    <edge id="e86" source="n128" target="n125">
+    </edge>
+    <edge id="e87" source="n121" target="n122">
+    </edge>
+    <edge id="e88" source="n104" target="n93">
+    </edge>
+    <edge id="e89" source="n103" target="n97">
+    </edge>
+    <edge id="e90" source="n54" target="n132">
+    </edge>
+    <edge id="e91" source="n37" target="n30">
+    </edge>
+    <edge id="e92" source="n33" target="n32">
+    </edge>
+    <edge id="e93" source="n41" target="n49">
+    </edge>
+    <edge id="e94" source="n38" target="n39">
+    </edge>
+    <edge id="e95" source="n41" target="n44">
+    </edge>
+    <edge id="e96" source="n39" target="n40">
+    </edge>
+    <edge id="e97" source="n28" target="n24">
+    </edge>
+    <edge id="e98" source="n47" target="n33">
+    </edge>
+    <edge id="e99" source="n41" target="n7">
+    </edge>
+    <edge id="e100" source="n39" target="n41">
+    </edge>
+    <edge id="e101" source="n33" target="n41">
+    </edge>
+    <edge id="e102" source="n10" target="n3">
+    </edge>
+    <edge id="e103" source="n19" target="n70">
+    </edge>
+    <edge id="e104" source="n70" target="n66">
+    </edge>
+    <edge id="e105" source="n27" target="n28">
+    </edge>
+    <edge id="e106" source="n3" target="n4">
+    </edge>
+    <edge id="e107" source="n23" target="n4">
+    </edge>
+    <edge id="e108" source="n46" target="n318">
+    </edge>
+    <edge id="e109" source="n47" target="n44">
+    </edge>
+    <edge id="e110" source="n47" target="n49">
+    </edge>
+    <edge id="e111" source="n318" target="n320">
+    </edge>
+    <edge id="e112" source="n78" target="n56">
+    </edge>
+    <edge id="e113" source="n61" target="n63">
+    </edge>
+    <edge id="e114" source="n57" target="n63">
+    </edge>
+    <edge id="e115" source="n82" target="n84">
+    </edge>
+    <edge id="e116" source="n85" target="n84">
+    </edge>
+    <edge id="e117" source="n1" target="n64">
+    </edge>
+    <edge id="e118" source="n65" target="n64">
+    </edge>
+    <edge id="e119" source="n69" target="n70">
+    </edge>
+    <edge id="e120" source="n70" target="n59">
+    </edge>
+    <edge id="e121" source="n87" target="n77">
+    </edge>
+    <edge id="e122" source="n78" target="n79">
+    </edge>
+    <edge id="e123" source="n109" target="n87">
+    </edge>
+    <edge id="e124" source="n109" target="n89">
+    </edge>
+    <edge id="e125" source="n134" target="n135">
+    </edge>
+    <edge id="e126" source="n136" target="n135">
+    </edge>
+    <edge id="e127" source="n138" target="n137">
+    </edge>
+    <edge id="e128" source="n149" target="n148">
+    </edge>
+    <edge id="e129" source="n290" target="n151">
+    </edge>
+    <edge id="e130" source="n151" target="n289">
+    </edge>
+    <edge id="e131" source="n151" target="n257">
+    </edge>
+    <edge id="e132" source="n150" target="n153">
+    </edge>
+    <edge id="e133" source="n150" target="n155">
+    </edge>
+    <edge id="e134" source="n150" target="n156">
+    </edge>
+    <edge id="e135" source="n150" target="n279">
+    </edge>
+    <edge id="e136" source="n155" target="n152">
+    </edge>
+    <edge id="e137" source="n152" target="n291">
+    </edge>
+    <edge id="e138" source="n151" target="n284">
+    </edge>
+    <edge id="e139" source="n153" target="n277">
+    </edge>
+    <edge id="e140" source="n153" target="n155">
+    </edge>
+    <edge id="e141" source="n153" target="n156">
+    </edge>
+    <edge id="e142" source="n153" target="n157">
+    </edge>
+    <edge id="e143" source="n155" target="n156">
+    </edge>
+    <edge id="e144" source="n155" target="n157">
+    </edge>
+    <edge id="e145" source="n288" target="n289">
+    </edge>
+    <edge id="e146" source="n287" target="n277">
+    </edge>
+    <edge id="e147" source="n291" target="n279">
+    </edge>
+    <edge id="e148" source="n288" target="n289">
+    </edge>
+    <edge id="e149" source="n291" target="n279">
+    </edge>
+    <edge id="e150" source="n288" target="n285">
+    </edge>
+    <edge id="e151" source="n286" target="n284">
+    </edge>
+    <edge id="e152" source="n285" target="n284">
+    </edge>
+    <edge id="e153" source="n286" target="n285">
+    </edge>
+    <edge id="e154" source="n287" target="n291">
+    </edge>
+    <edge id="e155" source="n278" target="n279">
+    </edge>
+    <edge id="e156" source="n281" target="n290">
+    </edge>
+    <edge id="e157" source="n280" target="n282">
+    </edge>
+    <edge id="e158" source="n280" target="n278">
+    </edge>
+    <edge id="e159" source="n168" target="n170">
+    </edge>
+    <edge id="e160" source="n171" target="n174">
+    </edge>
+    <edge id="e161" source="n258" target="n162">
+    </edge>
+    <edge id="e162" source="n281" target="n267">
+    </edge>
+    <edge id="e163" source="n272" target="n267">
+    </edge>
+    <edge id="e164" source="n268" target="n303">
+    </edge>
+    <edge id="e165" source="n159" target="n291">
+    </edge>
+    <edge id="e166" source="n270" target="n264">
+    </edge>
+    <edge id="e167" source="n281" target="n271">
+    </edge>
+    <edge id="e168" source="n270" target="n266">
+    </edge>
+    <edge id="e169" source="n266" target="n271">
+    </edge>
+    <edge id="e170" source="n168" target="n174">
+    </edge>
+    <edge id="e171" source="n303" target="n283">
+    </edge>
+    <edge id="e172" source="n168" target="n170">
+    </edge>
+    <edge id="e173" source="n278" target="n283">
+    </edge>
+    <edge id="e174" source="n278" target="n174">
+    </edge>
+    <edge id="e175" source="n160" target="n275">
+    </edge>
+    <edge id="e176" source="n280" target="n275">
+    </edge>
+    <edge id="e177" source="n168" target="n279">
+    </edge>
+    <edge id="e178" source="n275" target="n283">
+    </edge>
+    <edge id="e179" source="n267" target="n268">
+    </edge>
+    <edge id="e180" source="n280" target="n258">
+    </edge>
+    <edge id="e181" source="n160" target="n258">
+    </edge>
+    <edge id="e182" source="n160" target="n173">
+    </edge>
+    <edge id="e183" source="n258" target="n173">
+    </edge>
+    <edge id="e184" source="n279" target="n277">
+    </edge>
+    <edge id="e185" source="n278" target="n258">
+    </edge>
+    <edge id="e186" source="n170" target="n277">
+    </edge>
+    <edge id="e187" source="n258" target="n275">
+    </edge>
+    <edge id="e188" source="n170" target="n291">
+    </edge>
+    <edge id="e189" source="n168" target="n169">
+    </edge>
+    <edge id="e190" source="n171" target="n170">
+    </edge>
+    <edge id="e191" source="n258" target="n172">
+    </edge>
+    <edge id="e192" source="n171" target="n277">
+    </edge>
+    <edge id="e193" source="n173" target="n174">
+    </edge>
+    <edge id="e194" source="n174" target="n279">
+    </edge>
+    <edge id="e195" source="n165" target="n266">
+    </edge>
+    <edge id="e196" source="n278" target="n276">
+    </edge>
+    <edge id="e197" source="n265" target="n163">
+    </edge>
+    <edge id="e198" source="n163" target="n164">
+    </edge>
+    <edge id="e199" source="n163" target="n167">
+    </edge>
+    <edge id="e200" source="n269" target="n260">
+    </edge>
+    <edge id="e201" source="n270" target="n165">
+    </edge>
+    <edge id="e202" source="n165" target="n271">
+    </edge>
+    <edge id="e203" source="n174" target="n273">
+    </edge>
+    <edge id="e204" source="n258" target="n279">
+    </edge>
+    <edge id="e205" source="n278" target="n275">
+    </edge>
+    <edge id="e206" source="n258" target="n166">
+    </edge>
+    <edge id="e207" source="n267" target="n264">
+    </edge>
+    <edge id="e208" source="n266" target="n264">
+    </edge>
+    <edge id="e209" source="n269" target="n259">
+    </edge>
+    <edge id="e210" source="n273" target="n276">
+    </edge>
+    <edge id="e211" source="n281" target="n266">
+    </edge>
+    <edge id="e212" source="n263" target="n282">
+    </edge>
+    <edge id="e213" source="n229" target="n234">
+    </edge>
+    <edge id="e214" source="n228" target="n231">
+    </edge>
+    <edge id="e215" source="n224" target="n225">
+    </edge>
+    <edge id="e216" source="n231" target="n227">
+    </edge>
+    <edge id="e217" source="n213" target="n214">
+    </edge>
+    <edge id="e218" source="n231" target="n217">
+    </edge>
+    <edge id="e219" source="n216" target="n231">
+    </edge>
+    <edge id="e220" source="n232" target="n233">
+    </edge>
+    <edge id="e221" source="n218" target="n234">
+    </edge>
+  </graph>
+</graphml>
