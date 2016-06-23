@@ -1,6 +1,6 @@
 #! /bin/bash
 
-time_out=10
+time_out=0.1
 seeds=1
 seeds_minus_one=$((seeds - 1))
 
@@ -26,6 +26,8 @@ for file_name in `ls -1 $data_dir/ | grep "\.graph$"`; do
 
     graphml_file_name=$data_dir/../graphml/$data_name.graphml
     echo "graphml_file_name=$graphml_file_name"
+
+    node_mapping_file="$data_dir/$file_name.node_mapping"
 
     am=`echo $file_name | sed -e "s/.*AM\([1-3]\).*/\1/g"`
     echo "am=AM$am"
@@ -59,10 +61,11 @@ for file_name in `ls -1 $data_dir/ | grep "\.graph$"`; do
     echo "Add to intermediate csv..."
     python csvgen.py $log_file >> $output_dir/intermediate.csv
     #echo "Make solution csv..."
-    #python mk_solution_csv.py $graphml_file_name $log_file > $csv_dir/$data_name.csv
+    python mk_solution_csv.py $log_file $node_mapping_file > $csv_dir/$data_name.csv
 done
 
 ### generate real csv from intermediate csv
+python mk_final_csv.py $output_dir/intermediate.csv > $output_dir/final.csv
 
 ### generate and open table
 
