@@ -9,7 +9,7 @@ class CliquePhasedLocalSearch : public PhasedLocalSearch
     CliquePhasedLocalSearch(std::vector<std::vector<int>> const &vAdjacencyArray, std::vector<double> const &vVertexWeights);
     virtual ~CliquePhasedLocalSearch() {}
 
-    virtual int DegreeSelect(ArraySet const &vertexSet) const;
+    virtual int DegreeSelect(ResetableArraySet const &vertexSet) const;
 
     virtual void AddToK(int const vertex);
 

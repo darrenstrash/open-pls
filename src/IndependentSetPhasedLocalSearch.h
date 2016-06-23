@@ -9,7 +9,7 @@ class IndependentSetPhasedLocalSearch : public PhasedLocalSearch
     IndependentSetPhasedLocalSearch(std::vector<std::vector<int>> const &vAdjacencyArray, std::vector<double> const &vVertexWeights);
     virtual ~IndependentSetPhasedLocalSearch() {}
 
-    virtual int DegreeSelect(ArraySet const &vertexSet) const;
+    virtual int DegreeSelect(ResetableArraySet const &vertexSet) const;
 
     virtual void AddToK(int const vertex);
 

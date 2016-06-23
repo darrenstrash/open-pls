@@ -144,12 +144,12 @@ void PhasedLocalSearch::UpdatePenalties()
 #endif // DEBBUG
 }
 
-int PhasedLocalSearch::RandomSelect(ArraySet const &vertexSet) const
+int PhasedLocalSearch::RandomSelect(ResetableArraySet const &vertexSet) const
 {
     return *(vertexSet.begin() + rand()%vertexSet.Size());
 }
 
-int PhasedLocalSearch::PenaltySelect(ArraySet const &vertexSet) const
+int PhasedLocalSearch::PenaltySelect(ResetableArraySet const &vertexSet) const
 {
     assert(!vertexSet.Empty());
 #ifdef DEBUG
@@ -199,7 +199,7 @@ int PhasedLocalSearch::SelectFromZero()
     return vertexToSelect;
 }
 
-int PhasedLocalSearch::SelectFrom(ArraySet const &vertexSet) const
+int PhasedLocalSearch::SelectFrom(ResetableArraySet const &vertexSet) const
 {
     switch (m_SelectionPhase) {
         // random vertex in set.
@@ -240,7 +240,7 @@ int PhasedLocalSearch::SelectFromOne()
 
 
 // Perform set minus and return true iff it is empty
-bool PhasedLocalSearch::DiffIsEmpty(ArraySet const A, ArraySet const B) const
+bool PhasedLocalSearch::DiffIsEmpty(ResetableArraySet const A, ResetableArraySet const B) const
 {
     if (B.Size() < A.Size()) return false;
 
@@ -659,7 +659,7 @@ size_t PhasedLocalSearch::GetPenaltyDelay() const
     return m_uPenaltyDelay;
 }
 
-ArraySet const& PhasedLocalSearch::GetBestK() const
+ResetableArraySet const& PhasedLocalSearch::GetBestK() const
 {
     return m_BestK;
 }

@@ -2,7 +2,7 @@
 #define PLS_H
 
 #include "Algorithm.h"
-#include "ArraySet.h"
+#include "ResetableArraySet.h"
 
 #include <string>
 #include <vector>
@@ -21,13 +21,13 @@ public:
 
     void UpdatePenalties();
 
-    int RandomSelect (ArraySet const &vertexSet) const;
-    int PenaltySelect(ArraySet const &vertexSet) const;
-    virtual int DegreeSelect (ArraySet const &vertexSet) const = 0;
+    int RandomSelect (ResetableArraySet const &vertexSet) const;
+    int PenaltySelect(ResetableArraySet const &vertexSet) const;
+    virtual int DegreeSelect (ResetableArraySet const &vertexSet) const = 0;
 
 ////    void RunPhase(int const iterations, SelectionPhase selectionPhase);
 
-    int SelectFrom(ArraySet const &vertexSet) const;
+    int SelectFrom(ResetableArraySet const &vertexSet) const;
     int SelectFromZero();
     int SelectFromOne();
 
@@ -42,7 +42,7 @@ public:
 
     void SetMaxSelections(size_t const uMaxSelections);
 
-    bool DiffIsEmpty(ArraySet const A, ArraySet const B) const;
+    bool DiffIsEmpty(ResetableArraySet const A, ResetableArraySet const B) const;
 
     virtual void AddToK(int const vertex)   = 0;
 ////    void AddToKFromOne(int const vertex);
@@ -68,7 +68,7 @@ public:
     size_t GetMaxSelections() const { return m_uMaxSelections; }
     size_t GetPenaltyDelay() const;
 
-    ArraySet const& GetBestK() const;
+    ResetableArraySet const& GetBestK() const;
 
     virtual void ForceIntoK(int const vertex, bool const updateU) = 0;
 
@@ -92,14 +92,14 @@ protected:
     size_t                               m_uSelections;
 
 // Sets
-    ArraySet                             m_K;
-    ArraySet                             m_BestK;
-    ArraySet                             m_RandomK;
-    ArraySet                             m_DegreeK;
-    ArraySet                             m_U;
-    ArraySet                             m_NotAdjacentToOne;
-    ArraySet                             m_NotAdjacentToZero;
-    mutable ArraySet                     m_ScratchSpace;
+    ResetableArraySet                    m_K;
+    ResetableArraySet                    m_BestK;
+    ResetableArraySet                    m_RandomK;
+    ResetableArraySet                    m_DegreeK;
+    ResetableArraySet                    m_U;
+    ResetableArraySet                    m_NotAdjacentToOne;
+    ResetableArraySet                    m_NotAdjacentToZero;
+    mutable ResetableArraySet            m_ScratchSpace;
     mutable std::vector<int>             m_vScratchCounters;
     bool                                 m_bCheckZero;
     bool                                 m_bCheckOne;

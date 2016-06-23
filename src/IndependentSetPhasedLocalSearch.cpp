@@ -15,7 +15,7 @@ IndependentSetPhasedLocalSearch::IndependentSetPhasedLocalSearch(vector<vector<i
     SetName("pls-independent-set");
 }
 
-int IndependentSetPhasedLocalSearch::DegreeSelect(ArraySet const &vertexSet) const
+int IndependentSetPhasedLocalSearch::DegreeSelect(ResetableArraySet const &vertexSet) const
 {
     size_t minDegree(ULONG_MAX);
     m_ScratchSpace.Clear();

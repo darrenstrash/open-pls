@@ -12,7 +12,7 @@ CliquePhasedLocalSearch::CliquePhasedLocalSearch(vector<vector<int>> const &vAdj
     }
 }
 
-int CliquePhasedLocalSearch::DegreeSelect(ArraySet const &vertexSet) const
+int CliquePhasedLocalSearch::DegreeSelect(ResetableArraySet const &vertexSet) const
 {
     size_t maxDegree(0);
     m_ScratchSpace.Clear();
