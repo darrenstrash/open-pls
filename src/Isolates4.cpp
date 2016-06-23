@@ -74,7 +74,7 @@ bool Isolates4<NeighborSet>::RemoveIsolatedClique(int const vertex, vector<int> 
 
     size_t neighborCount(0);
     for (int const neighbor : neighbors[vertex]) {
-        if (neighbors[neighbor].Size() < neighbors[vertex].Size() || m_vWeights[neighbor] < m_vWeights[vertex]) {
+        if (neighbors[neighbor].Size() < neighbors[vertex].Size() || m_vWeights[neighbor] > m_vWeights[vertex]) {
             return false;
         }
     }
@@ -266,13 +266,13 @@ void Isolates4<NeighborSet>::RemoveAllIsolates(vector<int> &vIsolateVertices)
     while (!remaining.Empty()) {
         int const vertex = *(remaining.begin());
         remaining.Remove(vertex);
-        if (neighbors[vertex].Empty()) {
-            inGraph.Remove(vertex);
-            isolates.Insert(vertex);
-            vIsolateVertices.push_back(vertex);
-        } else {
+////        if (neighbors[vertex].Empty()) {
+////            inGraph.Remove(vertex);
+////            isolates.Insert(vertex);
+////            vIsolateVertices.push_back(vertex);
+////        } else {
             RemoveIsolatedClique(vertex, vIsolateVertices);
-        }
+////        }
     }
 
 #ifdef TIMERS

@@ -370,7 +370,7 @@ int main(int argc, char** argv)
                 vNewWeights[newVertex] = vVertexWeights[oldVertex];
             }
 
-            pPLS = new IndependentSetPhasedLocalSearch(subgraph, vVertexWeights);
+            pPLS = new IndependentSetPhasedLocalSearch(subgraph, vNewWeights);
 
             pPLS->SetMaxSelections(uMaxSelections);
             if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
