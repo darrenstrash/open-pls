@@ -1,5 +1,5 @@
-#ifndef ARRAY_SET_H
-#define ARRAY_SET_H
+#ifndef RESETABLE_ARRAY_SET_H
+#define RESETABLE_ARRAY_SET_H
 
 #include <set>
 #include <vector>
@@ -7,6 +7,7 @@
 #include <cassert>
 #include <utility>
 
+#ifdef USE_RESETABLE
 class ResetableArraySet
 {
 public:
@@ -318,5 +319,9 @@ private:
     bool m_bInserted;
     bool m_bRemoved;
 };
+#else
+    #include "ArraySet.h"
+    typedef ArraySet ResetableArraySet;
+#endif // USE_RESETABLE
 
-#endif // ARRAY_SET_H
+#endif // RESETABLE_ARRAY_SET_H

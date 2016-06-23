@@ -9,7 +9,7 @@
 #include <climits>
 
 ////#define ALLOW_OVERLAP
-#define CHECK_CONSISTENCY
+////#define CHECK_CONSISTENCY
 ////#define DEBUG
 
 using namespace std;

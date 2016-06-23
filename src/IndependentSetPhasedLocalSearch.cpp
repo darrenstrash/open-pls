@@ -153,6 +153,7 @@ void IndependentSetPhasedLocalSearch::InitializeFromK2(bool const updateU)
     int const vertexInK(*m_K.begin());
     m_dKWeight = m_vVertexWeights[vertexInK];
 
+#ifdef USE_RESETABLE
     if (!updateU) {
         // all neighbors of vertex are in C_1
         for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
@@ -167,6 +168,7 @@ void IndependentSetPhasedLocalSearch::InitializeFromK2(bool const updateU)
         m_NotAdjacentToZero.DiffInPlace(m_vAdjacencyArray[vertexInK]);
         return;
     }
+#endif // USE_RESETABLE
 
     // all neighbors of vertex are in C_1
     for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
