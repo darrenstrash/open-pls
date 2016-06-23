@@ -68,6 +68,8 @@ public:
     size_t GetMaxSelections() const { return m_uMaxSelections; }
     size_t GetPenaltyDelay() const;
 
+    ArraySet const& GetBestK() const;
+
     virtual void ForceIntoK(int const vertex, bool const updateU) = 0;
 
 protected:
@@ -91,6 +93,7 @@ protected:
 
 // Sets
     ArraySet                             m_K;
+    ArraySet                             m_BestK;
     ArraySet                             m_RandomK;
     ArraySet                             m_DegreeK;
     ArraySet                             m_U;

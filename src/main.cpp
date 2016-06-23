@@ -331,6 +331,11 @@ int main(int argc, char** argv)
         cout << "penalty-delay  : " << pPLS->GetPenaltyDelay() << endl << flush;
         cout << "selections     : " << pPLS->GetSelectionsToBestWeight() << endl << flush;
         cout << "max-selections : " << pPLS->GetMaxSelections() << endl << flush;
+        cout << "best-solution  :";
+        for (int const vertex : pPLS->GetBestK()) {
+            cout << " " << vertex;
+        }
+        cout << endl << flush;
     }
 
     delete pAlgorithm; pAlgorithm = nullptr;

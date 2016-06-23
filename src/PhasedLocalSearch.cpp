@@ -34,6 +34,7 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 
 // Sets
 , m_K(vAdjacencyArray.size())
+, m_BestK(vAdjacencyArray.size())
 , m_RandomK(vAdjacencyArray.size()) // for saving state of random phase
 , m_DegreeK(vAdjacencyArray.size()) // for saving state of degree phase
 , m_U(vAdjacencyArray.size())
@@ -440,17 +441,18 @@ void PhasedLocalSearch::UpdateStatistics()
     if (m_dKWeight > m_dBestWeight) {
         m_TimeToReachBestWeight = clock() - m_StartTime;
         m_uSelectionsToBestWeight = m_uSelections;
+        m_BestK = m_K;
         m_dBestWeight = m_dKWeight;
         if (!m_bQuiet)
-            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best MWIS weight=" << m_dBestWeight << " has size   " << m_K.Size() << endl << flush;
+            cout << "#(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best MWIS weight=" << m_dBestWeight << " has size   " << m_K.Size() << endl << flush;
     }
 
-    if (m_K.Size() > m_uBestSize) {
-        m_uBestSize = m_K.Size();
-        ////                    cout << "Best MWIS Size=" << m_uBestSize << endl << flush;
-        if (!m_bQuiet)
-            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best WIS size   =" << m_dBestWeight << " has weight " << m_dKWeight << endl << flush;
-    }
+////    if (m_K.Size() > m_uBestSize) {
+////        m_uBestSize = m_K.Size();
+////        ////                    cout << "Best MWIS Size=" << m_uBestSize << endl << flush;
+////        if (!m_bQuiet)
+////            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best WIS size   =" << m_dBestWeight << " has weight " << m_dKWeight << endl << flush;
+////    }
 }
 
 
@@ -515,7 +517,7 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
 
             UpdateStatistics();
             // done! independent set weight reached target
-            if (m_dKWeight == m_dTargetWeight) {
+            if (m_dKWeight >= m_dTargetWeight) {
                 return true;
             }
 
@@ -532,6 +534,10 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
             // select from C_1 \ U
 ////            if (!DiffIsEmpty(m_NotAdjacentToOne, m_U)) {
             if (!m_NotAdjacentToOne.Empty() && m_bCheckOne) {
+
+                if (clock() - m_StartTime > m_TimeOut) {
+                    return false;
+                }
                 bNoSelectionWasMade = false;
 
                 int const vertex = SelectFromOne();
@@ -557,6 +563,11 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
         m_U.Clear();
         m_bCheckZero = true;
         m_bCheckOne = true;
+
+        // stop if timed out
+        if (clock() - m_StartTime > m_TimeOut) {
+            return false;
+        }
     }
 
     return false;
@@ -566,13 +577,13 @@ bool PhasedLocalSearch::Run()
 {
     m_StartTime = clock();
     if (!m_bQuiet) {
-        cout << "Executing algorithm " << GetName() << "..." << endl << flush;
-        cout << "Graph has : " << m_vAdjacencyArray.size() << " vertices " << endl;
+        cout << "#Executing algorithm " << GetName() << "..." << endl << flush;
+        cout << "#Graph has : " << m_vAdjacencyArray.size() << " vertices " << endl;
     }
 
     if (!m_bQuiet) {
         size_t const uSampleVertex(1);
-        cout << "Vertex " << uSampleVertex << " has weight " << m_vVertexWeights[uSampleVertex] << endl;
+        cout << "#Vertex " << uSampleVertex << " has weight " << m_vVertexWeights[uSampleVertex] << endl;
     }
 
     // initialize independent set
@@ -646,4 +657,9 @@ double PhasedLocalSearch::GetTimeoutInSeconds() const
 size_t PhasedLocalSearch::GetPenaltyDelay() const
 {
     return m_uPenaltyDelay;
+}
+
+ArraySet const& PhasedLocalSearch::GetBestK() const
+{
+    return m_BestK;
 }
