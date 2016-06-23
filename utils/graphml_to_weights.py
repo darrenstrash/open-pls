@@ -28,6 +28,9 @@ for line in sys.stdin:
             #print "Found weight key = " + weight_key
             weight_pattern = re.compile("<data key=\"" + weight_key + "\">(.*)</data>")
     else:
+        # done evaluating nodes.
+        if "<edge" in line:
+            break;
         node_match = re.search(node_pattern, line)
         if node_match:
             v = int(node_match.group(1))
