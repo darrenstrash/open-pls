@@ -342,6 +342,8 @@ int main(int argc, char** argv)
     } else {
         cliqueAlgorithm = false;
 
+        clock_t const startReductions(clock());
+
         // first remove all isolated vertices, and create new graph
         // and map all nodes, weights
         Isolates4<SparseArraySet> isolates(adjacencyArray, vVertexWeights);
@@ -369,6 +371,7 @@ int main(int argc, char** argv)
                 int const oldVertex(newToOldVertex.second);
                 vNewWeights[newVertex] = vVertexWeights[oldVertex];
             }
+            clock_t const endReductions(clock());
 
             pPLS = new IndependentSetPhasedLocalSearch(subgraph, vNewWeights);
 
@@ -378,6 +381,7 @@ int main(int argc, char** argv)
             pPLS->SetQuiet(bQuiet);
             pAlgorithm = pPLS;
             bool bAlgorithmStatus(true);
+
 
             // if the remaining graph is not empty, continue w/ local search
             if (uRemainingGraphSize != 0) {
@@ -404,6 +408,7 @@ int main(int argc, char** argv)
             cout << "graph-name     : " << basename(inputFile) << endl << flush;
             cout << "graph-size     : " << adjacencyArray.size() << endl << flush;
             cout << "reduced-graph  : " << uRemainingGraphSize << endl << flush;
+            cout << "reduced-time(s): " << Tools::GetTimeInSeconds((endReductions - startReductions), false) << endl << flush;
             cout << "random-seed    : " << uRandomSeed << endl << flush;
 
             if (cliqueAlgorithm)
