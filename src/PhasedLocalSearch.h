@@ -48,7 +48,7 @@ public:
 ////    void AddToKFromOne(int const vertex);
 
     virtual void InitializeFromK()  = 0;
-    virtual void InitializeFromK2() = 0;
+    virtual void InitializeFromK2(bool const updateU) = 0;
 
     virtual bool IsConsistent() const = 0;
 

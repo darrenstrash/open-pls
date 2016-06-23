@@ -70,7 +70,7 @@ void PhasedLocalSearch::Perturb()
     if (m_SelectionPhase == SelectionPhase::PENALTY_SELECTION) {
         m_K.Clear();
         m_K.Insert(randomVertex);
-        InitializeFromK2();
+        InitializeFromK2(false /* don't update $U$ */);
         return;
     }
 
@@ -369,73 +369,6 @@ void PhasedLocalSearch::InitializeFromK()
 #endif // CHECK_CONSISTENCY
 }
 
-void PhasedLocalSearch::InitializeFromK2()
-{
-    assert(!m_K.Empty());
-    //Empty items that dependent on independent set, so they can be initialized.
-    m_dKWeight = 0;
-    m_ScratchSpace.Clear();
-    m_NotAdjacentToZero.Clear();
-    m_NotAdjacentToOne.Clear();
-
-    m_bCheckZero = false;
-    m_bCheckOne  = false;
-
-    if (m_K.Size() == 1) {
-        int const vertexInK(*m_K.begin());
-        m_dKWeight = m_vVertexWeights[vertexInK];
-        for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
-            m_NotAdjacentToZero.Insert(neighbor);
-            m_bCheckZero = m_bCheckZero || !m_U.Contains(neighbor);
-        }
-        for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
-            if (m_NotAdjacentToZero.Contains(vertex)) continue;
-            if (vertexInK == vertex) continue;
-            m_NotAdjacentToOne.Insert(vertex);
-            m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
-        }
-        m_NotAdjacentToOne.Remove(vertexInK);
-
-        return;
-    }
-
-    // update weights, follow neighbors, count them
-    // insert into levels sets C_0 and C_1
-    for (int const vertex : m_K) {
-        m_dKWeight += m_vVertexWeights[vertex];
-
-        for (int const neighbor : m_vAdjacencyArray[vertex]) {
-#ifndef ALLOW_OVERLAP
-            if (m_K.Contains(neighbor)) continue;
-#endif // ALLOW_OVERLAP
-            m_ScratchSpace.Insert(neighbor);
-            m_vScratchCounters[neighbor]++; 
-        }
-    }
-
-    for (int const vertex : m_ScratchSpace) {
-        int const neighborCount(m_vScratchCounters[vertex]);
-        if (neighborCount == m_K.Size()) {
-            m_NotAdjacentToZero.Insert(vertex);
-            m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
-        } else if (neighborCount == m_K.Size()-1) { 
-            m_NotAdjacentToOne.Insert(vertex);
-            m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
-        }
-
-        m_vScratchCounters[vertex] = 0;
-    }
-
-    m_ScratchSpace.Clear();
-
-#ifdef CHECK_CONSISTENCY
-    if (!IsConsistent()) {
-        cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
-    }
-#endif // CHECK_CONSISTENCY
-}
-
-
 void PhasedLocalSearch::UpdateStatistics()
 {
     if (m_dKWeight > m_dBestWeight) {
@@ -588,7 +521,7 @@ bool PhasedLocalSearch::Run()
 
     // initialize independent set
     int const randomVertex(rand()%m_vAdjacencyArray.size());
-    ForceIntoK(randomVertex, true /* update U */);
+    ForceIntoK(randomVertex, false /* update U */);
     m_RandomK.Insert(randomVertex);
     m_DegreeK.Insert(randomVertex);
     m_bCheckZero = true;
@@ -609,9 +542,10 @@ bool PhasedLocalSearch::Run()
             return false;
         }
 
+        // TODO/DS: optimize, only store the values that are needed?
         // degree phase starts where previous degree phase left off.
         m_K = m_DegreeK;
-        InitializeFromK2();
+        InitializeFromK2(false /* don't update $U$ */);
 
         foundSolution = Phase(100, SelectionPhase::DEGREE_SELECTION);
         if (foundSolution) return true;
@@ -623,7 +557,7 @@ bool PhasedLocalSearch::Run()
 
         // random phase begins where random phase left off.
         m_K = m_RandomK;
-        InitializeFromK2();
+        InitializeFromK2(false /* don't update $U$ */);
     }
 
     return false;

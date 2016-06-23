@@ -135,7 +135,7 @@ void IndependentSetPhasedLocalSearch::InitializeFromK()
 
 // same as InitializeFromK, but more efficient, iterates over $K$ instead
 // of over all vertices.
-void IndependentSetPhasedLocalSearch::InitializeFromK2()
+void IndependentSetPhasedLocalSearch::InitializeFromK2(bool const updateU)
 {
     if (m_K.Size() != 1) {
         InitializeFromK();
@@ -152,6 +152,22 @@ void IndependentSetPhasedLocalSearch::InitializeFromK2()
 
     int const vertexInK(*m_K.begin());
     m_dKWeight = m_vVertexWeights[vertexInK];
+
+    if (!updateU) {
+        // all neighbors of vertex are in C_1
+        for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
+            m_NotAdjacentToOne.Insert(neighbor);
+        }
+
+        // put in *all* elements, quickly
+        m_NotAdjacentToZero.Reset();
+        m_NotAdjacentToZero.Remove(vertexInK);
+        // remove neighbors. *much* faster than inserting non-neighbors
+        // for sparse graphs
+        m_NotAdjacentToZero.DiffInPlace(m_vAdjacencyArray[vertexInK]);
+        return;
+    }
+
     // all neighbors of vertex are in C_1
     for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
         m_NotAdjacentToOne.Insert(neighbor);
@@ -353,6 +369,6 @@ void IndependentSetPhasedLocalSearch::ForceIntoK(int const vertex, bool const up
 
     // then add v and update helper sets.
     m_K.Insert(vertex);
-    InitializeFromK2();
+    InitializeFromK2(updateU);
 }
 

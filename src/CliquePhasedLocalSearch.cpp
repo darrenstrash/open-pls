@@ -129,7 +129,8 @@ void CliquePhasedLocalSearch::InitializeFromK()
 
 // same as InitializeFromK, but more efficient, iterates over $K$ instead
 // of over all vertices.
-void CliquePhasedLocalSearch::InitializeFromK2()
+// TODO/DS: currently, updateU does nothing...
+void CliquePhasedLocalSearch::InitializeFromK2(bool const updateU)
 {
     assert(!m_K.Empty());
     //Empty items that dependent on independent set, so they can be initialized.
@@ -294,8 +295,8 @@ void CliquePhasedLocalSearch::ForceIntoK(int const vertex, bool const updateU)
 ////                    }
 ////                }
                 // first restrict to neighborhood of $v$
-                vector<int> diffSet;
-                m_K.IntersectInPlace(m_vAdjacencyArray[vertex], diffSet);
+    vector<int> diffSet;
+    m_K.IntersectInPlace(m_vAdjacencyArray[vertex], diffSet);
 
 ////                if (neighborsInK != m_K.Size()) {
 ////                    cout << "Mismatch in independent set." << endl << flush;
@@ -304,15 +305,14 @@ void CliquePhasedLocalSearch::ForceIntoK(int const vertex, bool const updateU)
 ////                    cout << "ERROR!: diff set should be one..." << endl << flush;
 ////                }
 
-                if (updateU) {
-                for (int const diffVertex : diffSet) {
-                    m_U.Insert(diffVertex);
-                }
-                }
+    if (updateU) {
+        for (int const diffVertex : diffSet) {
+            m_U.Insert(diffVertex);
+        }
+    }
 
-                // then add v and update helper sets.
-                m_K.Insert(vertex);
-                InitializeFromK2();
-
+    // then add v and update helper sets.
+    m_K.Insert(vertex);
+    InitializeFromK2(updateU);
 }
 

@@ -14,7 +14,7 @@ class CliquePhasedLocalSearch : public PhasedLocalSearch
     virtual void AddToK(int const vertex);
 
     virtual void InitializeFromK();
-    virtual void InitializeFromK2();
+    virtual void InitializeFromK2(bool const updateU);
 
     virtual bool IsConsistent() const;
 
