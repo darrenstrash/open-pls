@@ -6,7 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <cstdlib>
-#include <climits>
+#include <limits>
 
 ////#define ALLOW_OVERLAP
 #define CHECK_CONSISTENCY
@@ -28,7 +28,7 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 
 , m_uTargetSize(vAdjacencyArray.size())
 // initial weight, TODO/DS: change.
-, m_dTargetWeight(ULONG_MAX)
+, m_dTargetWeight(numeric_limits<double>::max())
 , m_uMaxSelections(100000000)
 , m_uSelections(0)
 
@@ -53,7 +53,7 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 , m_StartTime(0)
 , m_TimeToReachBestWeight(0)
 , m_uSelectionsToBestWeight(0)
-, m_TimeOut(ULONG_MAX)
+, m_TimeOut(numeric_limits<size_t>::max())
 , m_bQuiet(true)
 {
 }
@@ -156,7 +156,7 @@ int PhasedLocalSearch::PenaltySelect(ResetableArraySet const &vertexSet) const
     cout << "PenaltySelect..." << flush;
 #endif // DEBUG
     // don't select vertex with penalty 10?
-    size_t minPenalty(ULONG_MAX);
+    size_t minPenalty(numeric_limits<size_t>::max());
     m_ScratchSpace.Clear();
     for (int const vertex : vertexSet) {
         if (m_vVertexPenalties[vertex] < minPenalty) {

@@ -6,6 +6,8 @@ BIN_DIR   = bin
 CFLAGS = -Winline -O2 -std=c++0x -g
 #CFLAGS = -Winline -DDEBUG_MESSAGE -O0 -std=c++0x -g
 
+SOURCES_TMP += Isolates4.cpp
+SOURCES_TMP += GraphTools.cpp
 SOURCES_TMP += PhasedLocalSearch.cpp
 SOURCES_TMP += CliquePhasedLocalSearch.cpp
 SOURCES_TMP += IndependentSetPhasedLocalSearch.cpp
