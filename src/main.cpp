@@ -400,31 +400,32 @@ int main(int argc, char** argv)
 
         // TODO/DS: output run statistics.
         if (!bTableMode) {
-            cout << "#OUTPUT        : " << endl << flush;
-            cout << "#--------------"   << endl << flush;
-            cout << "algorithm-name : " << pAlgorithm->GetName() << endl << flush;
-            cout << "git-commit     : " << GIT_COMMIT_STRING << endl << flush;
-            cout << "git-status     : " << GIT_STATUS_STRING << endl << flush;
-            cout << "graph-name     : " << basename(inputFile) << endl << flush;
-            cout << "graph-size     : " << adjacencyArray.size() << endl << flush;
-            cout << "reduced-graph  : " << uRemainingGraphSize << endl << flush;
-            cout << "reduced-time(s): " << Tools::GetTimeInSeconds((endReductions - startReductions), false) << endl << flush;
-            cout << "random-seed    : " << uRandomSeed << endl << flush;
+            cout << "#OUTPUT         : " << endl << flush;
+            cout << "#---------------"   << endl << flush;
+            cout << "algorithm-name  : " << pAlgorithm->GetName() << endl << flush;
+            cout << "git-commit      : " << GIT_COMMIT_STRING << endl << flush;
+            cout << "git-status      : " << GIT_STATUS_STRING << endl << flush;
+            cout << "graph-name      : " << basename(inputFile) << endl << flush;
+            cout << "graph-size      : " << adjacencyArray.size() << endl << flush;
+            cout << "reduced-graph   : " << uRemainingGraphSize << endl << flush;
+            cout << "reduced-time(s) : " << Tools::GetTimeInSeconds((endReductions - startReductions), false) << endl << flush;
+            cout << "random-seed     : " << uRandomSeed << endl << flush;
 
             if (cliqueAlgorithm)
-                cout << (bWeighted ? "mwc            : " : "mc             : ");
+                cout << (bWeighted ? "mwc             : " : "mc              : ");
             else
-                cout << (bWeighted ? "mwis           : " : "mis            : ");
+                cout << (bWeighted ? "mwis            : " : "mis             : ");
 
             cout << pPLS->GetBestWeight() + dInitialWeight << endl << flush;
 
-            cout << "target         : " << pPLS->GetTargetWeight() + dInitialWeight << endl << flush;
-            cout << "time(s)        : " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;
-            cout << "timeout        : " << pPLS->GetTimeoutInSeconds() << endl << flush;
-            cout << "penalty-delay  : " << pPLS->GetPenaltyDelay() << endl << flush;
-            cout << "selections     : " << pPLS->GetSelectionsToBestWeight() << endl << flush;
-            cout << "max-selections : " << pPLS->GetMaxSelections() << endl << flush;
-            cout << "best-solution  :";
+            cout << "target          : " << pPLS->GetTargetWeight() + dInitialWeight << endl << flush;
+            cout << "time(s)         : " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;
+            cout << "timeout         : " << pPLS->GetTimeoutInSeconds() << endl << flush;
+            cout << "penalty-delay   : " << pPLS->GetPenaltyDelay() << endl << flush;
+            cout << "selections      : " << pPLS->GetSelectionsToBestWeight() << endl << flush;
+            cout << "total-selections: " << pPLS->GetSelections() << endl << flush;
+            cout << "max-selections  : " << pPLS->GetMaxSelections() << endl << flush;
+            cout << "best-solution   :";
             for (int const vertex : vIndependentSetVertices) {
                 cout << " " << vertex;
             }

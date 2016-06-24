@@ -7,6 +7,8 @@
 #include <cassert>
 #include <utility>
 
+#define USE_RESETABLE
+
 #ifdef USE_RESETABLE
 class ResetableArraySet
 {

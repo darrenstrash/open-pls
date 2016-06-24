@@ -138,7 +138,7 @@ void IndependentSetPhasedLocalSearch::InitializeFromK()
 void IndependentSetPhasedLocalSearch::InitializeFromK2(bool const updateU)
 {
     if (m_K.Size() != 1) {
-        InitializeFromK();
+        InitializeFromK(); // if it's large, initialize from scratch...expensive
         return;
     }
 
