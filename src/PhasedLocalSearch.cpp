@@ -256,76 +256,6 @@ bool PhasedLocalSearch::DiffIsEmpty(ResetableArraySet const A, ResetableArraySet
     return (uIntersectionCount == A.Size());
 }
 
-
-// TODO/DS: finish and test. Not currently working, some vertices on in C_1
-// that shouldn't be there.
-////void PhasedLocalSearch::AddToKFromOne(int const vertex)
-////{
-////#ifdef DEBUG
-////    cout << "Adding " << vertex << " to $K$" << endl << flush;
-////#endif // DEBUG
-////
-////    // first restrict to neighborhood of $v$
-////    vector<int> removedSet;
-////    m_K.IntersectInPlace(m_vAdjacencyArray[vertex], removedSet);
-////    assert (removedSet.size() == 1);
-////    int const removedVertex(removedSet[0]);
-////    m_NotAdjacentToOne.Remove(vertex);
-////    m_K.Insert(vertex);
-////    m_U.Insert(removedVertex);
-////
-////    // removedVertex is vertex's only neighbor not in K
-////    // we remove removedVertex and add vertex.
-////
-////    vector<int> diffOne;
-////    // if neighbor of removed vertex, and in $C_1$, then still in C_1
-////    m_NotAdjacentToOne.IntersectInPlace(m_vAdjacencyArray[removedVertex], diffOne);
-////
-////    // nonneighbors of removedVertex are neighbors of everyone else in K
-////    for (int const vertexInDiff : diffOne) {
-////        m_NotAdjacentToZero.Insert(vertexInDiff);
-////    }
-////
-////    vector<int> diffTwo;
-////    // neighbors of vertex must be in C_0
-////    m_NotAdjacentToZero.IntersectInPlace(m_vAdjacencyArray[vertex], diffTwo);
-////
-////    // non-neighbors are in C_1
-////    for (int const vertexInDiff : diffTwo) {
-////        m_NotAdjacentToOne.Insert(vertexInDiff);
-////    }
-////
-////    // check neighbors of vertex, to see if they should be in C_1.
-////    for (int const neighbor : m_vAdjacencyArray[vertex]) {
-////#ifndef ALLOW_OVERLAP
-////        if (m_K.Contains(neighbor)) continue;
-////#endif //ALLOW_OVERLAP
-////        // don't evaluate vertices that are already in C_1
-////        if (m_NotAdjacentToOne.Contains(neighbor)) continue;
-////
-////        // test neighbor to see if it should be in C_1
-////        size_t neighborCount(0);
-////        for (int const nNeighbor : m_vAdjacencyArray[neighbor]) {
-////            if (m_K.Contains(nNeighbor)) neighborCount++;
-////        }
-////
-////        if (neighborCount == m_K.Size()-1) {
-////            m_NotAdjacentToOne.Insert(neighbor);
-////        }
-////    }
-////
-////    ////TODO/DS: Update CheckZero and CheckOne
-////    m_bCheckZero = !DiffIsEmpty(m_NotAdjacentToZero, m_U);
-////    m_bCheckOne  = !DiffIsEmpty(m_NotAdjacentToOne,  m_U);
-////
-////////#ifdef CHECK_CONSISTENCY
-////    if (!IsConsistent()) {
-////        cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
-////    }
-////////#endif // CHECK_CONSISTENCY
-////}
-
-
 void PhasedLocalSearch::InitializeFromK()
 {
     //Empty items that dependent on independent set, so they can be initialized.
@@ -478,7 +408,8 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
                 cout << "Selected vertex " << vertex << " from C_1 \\ U" << endl << flush;
 #endif // DEBUG
 
-                ForceIntoK(vertex, true /* update U*/);
+////                ForceIntoK(vertex, true /* update U*/);
+                AddToKFromOne(vertex);
 
                 m_uSelections++;
             }

@@ -19,4 +19,6 @@ class IndependentSetPhasedLocalSearch : public PhasedLocalSearch
     virtual bool IsConsistent() const;
 
     virtual void ForceIntoK(int const vertex, bool const updateU);
+
+    virtual void AddToKFromOne(int const vertex);
 };

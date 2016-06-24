@@ -49,8 +49,17 @@ public:
         return locationX >= m_iBegin && locationX <= m_iEnd;
     }
 
+    bool SwapElements(int const x, int const y) {
+        size_t posX(m_Lookup[x]);
+        size_t posY(m_Lookup[y]);
+        m_Lookup[x] = posY;
+        m_Lookup[y] = posX;
+        m_Elements[posY] = x;
+        m_Elements[posX] = y;
+    }
+
     // Inserts are not allowed after saving state, as it is currently not supported.
-    void Insert(int const x) {
+    virtual void Insert(int const x) {
 ////        if (x==107) std::cout << "Inserting vertex " << x << " into graph." << std::endl << std::flush;
         if (Contains(x)) return;
         assert(!m_bRemoved); // not allowed to insert and remove when saving states
@@ -62,9 +71,9 @@ public:
         m_Elements[m_iEnd] = x;
     }
 
-    void Remove(int const x) {
+    virtual bool Remove(int const x) {
 ////        if (x==107) std::cout << "Removing vertex " << x << " from graph." << std::endl << std::flush;
-        if (!Contains(x)) return;
+        if (!Contains(x)) return false;
         assert(!m_bInserted); // not allowed to insert and remove when saving states
         if (!m_States.empty()) m_bRemoved = true;
         int const locationX(m_Lookup[x]);
@@ -73,12 +82,15 @@ public:
         m_Lookup[x] = m_iEnd;
         m_Elements[m_iEnd] = x;
         m_iEnd--;
+        return true;
     }
 
     void MoveTo(int const x, ArraySet &other) {
-        if (!Contains(x)) return;
-        Remove(x);
-        other.Insert(x);
+        if (Remove(x)) other.Insert(x);
+    }
+
+    void MoveTo(int const x, std::vector<int> &other) {
+        if (Remove(x)) other.push_back(x);
     }
 
     void CopyTo(int const x, ArraySet &other) {
@@ -90,15 +102,7 @@ public:
         int iPutValueHere(m_iBegin);
         for (int const valueOther : vOther) {
             if (Contains(valueOther)) {
-                int const locationOther(m_Lookup[valueOther]);
-                int const valueExisting(m_Elements[iPutValueHere]);
-
-                m_Lookup[valueExisting] = locationOther;
-                m_Elements[locationOther] = valueExisting;
-
-                m_Lookup[valueOther] = iPutValueHere;
-                m_Elements[iPutValueHere] = valueOther;
-                iPutValueHere++;
+                SwapElements(valueOther, m_Elements[iPutValueHere++]);
             }
         }
 
@@ -111,15 +115,7 @@ public:
         int iPutValueHere(m_iBegin);
         for (int const valueOther : vOther) {
             if (Contains(valueOther)) {
-                int const locationOther(m_Lookup[valueOther]);
-                int const valueExisting(m_Elements[iPutValueHere]);
-
-                m_Lookup[valueExisting] = locationOther;
-                m_Elements[locationOther] = valueExisting;
-
-                m_Lookup[valueOther] = iPutValueHere;
-                m_Elements[iPutValueHere] = valueOther;
-                iPutValueHere++;
+                SwapElements(valueOther, m_Elements[iPutValueHere++]);
             }
         }
 
@@ -129,14 +125,14 @@ public:
     void DiffInPlace(ArraySet const &other) {
         // if we have the same value as the other set, then we remove it.
         for (int const valueOther : other) {
-            if (Contains(valueOther)) Remove(valueOther);
+            Remove(valueOther);
         }
     }
 
     void DiffInPlace(std::vector<int> const &other) {
         // if we have the same value as the other set, then we remove it.
         for (int const valueOther : other) {
-            if (Contains(valueOther)) Remove(valueOther);
+            Remove(valueOther);
         }
     }
 
@@ -144,10 +140,7 @@ public:
     void DiffInPlace(std::vector<int> const &other, std::vector<int> &intersect) {
         // if we have the same value as the other set, then we remove it.
         for (int const valueOther : other) {
-            if (Contains(valueOther)) {
-                Remove(valueOther);
-                intersect.push_back(valueOther);
-            }
+            MoveTo(valueOther, intersect);
         }
     }
 
@@ -289,7 +282,7 @@ public:
         return true;
     }
 
-private:
+protected:
     std::vector<int> m_Lookup;
     std::vector<int> m_Elements;
     int m_iBegin;

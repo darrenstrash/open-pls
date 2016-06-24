@@ -1,3 +1,5 @@
+#ifndef CLIQUE_PHASED_LOCAL_SEARCH
+#define CLIQUE_PHASED_LOCAL_SEARCH
 
 #include "PhasedLocalSearch.h"
 
@@ -19,4 +21,8 @@ class CliquePhasedLocalSearch : public PhasedLocalSearch
     virtual bool IsConsistent() const;
 
     virtual void ForceIntoK(int const vertex, bool updateU);
+
+    virtual void AddToKFromOne(int const vertex);
 };
+
+#endif // CLIQUE_PHASED_LOCAL_SEARCH

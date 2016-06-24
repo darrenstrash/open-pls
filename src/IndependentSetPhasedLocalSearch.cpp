@@ -1,3 +1,5 @@
+#ifndef IS_PHASED_LOCAL_SEARCH
+#define IS_PHASED_LOCAL_SEARCH
 
 #include "IndependentSetPhasedLocalSearch.h"
 
@@ -33,7 +35,6 @@ int IndependentSetPhasedLocalSearch::DegreeSelect(ResetableArraySet const &verte
     m_ScratchSpace.Clear();
     return vertexToReturn;
 }
-
 
 void IndependentSetPhasedLocalSearch::AddToK(int const vertex)
 {
@@ -137,7 +138,7 @@ void IndependentSetPhasedLocalSearch::InitializeFromK()
 // of over all vertices.
 void IndependentSetPhasedLocalSearch::InitializeFromK2(bool const updateU)
 {
-    if (m_K.Size() != 1) {
+    if (m_K.Size() > 3) {
         InitializeFromK(); // if it's large, initialize from scratch...expensive
         return;
     }
@@ -150,39 +151,85 @@ void IndependentSetPhasedLocalSearch::InitializeFromK2(bool const updateU)
     m_bCheckZero = false;
     m_bCheckOne  = false;
 
+    if (m_K.Size() == 1) {
     int const vertexInK(*m_K.begin());
     m_dKWeight = m_vVertexWeights[vertexInK];
-
 #ifdef USE_RESETABLE
-    if (!updateU) {
+        if (!updateU) {
+            // all neighbors of vertex are in C_1
+            for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
+                m_NotAdjacentToOne.Insert(neighbor);
+            }
+
+            // put in *all* elements, quickly
+            m_NotAdjacentToZero.Reset();
+            m_NotAdjacentToZero.Remove(vertexInK);
+            // remove neighbors. *much* faster than inserting non-neighbors
+            // for sparse graphs
+            m_NotAdjacentToZero.DiffInPlace(m_vAdjacencyArray[vertexInK]);
+            return;
+        }
+#endif // USE_RESETABLE
+
         // all neighbors of vertex are in C_1
         for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
             m_NotAdjacentToOne.Insert(neighbor);
+            m_bCheckOne = m_bCheckOne || !m_U.Contains(neighbor);
         }
 
-        // put in *all* elements, quickly
-        m_NotAdjacentToZero.Reset();
-        m_NotAdjacentToZero.Remove(vertexInK);
-        // remove neighbors. *much* faster than inserting non-neighbors
-        // for sparse graphs
-        m_NotAdjacentToZero.DiffInPlace(m_vAdjacencyArray[vertexInK]);
+        // all others are in C_0
+        for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
+            if (m_NotAdjacentToOne.Contains(vertex)) continue;
+            if (vertexInK==vertex) continue;
+            m_NotAdjacentToZero.Insert(vertex);
+            m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
+        }
         return;
     }
+
+#ifdef USE_RESETABLE
+    // may contain many non-neighbors,
+    m_NotAdjacentToZero.Reset();
+
+    // update weights, follow neighbors, count them
+    // insert into levels sets C_0 and C_1
+    for (int const vertex : m_K) {
+        m_dKWeight += m_vVertexWeights[vertex];
+
+        m_NotAdjacentToZero.Remove(vertex);
+
+        for (int const neighbor : m_vAdjacencyArray[vertex]) {
+#ifndef ALLOW_OVERLAP
+            if (m_K.Contains(neighbor)) continue;
+#endif // ALLOW_OVERLAP
+            m_ScratchSpace.Insert(neighbor);
+            m_vScratchCounters[neighbor]++; 
+        }
+    }
+
+    for (int const vertex : m_ScratchSpace) {
+        int const neighborCount(m_vScratchCounters[vertex]);
+        if (neighborCount == 1) { 
+            m_NotAdjacentToOne.Insert(vertex);
+            m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
+        }
+
+        m_vScratchCounters[vertex] = 0;
+    }
+
+    // would be nice, if we weren't updating U too.
+    m_NotAdjacentToZero.DiffInPlace(m_ScratchSpace);
+    m_bCheckZero = !DiffIsEmpty(m_NotAdjacentToZero, m_U);
+
+    m_ScratchSpace.Clear();
 #endif // USE_RESETABLE
 
-    // all neighbors of vertex are in C_1
-    for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
-        m_NotAdjacentToOne.Insert(neighbor);
-        m_bCheckOne = m_bCheckOne || !m_U.Contains(neighbor);
+#ifdef CHECK_CONSISTENCY
+    if (!IsConsistent()) {
+        cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
     }
+#endif // CHECK_CONSISTENCY
 
-    // all others are in C_0
-    for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
-        if (m_NotAdjacentToOne.Contains(vertex)) continue;
-        if (vertexInK==vertex) continue;
-        m_NotAdjacentToZero.Insert(vertex);
-        m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
-    }
 }
 ////    assert(!m_K.Empty());
 ////    //Empty items that dependent on independent set, so they can be initialized.
@@ -346,22 +393,9 @@ void IndependentSetPhasedLocalSearch::ForceIntoK(int const vertex, bool const up
 {
 ////    AddToKFromOne(vertex);
 
-////    size_t neighborsInK(0);
-////    for (int const neighbor : m_vAdjacencyArray[vertex]) {
-////        if (m_K.Contains(neighbor)) {
-////            neighborsInK++;
-////        }
-////    }
     // first restrict to neighborhood of $v$
     vector<int> intersectSet;
     m_K.DiffInPlace(m_vAdjacencyArray[vertex], intersectSet);
-
-////    if (neighborsInK != m_K.Size()) {
-////        cout << "Mismatch in independent set." << endl << flush;
-////    }
-////    if (diffSet.size() != 1) {
-////        cout << "ERROR!: diff set should be one..." << endl << flush;
-////    }
 
     if (updateU) {
         for (int const intersectVertex : intersectSet) {
@@ -374,3 +408,99 @@ void IndependentSetPhasedLocalSearch::ForceIntoK(int const vertex, bool const up
     InitializeFromK2(updateU);
 }
 
+// TODO/DS: finish and test. Not currently working, some vertices on in C_1
+// that shouldn't be there.
+void IndependentSetPhasedLocalSearch::AddToKFromOne(int const vertex)
+{
+
+#ifdef CHECK_CONSISTENCY
+    if (!IsConsistent()) {
+        cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
+    }
+#endif // CHECK_CONSISTENCY
+
+#ifdef DEBUG
+
+    cout << "Adding " << vertex << " to $K$" << endl << flush;
+#endif // DEBUG
+
+    // first restrict to neighborhood of $v$
+    vector<int> removedSet;
+    m_K.DiffInPlace(m_vAdjacencyArray[vertex], removedSet);
+////    cout << "removed-set.size=" << removedSet.size() << endl << flush;
+    assert (removedSet.size() == 1);
+    int const removedVertex(removedSet[0]);
+    m_NotAdjacentToOne.Remove(vertex);
+    m_K.Insert(vertex);
+    m_U.Insert(removedVertex);
+
+    m_dKWeight += m_vVertexWeights[vertex];
+    m_dKWeight -= m_vVertexWeights[removedVertex];
+
+    // removedVertex is vertex's only neighbor in K
+    // we remove removedVertex and add vertex.
+
+    // if non-neighbor of removed vertex, and in $C_1$, then still in C_1
+    // neighbors of removedVertex in C_1 are non-neighbors of everyone else in K
+    // so they get added to C_0
+    m_NotAdjacentToOne.DiffInPlace(m_vAdjacencyArray[removedVertex], m_NotAdjacentToZero /* add remaining to C_0 */);
+
+    // non-neighbors of vertex must be in C_1
+    m_NotAdjacentToOne.DiffInPlace(m_vAdjacencyArray[vertex]);
+
+    // non-neighbors of vertex must be in C_0
+    // neighbors are in C_1
+    m_NotAdjacentToZero.DiffInPlace(m_vAdjacencyArray[vertex], m_NotAdjacentToOne /* add remaining to C_1*/);
+
+    // check neighbors of vertex, to see if they should be in C_1.
+    for (int const neighbor : m_vAdjacencyArray[removedVertex]) {
+#ifndef ALLOW_OVERLAP
+        if (m_K.Contains(neighbor)) continue;
+#endif //ALLOW_OVERLAP
+        // don't evaluate vertices that are already in C_1
+        if (m_NotAdjacentToOne.Contains(neighbor)) continue;
+
+        // test neighbor to see if it should be in C_1
+        size_t neighborCount(0);
+        for (int const nNeighbor : m_vAdjacencyArray[neighbor]) {
+            if (m_K.Contains(nNeighbor)) neighborCount++;
+            if (neighborCount > 1) break;
+        }
+
+        if (neighborCount == 1) {
+            m_NotAdjacentToOne.Insert(neighbor);
+        }
+    }
+
+    // check neighbors of vertex, to see if they should be in C_1.
+    for (int const neighbor : m_vAdjacencyArray[vertex]) {
+#ifndef ALLOW_OVERLAP
+        if (m_K.Contains(neighbor)) continue;
+#endif //ALLOW_OVERLAP
+        // don't evaluate vertices that are already in C_1
+        if (m_NotAdjacentToOne.Contains(neighbor)) continue;
+
+        // test neighbor to see if it should be in C_1
+        size_t neighborCount(0);
+        for (int const nNeighbor : m_vAdjacencyArray[neighbor]) {
+            if (m_K.Contains(nNeighbor)) neighborCount++;
+            if (neighborCount > 1) break;
+        }
+
+        if (neighborCount == 1) {
+            m_NotAdjacentToOne.Insert(neighbor);
+        }
+    }
+
+    ////TODO/DS: Update CheckZero and CheckOne
+    m_bCheckZero = !DiffIsEmpty(m_NotAdjacentToZero, m_U);
+    m_bCheckOne  = !DiffIsEmpty(m_NotAdjacentToOne,  m_U);
+
+#ifdef CHECK_CONSISTENCY
+    if (!IsConsistent()) {
+        cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
+    }
+#endif // CHECK_CONSISTENCY
+}
+
+#endif // IS_PHASED_LOCAL_SEARCH

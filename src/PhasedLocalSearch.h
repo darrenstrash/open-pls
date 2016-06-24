@@ -45,7 +45,7 @@ public:
     bool DiffIsEmpty(ResetableArraySet const A, ResetableArraySet const B) const;
 
     virtual void AddToK(int const vertex)   = 0;
-////    void AddToKFromOne(int const vertex);
+    virtual void AddToKFromOne(int const vertex) = 0;
 
     virtual void InitializeFromK()  = 0;
     virtual void InitializeFromK2(bool const updateU) = 0;
