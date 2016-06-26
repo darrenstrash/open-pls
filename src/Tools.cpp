@@ -323,7 +323,7 @@ void InvertGraph(vector<list<int>> const &adjList)
 string Tools::GetTimeInSeconds(clock_t delta, bool const brackets) {
     stringstream strm;
 
-    strm.precision(2);
+    strm.precision(4);
     strm.setf(std::ios::fixed, std::ios::floatfield);
     if (brackets) {
         strm << "[" << (double)(delta)/(double)(CLOCKS_PER_SEC) << "s]";
