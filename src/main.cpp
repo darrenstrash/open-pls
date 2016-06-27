@@ -182,6 +182,7 @@ int main(int argc, char** argv)
     bool   const bPrintHeader(mapCommandLineArgs.find("--header") != mapCommandLineArgs.end());
     string const sTimeout(mapCommandLineArgs.find("--timeout") != mapCommandLineArgs.end() ? mapCommandLineArgs["--timeout"] : "");
     bool   const bRunUnitTests(mapCommandLineArgs.find("--run-tests") != mapCommandLineArgs.end());
+    bool   const bNoReduce(mapCommandLineArgs.find("--no-reduce") != mapCommandLineArgs.end());
     size_t const uMaxSelections(mapCommandLineArgs.find("--max-selections") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--max-selections"]) : 100000000);
     double const dTargetWeight(mapCommandLineArgs.find("--target-weight") != mapCommandLineArgs.end() ? std::stod(mapCommandLineArgs["--target-weight"]) : numeric_limits<double>::max());
     size_t const uRandomSeed(mapCommandLineArgs.find("--random-seed") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--random-seed"]) : 0);
@@ -339,7 +340,7 @@ int main(int argc, char** argv)
             cout << endl << flush;
         }
 
-    } else {
+    } else if (!bNoReduce) {
         cliqueAlgorithm = false;
 
         clock_t const startReductions(clock());
@@ -360,43 +361,43 @@ int main(int argc, char** argv)
 
         size_t uRemainingGraphSize(isolates.GetInGraph().Size());
 
-            // create new subgraph
-            vector<vector<int>> subgraph;
-            map<int,int> newToOldVertexMap;
-            GraphTools::ComputeInducedSubgraphIsolates(isolates, subgraph, newToOldVertexMap);
-            // create new weights
-            vector<double> vNewWeights(subgraph.size(), 0.0);
-            for (pair<int,int> newToOldVertex : newToOldVertexMap) {
-                int const newVertex(newToOldVertex.first);
-                int const oldVertex(newToOldVertex.second);
-                vNewWeights[newVertex] = vVertexWeights[oldVertex];
-            }
-            clock_t const endReductions(clock());
+        // create new subgraph
+        vector<vector<int>> subgraph;
+        map<int,int> newToOldVertexMap;
+        GraphTools::ComputeInducedSubgraphIsolates(isolates, subgraph, newToOldVertexMap);
+        // create new weights
+        vector<double> vNewWeights(subgraph.size(), 0.0);
+        for (pair<int,int> newToOldVertex : newToOldVertexMap) {
+            int const newVertex(newToOldVertex.first);
+            int const oldVertex(newToOldVertex.second);
+            vNewWeights[newVertex] = vVertexWeights[oldVertex];
+        }
+        clock_t const endReductions(clock());
 
-            pPLS = new IndependentSetPhasedLocalSearch(subgraph, vNewWeights);
+        pPLS = new IndependentSetPhasedLocalSearch(subgraph, vNewWeights);
 
-            pPLS->SetMaxSelections(uMaxSelections);
-            if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
-            pPLS->SetTargetWeight(dTargetWeight - dInitialWeight);
-            pPLS->SetQuiet(bQuiet);
-            pAlgorithm = pPLS;
-            bool bAlgorithmStatus(true);
+        pPLS->SetMaxSelections(uMaxSelections);
+        if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
+        pPLS->SetTargetWeight(dTargetWeight - dInitialWeight);
+        pPLS->SetQuiet(bQuiet);
+        pAlgorithm = pPLS;
+        bool bAlgorithmStatus(true);
 
 
-            // if the remaining graph is not empty, continue w/ local search
-            if (uRemainingGraphSize != 0) {
-                bAlgorithmStatus = pAlgorithm->Run();
-            }
+        // if the remaining graph is not empty, continue w/ local search
+        if (uRemainingGraphSize != 0) {
+            bAlgorithmStatus = pAlgorithm->Run();
+        }
 
-            // if did not reach target (non-infinite) weight, then it's a failure...
-            if (!bAlgorithmStatus && dTargetWeight != numeric_limits<double>::max()) {
-                std::cout << "#" << pAlgorithm->GetName() << " reported a failure. Quitting." << std::endl << std::flush;
-            }
+        // if did not reach target (non-infinite) weight, then it's a failure...
+        if (!bAlgorithmStatus && dTargetWeight != numeric_limits<double>::max()) {
+            std::cout << "#" << pAlgorithm->GetName() << " reported a failure. Quitting." << std::endl << std::flush;
+        }
 
-            // Take best independent set and remap back to original node set.
-            for (int const vertex : pPLS->GetBestK()) {
-                vIndependentSetVertices.push_back(newToOldVertexMap[vertex]);
-            }
+        // Take best independent set and remap back to original node set.
+        for (int const vertex : pPLS->GetBestK()) {
+            vIndependentSetVertices.push_back(newToOldVertexMap[vertex]);
+        }
 
         // TODO/DS: output run statistics.
         if (!bTableMode) {
@@ -427,6 +428,57 @@ int main(int argc, char** argv)
             cout << "max-selections  : " << pPLS->GetMaxSelections() << endl << flush;
             cout << "best-solution   :";
             for (int const vertex : vIndependentSetVertices) {
+                cout << " " << vertex;
+            }
+            cout << endl << flush;
+        }
+    } else {
+        cliqueAlgorithm = false;
+
+        pPLS = new IndependentSetPhasedLocalSearch(adjacencyArray, vVertexWeights);
+
+        pPLS->SetMaxSelections(uMaxSelections);
+        if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
+        pPLS->SetTargetWeight(dTargetWeight);
+        pPLS->SetQuiet(bQuiet);
+        pAlgorithm = pPLS;
+        bool const bAlgorithmStatus = pAlgorithm->Run();
+
+        // if did not reach target (non-infinite) weight, then it's a failure...
+        if (!bAlgorithmStatus && dTargetWeight != numeric_limits<double>::max()) {
+            std::cout << "#" << pAlgorithm->GetName() << " reported a failure. Quitting." << std::endl << std::flush;
+        }
+
+        // TODO/DS: output run statistics.
+        if (!bTableMode) {
+            cout << "#OUTPUT         : " << endl << flush;
+            cout << "#---------------"   << endl << flush;
+            cout << "algorithm-name  : " << pAlgorithm->GetName() << endl << flush;
+            cout << "git-commit      : " << GIT_COMMIT_STRING << endl << flush;
+            cout << "git-status      : " << GIT_STATUS_STRING << endl << flush;
+            cout << "graph-name      : " << basename(inputFile) << endl << flush;
+            cout << "graph-size      : " << adjacencyArray.size() << endl << flush;
+            cout << "reductions      : " << (bNoReduce ? "OFF" : "ON") << endl << flush;
+            cout << "reduced-graph   : " << adjacencyArray.size() << endl << flush;
+            cout << "reduced-time(s) : " << Tools::GetTimeInSeconds(0, false) << endl << flush;
+            cout << "random-seed     : " << uRandomSeed << endl << flush;
+
+            if (cliqueAlgorithm)
+                cout << (bWeighted ? "mwc             : " : "mc              : ");
+            else
+                cout << (bWeighted ? "mwis            : " : "mis             : ");
+
+            cout << pPLS->GetBestWeight() << endl << flush;
+
+            cout << "target          : " << pPLS->GetTargetWeight() << endl << flush;
+            cout << "time(s)         : " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;
+            cout << "timeout         : " << pPLS->GetTimeoutInSeconds() << endl << flush;
+            cout << "penalty-delay   : " << pPLS->GetPenaltyDelay() << endl << flush;
+            cout << "selections      : " << pPLS->GetSelectionsToBestWeight() << endl << flush;
+            cout << "total-selections: " << pPLS->GetSelections() << endl << flush;
+            cout << "max-selections  : " << pPLS->GetMaxSelections() << endl << flush;
+            cout << "best-solution   :";
+            for (int const vertex : pPLS->GetBestK()) {
                 cout << " " << vertex;
             }
             cout << endl << flush;
