@@ -5,15 +5,15 @@
 The purpose of this package is to (attempt) to reproduce the results of the following two papers:
 
 *Phased local search for the maximum clique problem*,  
-**Wayne Pullan**, 
-Journal of Combinatorial Optimization, 12 (3), pp. 303–323, 2006 
+**Wayne Pullan**,  
+Journal of Combinatorial Optimization, 12 (3), pp. 303–323, 2006  
 [doi:10.1007/s10878-006-9635-y](https://doi.org/10.1007/s10878-006-9635-y)
 
 and
 
 *Optimisation of unweighted/weighted maximum independent sets and minimum vertex covers*,  
-**Wayne Pullan**, 
-Discrete Optimization, 6 (2), pp. 214–219, 2009 
+**Wayne Pullan**,  
+Discrete Optimization, 6 (2), pp. 214–219, 2009  
 [doi:10.1016/j.disopt.2008.12.001](https://doi.org/10.1016/j.disopt.2008.12.001)
 
 In addition to providing an open implementation of the PLS algorithm, this software provides exact reproducibility of experimental results using PLS in the paper:
