@@ -19,8 +19,8 @@ Discrete Optimization, 6 (2), pp. 214–219, 2009
 In addition to providing an open implementation of the PLS algorithm, this software provides exact reproducibility of experimental results using PLS in the paper:
 
 *Temporal Map Labeling: A New Unified Framework with Experiments*,  
-**L. Barth, B. Niedermann, M. Nöllenburg, and D. Strash**, 
-Proceedings of the 24th ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems (ACM SIGSPATIAL 2016) 
+**L. Barth, B. Niedermann, M. Nöllenburg, and D. Strash**,  
+Proceedings of the 24th ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems (ACM SIGSPATIAL 2016)  
 [arXiv:1609.06327](https://arxiv.org/abs/1609.06327)  
 
 ###This package includes:
