@@ -1,2 +1,2 @@
 # OpenPLS
-An open phased local search (PLS) algorithm for maximum independent set and related problems
+An open phased local search (PLS) algorithm for maximum clique and related problems
