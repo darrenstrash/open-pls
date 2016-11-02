@@ -49,7 +49,7 @@ public:
         return locationX >= m_iBegin && locationX <= m_iEnd;
     }
 
-    bool SwapElements(int const x, int const y) {
+    void SwapElements(int const x, int const y) {
         size_t posX(m_Lookup[x]);
         size_t posY(m_Lookup[y]);
         m_Lookup[x] = posY;

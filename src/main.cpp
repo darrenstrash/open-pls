@@ -29,6 +29,8 @@
 
 #define GIT_COMMIT_STRING str(GIT_COMMIT)
 #define GIT_STATUS_STRING str(GIT_STATUS)
+#define EXPERIMENTAL
+#define VERSION "1.0"
 
 using namespace std;
 
@@ -65,11 +67,16 @@ void PrintDebugWarning()
 
 void PrintExperimentalWarning()
 {
-    cout << "#WARNING: Phased Local Search v0.1alpha. (Experimental)" << endl;
+
+#ifdef EXPERIMENTAL
+    cout << "#WARNING: Phased Local Search v" << VERSION << "alpha. (Experimental)" << endl << flush;
     cout << "#WARNING: " << endl;
-    cout << "#WARNING: Proceed with caution: this software is currently in an experimental state." << endl;
-    cout << "#WARNING: This software may be slow, the algorithm may be unstable and the results may be incorrect." << endl;
-    cout << "#WARNING: If you care about this sort of thing, don't use it." << endl;
+    cout << "#WARNING: Proceed with caution: this software is currently in an experimental state." << endl << flush;
+    cout << "#WARNING: This software may be slow, the algorithm may be unstable and the results may be incorrect." << endl << flush;
+    cout << "#WARNING: If you care about this sort of thing, don't use it." << endl << flush;
+#else
+    cout << "#Phased Local Search " << VERSION << "." << endl << flush;
+#endif // EXPERIMENTAL
 }
 
 void RunUnitTests()

@@ -37,13 +37,13 @@ clean:
 	rm -rf $(EXECS) $(BUILD_DIR) $(BIN_DIR)
 
 $(BIN_DIR)/pls: main.cpp ${OBJECTS} | ${BIN_DIR}
-	g++-5 $(CFLAGS) -D GIT_COMMIT=`git log --format="%H" -n 1` -D GIT_STATUS="`git status -s -uno`" ${DEFINE} ${OBJECTS} $(SRC_DIR)/main.cpp -o $@
+	g++ $(CFLAGS) -D GIT_COMMIT=`git log --format="%H" -n 1` -D GIT_STATUS="`git status -s -uno`" ${DEFINE} ${OBJECTS} $(SRC_DIR)/main.cpp -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/%.h $(BUILD_DIR)/%.d | $(BUILD_DIR)
-	g++-5 $(CFLAGS) ${DEFINE} -c $< -o $@
+	g++ $(CFLAGS) ${DEFINE} -c $< -o $@
 
 $(BUILD_DIR)/%.d: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
-	g++-5 $(CFLAGS) -MM -MT '$(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$<)' $< -MF $@
+	g++ $(CFLAGS) -MM -MT '$(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$<)' $< -MF $@
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
