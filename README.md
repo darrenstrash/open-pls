@@ -1,2 +1,2 @@
-# phased-local-search
-Phased local search: A local search algorithm for clique and independent set problems
+# open-pls
+OpenPLS: An open phased local search (PLS) algorithm for maximum independent set and related problems
