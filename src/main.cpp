@@ -29,7 +29,7 @@
 
 #define GIT_COMMIT_STRING str(GIT_COMMIT)
 #define GIT_STATUS_STRING str(GIT_STATUS)
-//#define EXPERIMENTAL
+#define EXPERIMENTAL
 #define VERSION "1.0"
 
 using namespace std;
@@ -73,7 +73,7 @@ void PrintExperimentalWarning()
     cout << "#WARNING: " << endl;
     cout << "#WARNING: Proceed with caution: this software is currently in an experimental state." << endl << flush;
     cout << "#WARNING: This software may be slow, the algorithm may be unstable and the results may be incorrect." << endl << flush;
-    cout << "#WARNING: If you care about this sort of thing, don't use it." << endl << flush;
+    cout << "#WARNING: If you care about this sort of thing, download and run v1.0 at https://github.com/darrenstrash/open-pls/releases/tag/v1.0." << endl << flush;
 #else
     cout << "#Phased Local Search v" << VERSION << "." << endl << flush;
 #endif // EXPERIMENTAL

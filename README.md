@@ -21,7 +21,9 @@ In addition to providing an open implementation of the PLS algorithm, this softw
 *Temporal Map Labeling: A New Unified Framework with Experiments*,  
 **L. Barth, B. Niedermann, M. Nöllenburg, and D. Strash**,  
 Proceedings of the 24th ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems (ACM SIGSPATIAL 2016)  
-[arXiv:1609.06327](https://arxiv.org/abs/1609.06327)  
+[arXiv:1609.06327](https://arxiv.org/abs/1609.06327)
+
+For the version of this software that exactly reproduces the results from the above paper, download [v1.0](https://github.com/darrenstrash/open-pls/releases/tag/v1.0)
 
 ###This package includes:
 
@@ -36,7 +38,7 @@ Proceedings of the 24th ACM SIGSPATIAL International Conference on Advances in G
 Please feel free to contact me with any questions!
 
 ### Version
-1.0
+1.0beta
 
 ### Building
 
