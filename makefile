@@ -29,7 +29,7 @@ VPATH = src
 
 .PHONY : all
 GIT_STATUS_STRING = $(shell git status -s -uno)
-ifeq ("$(GIT_STATUS_STRING)","")
+ifeq ($(GIT_STATUS_STRING),'')
 GIT_CLEANLINESS = Clean
 else
 GIT_CLEANLINESS = Dirty
