@@ -28,26 +28,37 @@ EXECS = $(addprefix $(BIN_DIR)/, $(EXEC_NAMES))
 VPATH = src
 
 .PHONY : all
+GIT_STATUS_STRING = $(shell git status -s -uno)
+ifeq ("$(GIT_STATUS_STRING)","")
+GIT_CLEANLINESS = Clean
+else
+GIT_CLEANLINESS = Dirty
+endif
+#$(info string is $(GIT_STATUS_STRING))
+#$(info status is $(status))
+
+DEFINES = -D GIT_COMMIT=$(shell git log --format="%H" -n 1)
+DEFINES += -D GIT_STATUS=$(GIT_CLEANLINESS)
+$(info git commit $(DEFINES))
 
 all: $(EXECS)
 
 .PHONY : clean
 
-clean: 
+clean:
 	rm -rf $(EXECS) $(BUILD_DIR) $(BIN_DIR)
 
 $(BIN_DIR)/pls: main.cpp ${OBJECTS} | ${BIN_DIR}
-	g++ $(CFLAGS) -D GIT_COMMIT=`git log --format="%H" -n 1` -D GIT_STATUS="`git status -s -uno`" ${DEFINE} ${OBJECTS} $(SRC_DIR)/main.cpp -o $@
+	g++ $(CFLAGS) $(DEFINES) ${OBJECTS} $(SRC_DIR)/main.cpp -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/%.h $(BUILD_DIR)/%.d | $(BUILD_DIR)
-	g++ $(CFLAGS) ${DEFINE} -c $< -o $@
+	g++ $(CFLAGS) $(DEFINES) -c $< -o $@
 
 $(BUILD_DIR)/%.d: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
-	g++ $(CFLAGS) -MM -MT '$(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$<)' $< -MF $@
+	g++ $(CFLAGS) $(DEFINES) -MM -MT '$(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$<)' $< -MF $@
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
-
