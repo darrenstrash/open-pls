@@ -29,7 +29,7 @@ VPATH = src
 
 .PHONY : all
 GIT_STATUS_STRING = $(shell git status -s -uno)
-ifeq ($(GIT_STATUS_STRING),'')
+ifeq ("$(GIT_STATUS_STRING)","")
 GIT_CLEANLINESS = Clean
 else
 GIT_CLEANLINESS = Dirty
@@ -40,6 +40,7 @@ endif
 DEFINES = -D GIT_COMMIT=$(shell git log --format="%H" -n 1)
 DEFINES += -D GIT_STATUS=$(GIT_CLEANLINESS)
 $(info git commit $(DEFINES))
+$(info $(shell git status -s -uno))
 
 all: $(EXECS)
 
