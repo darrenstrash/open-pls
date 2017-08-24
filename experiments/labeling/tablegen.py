@@ -1,8 +1,9 @@
 #! /usr/bin/python
 
 import sys
-sys.path.append("../../algo_test")
+sys.path.append("../../Tablegen")
 from DataCruncher import data_cruncher
+from TableWriter import table_writer
 
 same_keys_list = ["git-commit", "graph-name", "target", "max-selections", "timeout"]
 different_keys_list = ["random-seed"]
@@ -15,11 +16,12 @@ column_names = ["seed", "k", "am", "wILP", "wGreedy", "wavg", "wmax", "savg", "t
 column_heads = [("Graph", 3), ("Weight",2), ("MWIS", 3), ("Time", 2), ("Git", 2)]
 #column_heads = [] #empty for non publication table
 experiment_name = "labeling"
-table_format = "latex_publication" #latex, latex_publication, markdown
+table_format = "markdown" #latex, latex_publication, markdown
 caption = ""
 
 data_dir = sys.argv[1]
-table = data_cruncher(keys_list)
-table.process_dir(data_dir)
-table.validate_data(same_keys_list, different_keys_list)
+experiment = data_cruncher()
+experiment.process_dir(data_dir, keys_list)
+experiment.validate_data(same_keys_list, different_keys_list)
+table = table_writer(experiment)
 table.write_table(experiment_name, table_format, title, author, column_names, column_heads, columns_list, caption)
