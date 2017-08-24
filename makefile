@@ -39,7 +39,7 @@ endif
 
 DEFINES = -D GIT_COMMIT=$(shell git log --format="%H" -n 1)
 DEFINES += -D GIT_STATUS=$(GIT_CLEANLINESS)
-$(info git commit $(DEFINES) $(GIT_STATUS_STRING))
+#$(info git commit $(DEFINES))
 
 all: $(EXECS)
 
