@@ -24,4 +24,5 @@ experiment = data_cruncher()
 experiment.process_dir(data_dir, keys_list)
 experiment.validate_data(same_keys_list, different_keys_list)
 table = table_writer(experiment)
-table.write_table(experiment_name, table_format, title, author, column_names, column_heads, columns_list, caption)
+table.initialize(experiment_name, table_format, title, author) #packages-optional last argument
+table.write_table(column_names, column_heads, columns_list, caption)

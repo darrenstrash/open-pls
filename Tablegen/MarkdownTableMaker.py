@@ -32,12 +32,13 @@ class markdown_tablemaker(object):
     def column_names(self, names, heads, columns_list):
         string = ""
         hyphen = "---"
-        for head in heads:
-            string += head[0] + "|"*head[1]
-        string = string + self.newline
-        for i in range(len(heads)):
-            string += ":" + hyphen + ": | "
-        string = string[:-2] + self.newline
+        #TODO support for colspan
+#        for head in heads:
+#            string += head[0] + "|"*head[1]
+#        string = string + self.newline
+#        for i in range(len(heads)):
+#            string += ":" + hyphen + ": | "
+#        string = string[:-2] + self.newline
 
         for name in names:
             string +=  name + " | "
