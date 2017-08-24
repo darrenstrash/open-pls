@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append("../../algo_test")
-from data_cruncher import data_cruncher
+from DataCruncher import data_cruncher
 
 same_keys_list = ["git-commit", "graph-name", "target", "max-selections", "timeout"]
 different_keys_list = ["random-seed"]
