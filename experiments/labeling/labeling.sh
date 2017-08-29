@@ -4,17 +4,12 @@ time_out=0.1
 seeds=5
 seeds_minus_one=$((seeds - 1))
 
-output_dir=labeling.$seeds
-data_dir=$1
+output_dir=labeling
+data_dir=../../data/temporal-labeling-sample
 
-#mv $output_dir  old.$output_dir
 rm -rf old.$output_dir
 mv $output_dir  old.$output_dir
-
 mkdir $output_dir
-
-#mkdir -p $output_dir
-#rm -rf $output_dir/log.*
 
 for file_name in `ls -1 $data_dir/ | grep "\.graph$"`; do
 
@@ -33,15 +28,6 @@ for file_name in `ls -1 $data_dir/ | grep "\.graph$"`; do
     k=`echo $prefix | sed -e "s/.*seed_[0-9]*-\(.*\)/\1/g"`
     echo "k=$k"
 
-    #cat $data_dir/../csvs/$prefix.csv
-    #target_weight=`python get_weight.py AM$am < $data_dir/../csvs/$prefix.csv`
-    #echo "target_weight=$target_weight"
-
-    #greedy_weight=`python get_greedy_weight.py AM$am < $data_dir/../csvs/$prefix.csv`
-    #echo "greedy_weight=$greedy_weight"
-
-    #rm -rf $log_file
-
     echo -n "Running $file_name "
     for random_seed in $(seq 0 $seeds_minus_one); do
         log_file=$output_dir/log.$file_name.$random_seed
@@ -55,16 +41,6 @@ for file_name in `ls -1 $data_dir/ | grep "\.graph$"`; do
         echo "file-k: $k" >> $log_file
         echo "file-am: AM$am" >> $log_file
     done
-    echo ""
-    echo "Add to table..."
 done
 
-
-### generate and open table
-python tablegen.py $output_dir
-#cat header.labeling $output_dir/labeling.table footer.labeling > $output_dir/labeling.table.tex
-#cd $output_dir
-#pdflatex labeling.table.tex
-#pdflatex labeling.table.tex
-#open -a Skim labeling.table.pdf
-#open labeling.table.pdf
+python tablegen.py

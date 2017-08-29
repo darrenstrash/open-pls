@@ -11,6 +11,12 @@ class data_cruncher(object):
         self.experiment_list = defaultdict(lambda : defaultdict(list))
         self.rows = []
 
+    def __repr__(self):
+        return "< data_cruncher : >", self.experiment_list
+
+    def __str__(self):
+        return str(self.experiment_list)
+
     @staticmethod
     def all_same(data_array):
         first_element = 1

@@ -1,6 +1,5 @@
 #! /usr/bin/python
 
-import os
 import subprocess
 from LaTeXTableMaker import latex_tablemaker
 
@@ -11,7 +10,6 @@ class latex_publication(latex_tablemaker):
         self.file_name = experiment_name+".tex"
         doc_type = "[11pt]{article}\n"
         self.default_packages = ["longtable", "amsmath", "fullpage", "pdflscape", "booktabs"]
-        #os.remove("labeling.self.table.tex")
         self.table = open(self.file_name, 'w')
         self.table.write("\\documentclass" + doc_type)
 
@@ -29,8 +27,10 @@ class latex_publication(latex_tablemaker):
         for head in heads:
             temp_str = "\\hskip {}".format(padding)
             temp_str = "@{{{}}} ".format(temp_str)
+            key_str = ""
             for i in range(head[1]):
-                temp_str =self.align(columns_list[counter+i])+ temp_str
+                key_str +=latex_tablemaker.align(columns_list[counter+i])
+            temp_str = key_str + temp_str
             counter += head[1]
             temp += temp_str
         temp = temp[:temp.rfind("@")]
@@ -56,7 +56,7 @@ class latex_publication(latex_tablemaker):
         string += end_str
         temp = "\\cmidrule({}){{{}-{}}}"
         for i in range(len(columns_list)):
-            string += temp.format(self.align(columns_list[i]), i+1, i+1)
+            string += temp.format(latex_tablemaker.align(columns_list[i]), i+1, i+1)
         string += end_str
         self.table.write(string)
 

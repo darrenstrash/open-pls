@@ -48,6 +48,9 @@ class markdown_tablemaker(object):
         string = string[:-2] + self.newline
         self.table.write(string)
 
+    def print_name(self, name):
+        self.table.write(name) #TODO support for colspan
+
     def print_row(self,reduced_array):
         string = ""
         for item in reduced_array:
