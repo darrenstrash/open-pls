@@ -97,27 +97,15 @@ class table_writer(object):
         return output
 
     @staticmethod
-    def min_column(hash_list, lst):
-        temp = []
-        for i in lst:
-            temp.append(float(hash_list[i]))
-        minIdx = temp.index(min(temp))
-        return lst[minIdx]
-
-    @staticmethod
-    def max_column(hash_list, lst):
-        temp = []
-        for i in lst:
-            temp.append(float(hash_list[i]))
-        maxIdx = temp.index(max(temp))
-        return lst[maxIdx]
-
-    @staticmethod
     def compare_columns(hash_list, lst):
+        temp = []
+        for i in lst[1:]:
+            temp.append(float(hash_list[i]))
         if lst[0] == "max":
-            return table_writer.max_column(hash_list, lst[1:])
+            idx = temp.index(max(temp))
         elif lst[0] == "min":
-            return table_writer.min_column(hash_list, lst[1:])
+            idx = temp.index(min(temp))
+        return lst[idx+1]
 
     def add_experiment(self, experiment, experiment_name, sub_header=""):
         self.experiment_list[experiment_name] = experiment
