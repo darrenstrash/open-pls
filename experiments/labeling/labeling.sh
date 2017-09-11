@@ -4,13 +4,12 @@ time_out=0.1
 seeds=5
 seeds_minus_one=$((seeds - 1))
 
-output_dir=results/labeling.$seeds.$time_out
-data_dir=$1
+output_dir=labeling
+data_dir=../../data/temporal-labeling-sample
 
-#mv $output_dir  old.$output_dir
-
+rm -rf old.$output_dir
+mv $output_dir  old.$output_dir
 mkdir $output_dir
-rm -rf $output_dir/log.*
 
 for file_name in `ls -1 $data_dir/ | grep "\.graph$"`; do
 
@@ -29,37 +28,19 @@ for file_name in `ls -1 $data_dir/ | grep "\.graph$"`; do
     k=`echo $prefix | sed -e "s/.*seed_[0-9]*-\(.*\)/\1/g"`
     echo "k=$k"
 
-    #cat $data_dir/../csvs/$prefix.csv
-    target_weight=`python get_weight.py AM$am < $data_dir/../csvs/$prefix.csv`
-    echo "target_weight=$target_weight"
-
-    greedy_weight=`python get_greedy_weight.py AM$am < $data_dir/../csvs/$prefix.csv`
-    echo "greedy_weight=$greedy_weight"
-
-    log_file=$output_dir/log.$file_name.$time_out
-
-    rm -rf $log_file
-
     echo -n "Running $file_name "
     for random_seed in $(seq 0 $seeds_minus_one); do
+        log_file=$output_dir/log.$file_name.$random_seed
         echo -n "$random_seed/$seeds_minus_one..."
-        echo "../../bin/pls --algorithm=labeling --input-file=$data_dir/$file_name --target-weight=$target_weight --weighted --use-weight-file --timeout=$time_out --random-seed=$random_seed >> $log_file"
-        ../../bin/pls --algorithm=labeling --input-file=$data_dir/$file_name --target-weight=$target_weight --weighted --use-weight-file --timeout=$time_out --random-seed=$random_seed >> $log_file
+        #echo "../../bin/pls --algorithm=labeling --input-file=$data_dir/$file_name --target-weight=$target_weight --weighted --use-weight-file --timeout=$time_out --random-seed=$random_seed >> $log_file"
+        echo "../../bin/pls --algorithm=labeling --input-file=$data_dir/$file_name --weighted --use-weight-file --timeout=$time_out --random-seed=$random_seed >> $log_file"
+        #../../bin/pls --algorithm=labeling --input-file=$data_dir/$file_name --target-weight=$target_weight --weighted --use-weight-file --timeout=$time_out --random-seed=$random_seed >> $log_file
+        ../../bin/pls --algorithm=labeling --input-file=$data_dir/$file_name --weighted --use-weight-file --timeout=$time_out --random-seed=$random_seed >> $log_file
         echo "greedy-weight: $greedy_weight" >> $log_file
         echo "file-seed: $seed" >> $log_file
         echo "file-k: $k" >> $log_file
         echo "file-am: AM$am" >> $log_file
     done
-    echo ""
-    echo "Add to table..."
-    python tablegen.py $output_dir/log.$file_name.$time_out >> $output_dir/labeling.table
 done
 
-
-### generate and open table
-
-cat header.labeling $output_dir/labeling.table footer.labeling > $output_dir/labeling.table.tex
-cd $output_dir
-pdflatex labeling.table.tex
-pdflatex labeling.table.tex
-open -a Skim labeling.table.pdf
+python tablegen.py
