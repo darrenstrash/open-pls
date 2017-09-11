@@ -97,7 +97,9 @@ class table_writer(object):
         return output
 
     @staticmethod
-    def compare_columns(hash_list, lst):
+    def compare_columns(hash_list, lst=[]):
+        if(len(lst) < 3):
+            return
         temp = []
         for i in lst[1:]:
             temp.append(float(hash_list[i]))

@@ -74,7 +74,7 @@ class latex_tablemaker(object):
 
     def print_name(self, length, name):
         string = "\\multicolumn{{{}}}{{{}}}{{{}}} \\\\ \n"
-        string = string.format(length, "l", name)
+        string = string.format(length, "l", "\\textbf{{{}}}".format(name))
         self.table.write(string)
 
     def print_row(self,reduced_array, idx):
