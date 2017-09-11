@@ -8,7 +8,8 @@ class latex_tablemaker(object):
     def __init__(self, experiment_name):
         self.file_name = experiment_name+".tex"
         doc_type = "journal"
-        self.default_packages = ["longtable", "amsmath", "fullpage", "pdflscape", "booktabs"]
+        self.default_packages = ["longtable", "amsmath", "fullpage", "pdflscape", "booktabs", "numprint"]
+        #TODO numprint package, textbf
         self.table = open(self.file_name, 'w')
         self.table.write("\\documentclass{{{}}}\n".format(doc_type))
 
@@ -42,7 +43,7 @@ class latex_tablemaker(object):
         string += "\\rowcolors{2}{gray!25}{white}\n"
         string += "\\begin{{{}}}\n".format(orientation)
         string += "\\maketitle\n"
-        string += "%\\begin{center}\n"
+        string += "\\begin{center}\n"
         string += "\\begin{longtable}[!t]"
         key_alignment = ""
         for key in columns_list:
@@ -76,13 +77,15 @@ class latex_tablemaker(object):
         string = string.format(length, "l", name)
         self.table.write(string)
 
-    def print_row(self,reduced_array):
+    def print_row(self,reduced_array, idx):
         #TODO validate number of columns
+        if idx is not None:
+            reduced_array[idx] = "\\textbf{{{}}}".format(reduced_array[idx])
         self.table.write(" & ".join(reduced_array) + " \\\\\n")
 
     def footer(self):
         orientation = "landscape"
-        string = "%\end{center}\n"
+        string = "\\end{center}\n"
         string += "\\end{longtable}\n"
         string += "\\end{{{}}}\n".format(orientation)
         string += "\\end{document}\n"

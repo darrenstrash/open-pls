@@ -2,10 +2,7 @@
 
 import sys
 from collections import defaultdict
-from LaTeXTableMaker import latex_tablemaker
-from MarkdownTableMaker import markdown_tablemaker
-from LaTeXPublication import latex_publication
-from DataCruncher import data_cruncher
+from Tablegen import *
 
 class table_writer(object):
     """docstring for table_writer."""
@@ -15,6 +12,12 @@ class table_writer(object):
         self.output = None
         self.names = [] #identify different subtables in an experiment
         self.sub_headers = [] #displayed names for the subtables
+
+    def __repr__(self):
+        string = "<table : "
+        for item in self.experiment_list:
+            string += "<{} : {}>\n".format(item, str(self.experiment_list[item]))
+        return string
 
     @staticmethod
     def one_row(hash_list, columns_list):
@@ -93,15 +96,28 @@ class table_writer(object):
             output = latex_publication(experiment_name)
         return output
 
-    def compare_columns(self, value1, value2):
-        for key in self.table:
-            value1 = float(key[value1][0])
-            value2 = float(key[value2][0])
-            if value1 >= value2:
-                value1 = "\\textbf{" + value1 + "}"
-            if value2 >= value1:
-                value2 = "\\textbf{" + value2 + "}"
+    @staticmethod
+    def min_column(hash_list, lst):
+        temp = []
+        for i in lst:
+            temp.append(float(hash_list[i]))
+        minIdx = temp.index(min(temp))
+        return lst[minIdx]
 
+    @staticmethod
+    def max_column(hash_list, lst):
+        temp = []
+        for i in lst:
+            temp.append(float(hash_list[i]))
+        maxIdx = temp.index(max(temp))
+        return lst[maxIdx]
+
+    @staticmethod
+    def compare_columns(hash_list, lst):
+        if lst[0] == "max":
+            return table_writer.max_column(hash_list, lst[1:])
+        elif lst[0] == "min":
+            return table_writer.min_column(hash_list, lst[1:])
 
     def add_experiment(self, experiment, experiment_name, sub_header=""):
         self.experiment_list[experiment_name] = experiment
@@ -114,23 +130,23 @@ class table_writer(object):
         self.output.set_title(title)
         self.output.set_author(author)
 
-    def write_sub_table(self, name, table, columns_list):
+    def write_sub_table(self, name, table, columns_list, compare_cols):
         rows = table.get_rows()
         if(len(self.experiment_list) > 1):
             self.output.print_name(len(table.get_data(rows[0])), name)
         for row in rows:
             reduced_array = list(row)
             reduced_array += table_writer.one_row(table.get_data(row), columns_list)
-            self.output.print_row(reduced_array)
+            idx = table_writer.compare_columns(reduced_array, compare_cols)
+            self.output.print_row(reduced_array, idx)
 
-    def write_table(self, column_names, column_heads, columns_list, caption):
+    def write_table(self, column_names, column_heads, columns_list, compare_cols=[], caption=""):
         rows = self.experiment_list[self.names[0]].get_rows()
         example = list(rows[0])
         example += table_writer.one_row(self.experiment_list[self.names[0]].get_data(rows[0]), columns_list) #template for aligning the output
         self.output.begin(example, column_heads, caption)
         self.output.column_names(column_names, column_heads, example)
-
         for i in range(len(self.names)):
-            self.write_sub_table(self.sub_headers[i], self.experiment_list[self.names[i]], columns_list)
+            self.write_sub_table(self.sub_headers[i], self.experiment_list[self.names[i]], columns_list, compare_cols)
 
         self.output.footer()

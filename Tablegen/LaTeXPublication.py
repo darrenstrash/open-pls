@@ -14,13 +14,14 @@ class latex_publication(latex_tablemaker):
         self.table.write("\\documentclass" + doc_type)
 
     def begin(self, columns_list, heads, caption):
-        padding = "25pt"
+        padding = "18pt"
         string = "\\begin{document}\n"
         string += "\\begin{table}\n"
+        string += "\\maketitle\n"
+        string += "\\begin{center}\n"
         string += "\\caption{{{}}}\n".format(caption)
         string += "\\scriptsize\n"
-        string += "\\setlength{\\tabcolsep}{1.5ex}\n"
-        string += "%\\begin{center}\n"
+        string += "\\setlength{\\tabcolsep}{.9ex}\n"
         string += "\\begin{tabular}[tb]"
         counter = 0
         temp = ""
@@ -64,7 +65,7 @@ class latex_publication(latex_tablemaker):
     def footer(self):
         string = "\\hline"
         string += "\\end{tabular}\n"
-        string += "%\\end{center}\n"
+        string += "\\end{center}\n"
         string += "\\end{table}\n"
         string += "\\end{document}\n"
         self.table.write(string)

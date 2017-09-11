@@ -12,10 +12,16 @@ class data_cruncher(object):
         self.rows = []
 
     def __repr__(self):
-        return "< data_cruncher : >", self.experiment_list
+        string = "DataCruncher : "
+        for item in self.experiment_list:
+            string += "<{} : {}>\n".format(item, str(self.experiment_list[item]))
+        return string
 
     def __str__(self):
-        return str(self.experiment_list)
+        string = "DataCruncher : "
+        for item in self.experiment_list:
+            string += "<{} : {}>\n".format(item, str(self.experiment_list[item]))
+        return string
 
     @staticmethod
     def all_same(data_array):
