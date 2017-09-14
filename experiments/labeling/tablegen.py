@@ -2,8 +2,7 @@
 
 import sys
 import os
-sys.path.append("../../")
-from Tablegen import *
+from table_gen import *
 
 same_keys_list = ["git-commit", "graph-name", "target", "max-selections", "timeout"]
 different_keys_list = ["random-seed"]
