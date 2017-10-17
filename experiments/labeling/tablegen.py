@@ -12,7 +12,7 @@ author = "Darren Strash, Daniel Gathogo (automated)"
 column_names = ["seed", "k", "am", "wILP", "wGreedy", "wavg", "wmax", "savg", "timeout", "tavg", "last commit", "status"]
 column_heads = [("Graph", 3), ("Weight",2), ("MWIS", 3), ("Time", 2), ("Git", 2)]
 
-compare_cols = [5,6]
+compare_cols = ['max',5,6]
 experiment_name = "Labeling"
 experiments = ["labeling"]
 sub_headers = [] #subheadings for each experiment
