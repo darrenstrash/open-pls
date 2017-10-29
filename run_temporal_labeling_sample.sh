@@ -7,8 +7,8 @@ echo "Done"
 
 echo -n "Decompressing data..."
 cd data
-tar -xzf temporal-labeling-sample.tar.gz
-cd temporal-labeling-sample
+tar -xzf temporal-labeling.tar.gz
+cd temporal-labeling
 data_dir=`pwd`
 echo "Done"
 

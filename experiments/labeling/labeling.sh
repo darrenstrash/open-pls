@@ -5,7 +5,7 @@ seeds=5
 seeds_minus_one=$((seeds - 1))
 
 output_dir=labeling
-data_dir=../../data/temporal-labeling
+data_dir=$1
 
 rm -rf old.$output_dir
 mv $output_dir  old.$output_dir
