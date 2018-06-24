@@ -9,7 +9,7 @@ data_dir=$1
 
 #mv $output_dir  old.$output_dir
 
-mkdir $output_dir
+mkdir -p $output_dir
 rm -rf $output_dir/log.*
 
 for file_name in `ls -1 $data_dir/ | grep "\.graph$"`; do
@@ -60,6 +60,6 @@ done
 
 cat header.labeling $output_dir/labeling.table footer.labeling > $output_dir/labeling.table.tex
 cd $output_dir
-pdflatex labeling.table.tex
-pdflatex labeling.table.tex
+pdflatex labeling.table.tex > /dev/null
+pdflatex labeling.table.tex > /dev/null
 open -a Skim labeling.table.pdf
