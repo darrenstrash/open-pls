@@ -189,7 +189,8 @@ int main(int argc, char** argv)
     bool   const bPrintHeader(mapCommandLineArgs.find("--header") != mapCommandLineArgs.end());
     string const sTimeout(mapCommandLineArgs.find("--timeout") != mapCommandLineArgs.end() ? mapCommandLineArgs["--timeout"] : "");
     bool   const bRunUnitTests(mapCommandLineArgs.find("--run-tests") != mapCommandLineArgs.end());
-    bool   const bNoReduce(mapCommandLineArgs.find("--no-reduce") != mapCommandLineArgs.end());
+    bool   const bReduce(mapCommandLineArgs.find("--reduce") != mapCommandLineArgs.end());
+    bool   const bNoReduce((mapCommandLineArgs.find("--no-reduce") != mapCommandLineArgs.end()) || !bReduce);
     size_t const uMaxSelections(mapCommandLineArgs.find("--max-selections") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--max-selections"]) : 100000000);
     double const dTargetWeight(mapCommandLineArgs.find("--target-weight") != mapCommandLineArgs.end() ? std::stod(mapCommandLineArgs["--target-weight"]) : numeric_limits<double>::max());
     size_t const uRandomSeed(mapCommandLineArgs.find("--random-seed") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--random-seed"]) : 0);
