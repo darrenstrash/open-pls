@@ -10,7 +10,7 @@ data_dir=$1
 csv_dir=$output_dir/csvs
 
 
-rm -rf $output_dir
+rm -rf $old_output_dir
 mv $output_dir  $old_output_dir
 
 split_file_prefix="make_me_unique"
