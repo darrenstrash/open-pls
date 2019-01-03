@@ -1,6 +1,7 @@
 # **OpenPLS**: An open phased local search (PLS) algorithm for maximum clique and related problems
 
 [![license](https://img.shields.io/badge/license-GPL%20v3.0-blue.svg)](http://www.gnu.org/licenses/)
+[![Build Status](https://travis-ci.com/darrenstrash/open-pls.svg?branch=master)](https://travis-ci.com/darrenstrash/open-pls)
 
 The purpose of this package is to (attempt) to reproduce the results of the following two papers:
 
