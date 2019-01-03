@@ -25,6 +25,9 @@ EXEC_NAMES = pls
 
 EXECS = $(addprefix $(BIN_DIR)/, $(EXEC_NAMES))
 
+#set CXX to generic g++ if not set.
+CXX ?= g++
+
 VPATH = src
 
 .PHONY : all
@@ -36,14 +39,14 @@ all: $(EXECS)
 clean: 
 	rm -rf $(EXECS) $(BUILD_DIR) $(BIN_DIR)
 
-$(BIN_DIR)/pls: main.cpp ${OBJECTS} | ${BIN_DIR}
-	g++ $(CFLAGS) -D GIT_COMMIT=`git log --format="%H" -n 1` -D GIT_STATUS="`git status -s -uno`" ${DEFINE} ${OBJECTS} $(SRC_DIR)/main.cpp -o $@
+$(BIN_DIR)/pls: main.cpp ${OBJECTS} makefile | ${BIN_DIR}
+	$(CXX) $(CFLAGS) -D GIT_COMMIT=`git log --format="%H" -n 1` -D GIT_STATUS="`git status -s -uno`" ${DEFINE} ${OBJECTS} $(SRC_DIR)/main.cpp -o $@
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/%.h $(BUILD_DIR)/%.d | $(BUILD_DIR)
-	g++ $(CFLAGS) ${DEFINE} -c $< -o $@
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/%.h $(BUILD_DIR)/%.d makefile | $(BUILD_DIR)
+	$(CXX) $(CFLAGS) ${DEFINE} -c $< -o $@
 
-$(BUILD_DIR)/%.d: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
-	g++ $(CFLAGS) -MM -MT '$(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$<)' $< -MF $@
+$(BUILD_DIR)/%.d: $(SRC_DIR)/%.cpp makefile | $(BUILD_DIR)
+	$(CXX) $(CFLAGS) -MM -MT '$(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$<)' $< -MF $@
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
