@@ -28,6 +28,8 @@ Experiments were run on a Macbook Pro with a 2.3 GHz Intel Core i5, which has a 
 
 As shown in the table below, Pullan's original algorithm is faster on most instances. It is generally faster by a factor of 3; however, it is much faster for dense graphs, for example it is faster on MANN_a27 and san400_0.9_1 by factors 81.99 and 144, respectively.
 
+The slowest instances were excluded, due to time constraints.
+
 Graph               | Clique Number |     Time (Pullan) | Time (Ours) | Selections (Pullan) | Selections (Ours)
 :----               | ------------: |          -------: | --------:   |              -----: | -----:
 brock200_1          |            21 | 0.0036 | 0.0312 | 2958   | 3986.96
