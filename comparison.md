@@ -26,8 +26,20 @@ Experiments were run on a Macbook Pro with a 2.3 GHz Intel Core i5, which has a 
 
 ### Table
 
-Graph    | Clique Number | Time (Pullan) | Time (Ours) | Selections (Pullan) | Selections (Ours)
-:----    | ------------: |      -------: | --------:   |              -----: | -----:
-C125.9   |            34 |        0.0001 |   0.0024    |                199  | 191.85
+Graph                | Clique Number |     Time (Pullan) | Time (Ours) | Selections (Pullan) | Selections (Ours)
+:----                | ------------: |          -------: | --------:   |              -----: | -----:
+C125.9               |            34 |            0.0001 |   0.0024    |                199  | 191.85
+C250.9 | 44 | | 0.0447 | | 2051.35
+
+MANN_a27 | 126 | | 2.55877 | | 28188.8
+MANN_a9 | 16 | | <0.0001 | | 21.28
+brock200_1 | 21 | | 0.031275 | | 3986.96
+brock200_2 | 12 | | 0.040634 | | 10229.6
+brock200_3 | 15 | | 0.019743 | | 3939.77
+brock200_4 | 17 | | 0.278674 | | 49016.8
+brock400_1 | 27 | | 376982 | | 5.62016
+brock400_2 | 29 | | 1.14214 | | 77090.5
+brock400_3 | 31 | | 0.552496 | | 37027.4
+brock400_4 | 33 | | 0.2821 | | 18977.3
 
 
