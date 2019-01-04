@@ -1,10 +1,11 @@
 # Comparison with Pullan's PLS
 
-Pullan's original algorithm was designed to be run on DIMACS graphs, which are generally small and dense. As such, his implementation problem used an adjacency matrix. However, this limits the applicability of the algorithm to large sparse networks, which are often of interest in practice.
+Pullan's original algorithm was designed to be run on DIMACS graphs, which are generally small and dense. As such, his implementation probably used an adjacency matrix. However, this limits the applicability of the algorithm to large sparse networks, which are often of interest in practice. Our implementation is designed for sparse graphs, and uses an adjacency list. While this enables it to handle a more diverse collection of data sets, using an adjacency list can lead to slow solving on dense graphs, such as those in Pullan's paper.
+
 
 ### Criteria
 
-We briefly compare the present implementation to that of Pullan. There are two criteria to compare:
+To illustrate the algorithm performance differences, we ran experiments the compare the present implementation to Pullan's. There are two criteria to compare:
 
 - *Selections*: the number of times a new vertex is selected for insertion into the approximate clique. 
 
@@ -25,5 +26,8 @@ Experiments were run on a Macbook Pro with a 2.3 GHz Intel Core i5, which has a 
 
 ### Table
 
+Graph    | Clique Number | Time (Pullan) | Time (Ours) | Selections (Pullan) | Selections (Ours)
+:----    | ------------: |      -------: | --------:   |              -----: | -----:
+C125.9   |            34 |        0.0001 |   0.0024    |                199  | 191.85
 
 
