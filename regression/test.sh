@@ -21,7 +21,7 @@ rm -f san1000.graph
 cd ../
 
 rm -f log.0901
-for file in `ls -1 dimacs/*.graph`; do
+for file in `ls -1 dimacs/C125.9.graph`; do
     base=`basename $file`
     noext=`echo $base | sed -e "s/\.graph//g"`
 
