@@ -4,6 +4,7 @@
 #include "Algorithm.h"
 #include "ResetableArraySet.h"
 
+#include <random>
 #include <string>
 #include <vector>
 #include <cstddef>
@@ -115,6 +116,7 @@ protected:
     size_t                               m_TimeOut;
 
     bool                                 m_bQuiet;
+    mutable std::minstd_rand             m_RandomGenerator;
 };
 
 #endif //PLS_H
