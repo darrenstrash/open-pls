@@ -112,7 +112,7 @@ protected:
     clock_t                              m_TimeToReachBestWeight;
     size_t                               m_uSelectionsToBestWeight;
     clock_t                              m_StartTime;
-    clock_t                              m_TimeOut;
+    size_t                               m_TimeOut;
 
     bool                                 m_bQuiet;
 };
