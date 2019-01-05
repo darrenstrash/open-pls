@@ -1,6 +1,6 @@
-# Comparison with Pullan's PLS
+# Comparing OpenPLS with Pullan's PLS
 
-Pullan's original algorithm was designed to be run on DIMACS graphs, which are generally small and dense. As such, his implementation probably used an adjacency matrix. However, this limits the applicability of the algorithm to large sparse networks, which are often of interest in practice. Our implementation is designed for sparse graphs, and uses an adjacency list. While this enables it to handle a more diverse collection of data sets, using an adjacency list can lead to slow solving on dense graphs, such as those in Pullan's paper.
+Pullan's original algorithm was designed to be run on DIMACS graphs, which are generally small and dense. As such, his implementation probably used an adjacency matrix. However, this limits the applicability of the algorithm to large sparse networks, which are often of interest in practice. OpenPLS is designed for sparse graphs, and uses an adjacency list. While this enables it to handle a more diverse collection of data sets, using an adjacency list can lead to slow solving on dense graphs, such as those in Pullan's paper.
 
 
 ### Criteria
@@ -20,19 +20,19 @@ We repeat the same experiment as Pullan from the following paper:
 Journal of Combinatorial Optimization, 12 (3), pp. 303–323, 2006  
 [doi:10.1007/s10878-006-9635-y](https://doi.org/10.1007/s10878-006-9635-y)
 
-For each data set, we give a *target* clique size, using the `--target-weight` command-line option, and run the algorithm over 100 trials with random seeds `0` through `99`, computing the average number of selections and the average running time in seconds. 
+For each data set, we give a *target* clique size, using the `--target-weight` command-line option, and run the algorithm over 100 independent trials with random seeds `0` through `99`, computing the average number of selections and the average running time in seconds. 
 
 Experiments were run on a Macbook Pro with a 2.3 GHz Intel Core i5, which has a similar speed to Pullan's (2.4 GHz Pentium IV) machine.
 
 ### Table
 
-As shown in the table below, Pullan's original algorithm is faster on most instances. It is generally faster by a factor of 3; however, it is much faster for dense graphs, for example it is faster on MANN_a27 and san400_0.9_1 by factors 81.99 and 144, respectively. 
+As shown in the table below, Pullan's original algorithm is faster than OpenPLS on most instances. It is generally faster by a factor of 3; however, it is much faster for dense graphs, for example it is faster on MANN_a27 and san400_0.9_1 by factors 81.99 and 144, respectively. 
 
-On most instances, the algorithms have a similar number of selections. On several instances, Pullan's algorithm performs 50% fewer selections; however, on other instances our algorithm performs 50% fewer selections.
+On most instances, the algorithms have a similar number of selections. On several instances, Pullan's algorithm performs 50% fewer selections; however, on other instances OpenPLS algorithm performs 50% fewer selections.
 
 The slowest instances were excluded, due to time constraints.
 
-Graph               | Clique Number |     Time (Pullan) | Time (Ours) | Selections (Pullan) | Selections (Ours)
+Graph               | Clique Number |     Time (Pullan) | Time (Open) | Selections (Pullan) | Selections (Open)
 :----               | ------------: |          -------: | --------:   |              -----: | -----:
 brock200_1          |            21 | 0.0036 | 0.0312 | 2958   | 3986.96
 brock200_2          |            12 | 0.0294 | 0.0406 | 14143  | 10229.60
