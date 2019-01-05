@@ -1,32 +1,45 @@
-# **OpenPLS**: An open phased local search (PLS) algorithm for maximum clique and related problems
+# **OpenPLS**: An open phased local search (PLS) implementation
 
 [![license](https://img.shields.io/badge/license-GPL%20v3.0-blue.svg)](http://www.gnu.org/licenses/)
 [![Build Status](https://travis-ci.com/darrenstrash/open-pls.svg?branch=master)](https://travis-ci.com/darrenstrash/open-pls)
 
-The purpose of this package is to (attempt) to reproduce the results of the following two papers:
+Phased local search (PLS) is a simple, yet powerful technique to compute approximate solutions to combinatorial optimization problems. OpenPLS was written with two goals in mind:
 
-*Phased local search for the maximum clique problem*,  
-**Wayne Pullan**,  
-Journal of Combinatorial Optimization, 12 (3), pp. 303–323, 2006  
-[doi:10.1007/s10878-006-9635-y](https://doi.org/10.1007/s10878-006-9635-y)
+- Have a working (open) implementation of PLS for the maximum clique / independent set problems and their weighted variants.
+- Have the implementation work on large sparse graphs that cannot be stored with an adjacency matrix.
 
-and
+The original PLS algorithm by Pullan was *not* designed for sparse graphs, and thus there is a speed difference between published results using PLS and OpenPLS. (See a comparison with published results [here](/comparison.md). Effort is underway to provide an option for dense networks, which is competetive with the original publications.
 
-*Optimisation of unweighted/weighted maximum independent sets and minimum vertex covers*,  
-**Wayne Pullan**,  
-Discrete Optimization, 6 (2), pp. 214–219, 2009  
-[doi:10.1016/j.disopt.2008.12.001](https://doi.org/10.1016/j.disopt.2008.12.001)
+### About this implementation 
 
-In addition to providing an open implementation of the PLS algorithm, this software provides exact reproducibility of experimental results using PLS in the paper:
+The purpose of OpenPLS is two-fold:
 
-*Temporal Map Labeling: A New Unified Framework with Experiments*,  
-**L. Barth, B. Niedermann, M. Nöllenburg, and D. Strash**,  
-Proceedings of the 24th ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems (ACM SIGSPATIAL 2016)  
-[arXiv:1609.06327](https://arxiv.org/abs/1609.06327)
+1. Faithfully implement the algorithms from the following two papers:
 
-For the version of this software that exactly reproduces the results from the above paper, download [v1.0](https://github.com/darrenstrash/open-pls/releases/tag/v1.0)
+   *Phased local search for the maximum clique problem*,  
+   **Wayne Pullan**,  
+   Journal of Combinatorial Optimization, 12 (3), pp. 303–323, 2006  
+   [doi:10.1007/s10878-006-9635-y](https://doi.org/10.1007/s10878-006-9635-y)
 
-###This package includes:
+   and
+
+   *Optimisation of unweighted/weighted maximum independent sets and minimum vertex covers*,  
+   **Wayne Pullan**,  
+   Discrete Optimization, 6 (2), pp. 214–219, 2009  
+   [doi:10.1016/j.disopt.2008.12.001](https://doi.org/10.1016/j.disopt.2008.12.001)
+
+   **As noted above, the present implementation is optimized for sparse graphs, using an adjacency list instead of an adjacency matrix. As such, the PLS is slower than Pullan's PLS on dense graphs. See a comparison [here](/comparison.md).**
+
+2. Provide exact reproducibility of experimental results using PLS in the paper:
+
+   *Temporal Map Labeling: A New Unified Framework with Experiments*,  
+   **L. Barth, B. Niedermann, M. Nöllenburg, and D. Strash**,  
+   Proceedings of the 24th ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems (ACM SIGSPATIAL 2016)  
+   [arXiv:1609.06327](https://arxiv.org/abs/1609.06327)
+
+   For the version of OpenPLS that exactly reproduces the results from the above paper, download [v1.0](https://github.com/darrenstrash/open-pls/releases/tag/v1.0)
+
+### This package includes:
 
  - C++ code for phased local search, to compute an approximate:
    - maximum (unweighted) clique,
