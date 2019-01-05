@@ -1,8 +1,9 @@
 language: cpp
 
-script: make
-        cd $TRAVIS_BUILD_DIR/regression
-        bash test.sh
+script:
+  - make
+  - cd $TRAVIS_BUILD_DIR/regression
+  - bash test.sh
 
 compiler:
   - gcc
