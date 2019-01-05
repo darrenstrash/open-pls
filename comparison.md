@@ -1,6 +1,6 @@
 # Comparing OpenPLS with Pullan's PLS
 
-Pullan's original algorithm was designed to be run on DIMACS graphs, which are generally small and dense. As such, his implementation probably used an adjacency matrix. However, this limits the applicability of the algorithm to large sparse networks, which are often of interest in practice. OpenPLS is designed for sparse graphs, and uses an adjacency list. While this enables it to handle a more diverse collection of data sets, using an adjacency list can lead to slow solving on dense graphs, such as those in Pullan's paper.
+Pullan's original algorithm was designed to be run on DIMACS graphs, which are generally small and dense. As such, his implementation probably used an adjacency matrix. However, this limits the applicability of PLS to large sparse networks, which are often of interest in practice. OpenPLS is designed for sparse graphs, and uses an adjacency list. While this enables it to handle a more diverse collection of data sets, using an adjacency list can lead to slow solving on dense graphs, such as those in Pullan's paper.
 
 
 ### Criteria
@@ -99,3 +99,6 @@ sanr200_0.9 | 42 | 0.0083 | 0.0949 | 10205 | 5488.88
 sanr400_0.5 | 13 | 0.0090 | 0.0374 | 2404 | 5246.33
 sanr400_0.7 | 21 | 0.0083 | 0.0440 | 3368 | 3614.38
 
+### Conclusion
+
+OpenPLS is competetive with Pullan's PLS in the number of selections. However, it is not yet as efficient in terms of running time on DIMACS instances (although for some instances, the running times are similar). However, OpenPLS can run on many graphs that Pullan's cannot -- large sparse graphs having 100,000 vertices or more.
