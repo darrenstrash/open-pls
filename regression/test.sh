@@ -21,7 +21,8 @@ rm -f san1000.graph
 cd ../
 
 rm -f log.0901
-for file in `ls -1 dimacs/*.graph`; do
+for file in `cat graphs.txt`; do
+    file=dimacs/$file
     base=`basename $file`
     noext=`echo $base | sed -e "s/\.graph//g"`
     theweight=`cat targets | grep $noext | awk '{print $2}'`
