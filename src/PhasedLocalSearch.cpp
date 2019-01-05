@@ -64,7 +64,9 @@ void PhasedLocalSearch::Perturb()
     cout << "Perturbing..." << endl << flush;
 #endif // DEBUG
 
-    int const randomVertex(rand()%m_vAdjacencyArray.size());
+    size_t const random_int(rand());
+    cout << "random-int: " << random_int << endl << flush;
+    int const randomVertex(random_int%m_vAdjacencyArray.size());
 
     // Set $K$ to contain only random vertex.
     if (m_SelectionPhase == SelectionPhase::PENALTY_SELECTION) {
@@ -146,7 +148,9 @@ void PhasedLocalSearch::UpdatePenalties()
 
 int PhasedLocalSearch::RandomSelect(ResetableArraySet const &vertexSet) const
 {
-    return *(vertexSet.begin() + rand()%vertexSet.Size());
+    size_t const random_int(rand());
+    cout << "random-int: " << random_int << endl << flush;
+    return *(vertexSet.begin() + random_int%vertexSet.Size());
 }
 
 int PhasedLocalSearch::PenaltySelect(ResetableArraySet const &vertexSet) const
@@ -173,7 +177,9 @@ int PhasedLocalSearch::PenaltySelect(ResetableArraySet const &vertexSet) const
 ////    if (vertexSet.Size() == 2 && m_ScratchSpace.Size() == 0) {
 ////        cout << "vs={" << *(vertexSet.begin()) << "," << *(vertexSet.begin() + 1) << "}" << endl << flush;
 ////    }
-    int const vertexToReturn = *(m_ScratchSpace.begin() + rand()%m_ScratchSpace.Size());
+    size_t const random_int(rand());
+    cout << "random-int: " << random_int << endl << flush;
+    int const vertexToReturn = *(m_ScratchSpace.begin() + random_int%m_ScratchSpace.Size());
     m_ScratchSpace.Clear();
 #ifdef DEBUG
     cout << "Done!" << endl << flush;
@@ -451,7 +457,9 @@ bool PhasedLocalSearch::Run()
     }
 
     // initialize independent set
-    int const randomVertex(rand()%m_vAdjacencyArray.size());
+    size_t const random_int(rand());
+    cout << "random-int: " << random_int << endl << flush;
+    int const randomVertex(random_int%m_vAdjacencyArray.size());
     ForceIntoK(randomVertex, false /* update U */);
     m_RandomK.Insert(randomVertex);
     m_DegreeK.Insert(randomVertex);

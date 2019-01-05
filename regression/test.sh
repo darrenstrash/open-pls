@@ -28,7 +28,7 @@ for file in `ls -1 dimacs/C125.9.graph`; do
 
     echo "Testing $noext..."
     ../bin/pls --target-weight=$theweight --algorithm=clique --random-seed=0 --input-file=$file
-    ../bin/pls --target-weight=$theweight --algorithm=clique --random-seed=0 --input-file=$file | grep -E "^graph-name|^mc|^selections|^best-solution" | tee -a log.0901
+    ../bin/pls --target-weight=$theweight --algorithm=clique --random-seed=0 --input-file=$file | grep -E "^random-int|^graph-name|^mc|^selections|^best-solution" | tee -a log.0901
     echo "" | tee -a log.0901
 
 done
