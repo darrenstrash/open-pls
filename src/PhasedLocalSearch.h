@@ -73,6 +73,10 @@ public:
 
     virtual void ForceIntoK(int const vertex, bool const updateU) = 0;
 
+    void SeedRandomNumberGenerator(int const the_seed) {
+        m_RandomGenerator.seed(the_seed);
+    }
+
 protected:
     std::string m_sName;
 

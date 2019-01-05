@@ -194,6 +194,7 @@ int main(int argc, char** argv)
     size_t const uMaxSelections(mapCommandLineArgs.find("--max-selections") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--max-selections"]) : 100000000);
     double const dTargetWeight(mapCommandLineArgs.find("--target-weight") != mapCommandLineArgs.end() ? std::stod(mapCommandLineArgs["--target-weight"]) : numeric_limits<double>::max());
     size_t const uRandomSeed(mapCommandLineArgs.find("--random-seed") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--random-seed"]) : 0);
+    string const sGraphMode(mapCommandLineArgs.find("--graph-mode") != mapCommandLineArgs.end() ? mapCommandLineArgs["--graph-mode"] : "sparse");
 ////    size_t const uTimeoutInMilliseconds(mapCommandLineArgs.find("--timeout-in-ms") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--timeout-in-ms"]) : 5000)
 
     cout << "#command :";
@@ -213,7 +214,6 @@ int main(int argc, char** argv)
         }
     }
 
-    srand(uRandomSeed);
 
     bool   const bRunExperiment(!sExperimentName.empty());
     bool   const bTableMode(bOutputLatex || bOutputTable);
@@ -309,6 +309,7 @@ int main(int argc, char** argv)
         if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
         pPLS->SetTargetWeight(dTargetWeight);
         pPLS->SetQuiet(bQuiet);
+        pPLS->SeedRandomNumberGenerator(uRandomSeed);
         pAlgorithm = pPLS;
 
         bool const bAlgorithmStatus(pAlgorithm->Run());
@@ -388,6 +389,7 @@ int main(int argc, char** argv)
         if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
         pPLS->SetTargetWeight(dTargetWeight - dInitialWeight);
         pPLS->SetQuiet(bQuiet);
+        pPLS->SeedRandomNumberGenerator(uRandomSeed);
         pAlgorithm = pPLS;
         bool bAlgorithmStatus(true);
 
@@ -449,6 +451,7 @@ int main(int argc, char** argv)
         if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
         pPLS->SetTargetWeight(dTargetWeight);
         pPLS->SetQuiet(bQuiet);
+        pPLS->SeedRandomNumberGenerator(uRandomSeed);
         pAlgorithm = pPLS;
         bool const bAlgorithmStatus = pAlgorithm->Run();
 
