@@ -65,7 +65,7 @@ void PhasedLocalSearch::Perturb()
     cout << "Perturbing..." << endl << flush;
 #endif // DEBUG
 
-    size_t const random_int(m_RandomGenerator());
+    unsigned int const random_int(m_RandomGenerator());
 ////    cout << "random-int: " << random_int << endl << flush;
     int const randomVertex(random_int%m_vAdjacencyArray.size());
 
@@ -149,7 +149,7 @@ void PhasedLocalSearch::UpdatePenalties()
 
 int PhasedLocalSearch::RandomSelect(ResetableArraySet const &vertexSet) const
 {
-    size_t const random_int(m_RandomGenerator());
+    unsigned int const random_int(m_RandomGenerator());
 ////    cout << "random-int: " << random_int << endl << flush;
     return *(vertexSet.begin() + random_int%vertexSet.Size());
 }
@@ -178,7 +178,7 @@ int PhasedLocalSearch::PenaltySelect(ResetableArraySet const &vertexSet) const
 ////    if (vertexSet.Size() == 2 && m_ScratchSpace.Size() == 0) {
 ////        cout << "vs={" << *(vertexSet.begin()) << "," << *(vertexSet.begin() + 1) << "}" << endl << flush;
 ////    }
-    size_t const random_int(m_RandomGenerator());
+    unsigned int const random_int(m_RandomGenerator());
 ////    cout << "random-int: " << random_int << endl << flush;
     int const vertexToReturn = *(m_ScratchSpace.begin() + random_int%m_ScratchSpace.Size());
     m_ScratchSpace.Clear();
@@ -458,7 +458,7 @@ bool PhasedLocalSearch::Run()
     }
 
     // initialize independent set
-    size_t const random_int(m_RandomGenerator());
+    unsigned int const random_int(m_RandomGenerator());
 ////    cout << "random-int: " << random_int << endl << flush;
     int const randomVertex(random_int%m_vAdjacencyArray.size());
     ForceIntoK(randomVertex, false /* update U */);

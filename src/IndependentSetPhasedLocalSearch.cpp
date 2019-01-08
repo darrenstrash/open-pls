@@ -31,7 +31,8 @@ int IndependentSetPhasedLocalSearch::DegreeSelect(ResetableArraySet const &verte
         }
     }
 
-    int const vertexToReturn = *(m_ScratchSpace.begin() + rand()%m_ScratchSpace.Size());
+    unsigned int const random_int(m_RandomGenerator());
+    int const vertexToReturn = *(m_ScratchSpace.begin() + random_int%m_ScratchSpace.Size());
     m_ScratchSpace.Clear();
     return vertexToReturn;
 }

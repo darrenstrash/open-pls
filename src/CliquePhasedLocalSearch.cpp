@@ -26,7 +26,8 @@ int CliquePhasedLocalSearch::DegreeSelect(ResetableArraySet const &vertexSet) co
         }
     }
 
-    int const vertexToReturn = *(m_ScratchSpace.begin() + rand()%m_ScratchSpace.Size());
+    unsigned int const random_int(m_RandomGenerator());
+    int const vertexToReturn = *(m_ScratchSpace.begin() + random_int%m_ScratchSpace.Size());
     m_ScratchSpace.Clear();
     return vertexToReturn;
 }
@@ -178,7 +179,7 @@ void CliquePhasedLocalSearch::InitializeFromK2(bool const updateU)
         if (neighborCount == m_K.Size()) {
             m_NotAdjacentToZero.Insert(vertex);
             m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
-        } else if (neighborCount == m_K.Size()-1) { 
+        } else if (neighborCount == m_K.Size() - 1) { 
             m_NotAdjacentToOne.Insert(vertex);
             m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
         }
