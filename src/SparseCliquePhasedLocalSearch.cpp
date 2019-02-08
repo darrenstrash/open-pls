@@ -1,9 +1,9 @@
 
-#include "CliquePhasedLocalSearch.h"
+#include "SparseCliquePhasedLocalSearch.h"
 
 using namespace std;
 
-CliquePhasedLocalSearch::CliquePhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray, vector<double> const &vVertexWeights)
+SparseCliquePhasedLocalSearch::SparseCliquePhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray, vector<double> const &vVertexWeights)
 : PhasedLocalSearch(vAdjacencyArray,vVertexWeights)
 {
     SetName("pls-clique");
@@ -12,7 +12,7 @@ CliquePhasedLocalSearch::CliquePhasedLocalSearch(vector<vector<int>> const &vAdj
     }
 }
 
-int CliquePhasedLocalSearch::DegreeSelect(ResetableArraySet const &vertexSet) const
+int SparseCliquePhasedLocalSearch::DegreeSelect(ResetableArraySet const &vertexSet) const
 {
     size_t maxDegree(0);
     m_ScratchSpace.Clear();
@@ -33,7 +33,7 @@ int CliquePhasedLocalSearch::DegreeSelect(ResetableArraySet const &vertexSet) co
 }
 
 
-void CliquePhasedLocalSearch::AddToK(int const vertex)
+void SparseCliquePhasedLocalSearch::AddToK(int const vertex)
 {
 #ifdef DEBUG
     cout << "Adding " << vertex << " to $K$" << endl << flush;
@@ -85,7 +85,7 @@ void CliquePhasedLocalSearch::AddToK(int const vertex)
 
 
 // starting from clique, initialize level sets and flags
-void CliquePhasedLocalSearch::InitializeFromK()
+void SparseCliquePhasedLocalSearch::InitializeFromK()
 {
     //Empty items that dependent on independent set, so they can be initialized.
     m_dKWeight = 0;
@@ -131,7 +131,7 @@ void CliquePhasedLocalSearch::InitializeFromK()
 // same as InitializeFromK, but more efficient, iterates over $K$ instead
 // of over all vertices.
 // TODO/DS: currently, updateU does nothing...
-void CliquePhasedLocalSearch::InitializeFromK2(bool const updateU)
+void SparseCliquePhasedLocalSearch::InitializeFromK2(bool const updateU)
 {
     assert(!m_K.Empty());
     //Empty items that dependent on independent set, so they can be initialized.
@@ -196,7 +196,7 @@ void CliquePhasedLocalSearch::InitializeFromK2(bool const updateU)
 #endif // CHECK_CONSISTENCY
 }
 
-bool CliquePhasedLocalSearch::IsConsistent() const
+bool SparseCliquePhasedLocalSearch::IsConsistent() const
 {
 ////    cout << "Checking Consistency..." << endl << flush;
     bool bConsistent(true);
@@ -285,7 +285,7 @@ bool CliquePhasedLocalSearch::IsConsistent() const
     return bConsistent;
 }
 
-void CliquePhasedLocalSearch::ForceIntoK(int const vertex, bool const updateU)
+void SparseCliquePhasedLocalSearch::ForceIntoK(int const vertex, bool const updateU)
 {
 ////                AddToKFromOne(vertex);
 
@@ -317,7 +317,7 @@ void CliquePhasedLocalSearch::ForceIntoK(int const vertex, bool const updateU)
     InitializeFromK2(updateU);
 }
 
-void CliquePhasedLocalSearch::AddToKFromOne(int const vertex)
+void SparseCliquePhasedLocalSearch::AddToKFromOne(int const vertex)
 {
     ForceIntoK(vertex, true /* update U*/);
 }

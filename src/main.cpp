@@ -1,5 +1,6 @@
-// local includes
+
 #include "CliquePhasedLocalSearch.h"
+#include "SparseCliquePhasedLocalSearch.h"
 #include "IndependentSetPhasedLocalSearch.h"
 ////#include "PhasedLocalSearch.h"
 #include "Algorithm.h"
@@ -303,7 +304,28 @@ int main(int argc, char** argv)
     PhasedLocalSearch *pPLS(nullptr);
     if (sAlgorithm=="clique") {
         cliqueAlgorithm = true;
-        pPLS = new CliquePhasedLocalSearch(adjacencyArray, vVertexWeights);
+        size_t const threshold_for_adjacency_matrix(20000);
+        if (adjacencyArray.size() < threshold_for_adjacency_matrix) {
+            cout << "#LOG: Graph has fewer than " << threshold_for_adjacency_matrix << " vertices. " << endl << flush;
+            cout << "#LOG: Switching to adjacency matrix representation." << endl << flush;
+
+            // construct adjacency matrix
+            vector<vector <int> > vvAdjacencyMatrix;
+            vvAdjacencyMatrix.resize(adjacencyArray.size());
+            for (vector<int> &vNeighbors : vvAdjacencyMatrix) {
+                vNeighbors.resize(adjacencyArray.size(), 0);
+            }
+
+            for (size_t vertex = 0; vertex < adjacencyArray.size(); vertex++) {
+                for (int const neighbor : adjacencyArray[vertex]) {
+                    vvAdjacencyMatrix[vertex][neighbor] = 1;
+                }
+            }
+
+            pPLS = new CliquePhasedLocalSearch(vvAdjacencyMatrix, adjacencyArray, vVertexWeights);
+        } else {
+            pPLS = new SparseCliquePhasedLocalSearch(adjacencyArray, vVertexWeights);
+        }
 
         pPLS->SetMaxSelections(uMaxSelections);
         if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);

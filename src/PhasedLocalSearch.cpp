@@ -73,7 +73,8 @@ void PhasedLocalSearch::Perturb()
     if (m_SelectionPhase == SelectionPhase::PENALTY_SELECTION) {
         m_K.Clear();
         m_K.Insert(randomVertex);
-        InitializeFromK2(false /* don't update $U$ */);
+////        InitializeFromK2(false /* don't update $U$ */);
+        InitializeFromK();
         return;
     }
 
@@ -263,6 +264,7 @@ bool PhasedLocalSearch::DiffIsEmpty(ResetableArraySet const A, ResetableArraySet
     return (uIntersectionCount == A.Size());
 }
 
+/*
 void PhasedLocalSearch::InitializeFromK()
 {
     //Empty items that dependent on independent set, so they can be initialized.
@@ -305,6 +307,7 @@ void PhasedLocalSearch::InitializeFromK()
     }
 #endif // CHECK_CONSISTENCY
 }
+*/
 
 void PhasedLocalSearch::UpdateStatistics()
 {
@@ -485,7 +488,8 @@ bool PhasedLocalSearch::Run()
         // TODO/DS: optimize, only store the values that are needed?
         // degree phase starts where previous degree phase left off.
         m_K = m_DegreeK;
-        InitializeFromK2(false /* don't update $U$ */);
+////        InitializeFromK2(false /* don't update $U$ */);
+        InitializeFromK();
 
         foundSolution = Phase(100, SelectionPhase::DEGREE_SELECTION);
         if (foundSolution) return true;
@@ -497,7 +501,8 @@ bool PhasedLocalSearch::Run()
 
         // random phase begins where random phase left off.
         m_K = m_RandomK;
-        InitializeFromK2(false /* don't update $U$ */);
+////        InitializeFromK2(false /* don't update $U$ */);
+        InitializeFromK();
     }
 
     return false;

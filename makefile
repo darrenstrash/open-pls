@@ -10,6 +10,7 @@ SOURCES_TMP += Isolates4.cpp
 SOURCES_TMP += GraphTools.cpp
 SOURCES_TMP += PhasedLocalSearch.cpp
 SOURCES_TMP += CliquePhasedLocalSearch.cpp
+SOURCES_TMP += SparseCliquePhasedLocalSearch.cpp
 SOURCES_TMP += IndependentSetPhasedLocalSearch.cpp
 SOURCES_TMP += Tools.cpp
 

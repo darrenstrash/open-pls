@@ -1,15 +1,15 @@
-#ifndef CLIQUE_PHASED_LOCAL_SEARCH
-#define CLIQUE_PHASED_LOCAL_SEARCH
+#ifndef SPARSE_CLIQUE_PHASED_LOCAL_SEARCH
+#define SPARSE_CLIQUE_PHASED_LOCAL_SEARCH
 
 #include "PhasedLocalSearch.h"
 
 #include <vector>
 
-class CliquePhasedLocalSearch : public PhasedLocalSearch
+class SparseCliquePhasedLocalSearch : public PhasedLocalSearch
 {
     public:
-    CliquePhasedLocalSearch(std::vector<std::vector<int>> const &vAdjacencyArray, std::vector<double> const &vVertexWeights);
-    virtual ~CliquePhasedLocalSearch() {}
+    SparseCliquePhasedLocalSearch(std::vector<std::vector<int>> const &vAdjacencyArray, std::vector<double> const &vVertexWeights);
+    virtual ~SparseCliquePhasedLocalSearch() {}
 
     virtual int DegreeSelect(ResetableArraySet const &vertexSet) const;
 
@@ -25,4 +25,4 @@ class CliquePhasedLocalSearch : public PhasedLocalSearch
     virtual void AddToKFromOne(int const vertex);
 };
 
-#endif // CLIQUE_PHASED_LOCAL_SEARCH
+#endif // SPARSE_CLIQUE_PHASED_LOCAL_SEARCH
