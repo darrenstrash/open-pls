@@ -1,5 +1,6 @@
-#include "IndependentSetPhasedLocalSearch.h"
+#include "IntervalPhasedLocalSearch.h"
 
+#include <algorithm>
 #include <limits>
 
 ////#define ALLOW_OVERLAP
@@ -8,13 +9,15 @@
 
 using namespace std;
 
-IndependentSetPhasedLocalSearch::IndependentSetPhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray, vector<double> const &vVertexWeights)
-: PhasedLocalSearch(vAdjacencyArray,vVertexWeights)
+IntervalPhasedLocalSearch::IntervalPhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray, vector<double> const &vVertexWeights, size_t const uRestrictedSize)
+: PhasedLocalSearch(vAdjacencyArray, vVertexWeights)
+, m_uRestrictedSize(uRestrictedSize)
+, m_pRestricted(nullptr)
 {
-    SetName("pls-independent-set");
+    SetName("interval-pls");
 }
 
-int IndependentSetPhasedLocalSearch::DegreeSelect(ResetableArraySet const &vertexSet) const
+int IntervalPhasedLocalSearch::DegreeSelect(ResetableArraySet const &vertexSet) const
 {
     size_t minDegree(numeric_limits<size_t>::max());
     m_ScratchSpace.Clear();
@@ -33,7 +36,7 @@ int IndependentSetPhasedLocalSearch::DegreeSelect(ResetableArraySet const &verte
     return vertexToReturn;
 }
 
-void IndependentSetPhasedLocalSearch::AddToK(int const vertex)
+void IntervalPhasedLocalSearch::AddToK(int const vertex)
 {
 #ifdef DEBUG
     cout << "Adding " << vertex << " to $K$" << endl << flush;
@@ -87,7 +90,7 @@ void IndependentSetPhasedLocalSearch::AddToK(int const vertex)
 
 
 // starting from IndependentSet, initialize level sets and flags
-void IndependentSetPhasedLocalSearch::InitializeFromK()
+void IntervalPhasedLocalSearch::InitializeFromK()
 {
     //Empty items that dependent on independent set, so they can be initialized.
     m_dKWeight = 0;
@@ -133,7 +136,7 @@ void IndependentSetPhasedLocalSearch::InitializeFromK()
 
 // same as InitializeFromK, but more efficient, iterates over $K$ instead
 // of over all vertices.
-void IndependentSetPhasedLocalSearch::InitializeFromK2(bool const updateU)
+void IntervalPhasedLocalSearch::InitializeFromK2(bool const updateU)
 {
     if (m_K.Size() > 3) {
         InitializeFromK(); // if it's large, initialize from scratch...expensive
@@ -297,7 +300,7 @@ void IndependentSetPhasedLocalSearch::InitializeFromK2(bool const updateU)
 ////#endif // CHECK_CONSISTENCY
 ////}
 
-bool IndependentSetPhasedLocalSearch::IsConsistent() const
+bool IntervalPhasedLocalSearch::IsConsistent() const
 {
 ////    cout << "Checking Consistency..." << endl << flush;
     bool bConsistent(true);
@@ -386,7 +389,7 @@ bool IndependentSetPhasedLocalSearch::IsConsistent() const
     return bConsistent;
 }
 
-void IndependentSetPhasedLocalSearch::ForceIntoK(int const vertex, bool const updateU)
+void IntervalPhasedLocalSearch::ForceIntoK(int const vertex, bool const updateU)
 {
 ////    AddToKFromOne(vertex);
 
@@ -407,7 +410,7 @@ void IndependentSetPhasedLocalSearch::ForceIntoK(int const vertex, bool const up
 
 // TODO/DS: finish and test. Not currently working, some vertices on in C_1
 // that shouldn't be there.
-void IndependentSetPhasedLocalSearch::AddToKFromOne(int const vertex)
+void IntervalPhasedLocalSearch::AddToKFromOne(int const vertex)
 {
 
 #ifdef CHECK_CONSISTENCY
@@ -426,6 +429,7 @@ void IndependentSetPhasedLocalSearch::AddToKFromOne(int const vertex)
     m_K.DiffInPlace(m_vAdjacencyArray[vertex], removedSet);
 ////    cout << "removed-set.size=" << removedSet.size() << endl << flush;
     assert (removedSet.size() == 1);
+
     int const removedVertex(removedSet[0]);
     m_NotAdjacentToOne.Remove(vertex);
     m_K.Insert(vertex);

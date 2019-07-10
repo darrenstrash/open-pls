@@ -11,6 +11,8 @@ SOURCES_TMP += GraphTools.cpp
 SOURCES_TMP += PhasedLocalSearch.cpp
 SOURCES_TMP += CliquePhasedLocalSearch.cpp
 SOURCES_TMP += IndependentSetPhasedLocalSearch.cpp
+SOURCES_TMP += IntervalPhasedLocalSearch.cpp
+SOURCES_TMP += constraintkrestricted.cpp
 SOURCES_TMP += Tools.cpp
 
 SOURCES=$(addprefix $(SOURCES_DIR)/, $(SOURCES_TMP))

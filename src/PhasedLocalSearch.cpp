@@ -256,6 +256,7 @@ bool PhasedLocalSearch::DiffIsEmpty(ResetableArraySet const A, ResetableArraySet
     return (uIntersectionCount == A.Size());
 }
 
+#if 0
 void PhasedLocalSearch::InitializeFromK()
 {
     //Empty items that dependent on independent set, so they can be initialized.
@@ -298,6 +299,7 @@ void PhasedLocalSearch::InitializeFromK()
     }
 #endif // CHECK_CONSISTENCY
 }
+#endif // 0
 
 void PhasedLocalSearch::UpdateStatistics()
 {

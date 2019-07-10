@@ -1,3 +1,5 @@
+#ifndef IS_PLS
+#define IS_PLS
 
 #include "PhasedLocalSearch.h"
 
@@ -22,3 +24,5 @@ class IndependentSetPhasedLocalSearch : public PhasedLocalSearch
 
     virtual void AddToKFromOne(int const vertex);
 };
+
+#endif //IS_PLS
