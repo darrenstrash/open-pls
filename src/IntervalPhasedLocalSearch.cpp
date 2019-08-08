@@ -4,7 +4,7 @@
 #include <limits>
 
 ////#define ALLOW_OVERLAP
-////#define CHECK_CONSISTENCY 
+#define CHECK_CONSISTENCY 
 ////#define DEBUG
 
 using namespace std;
@@ -38,6 +38,10 @@ int IntervalPhasedLocalSearch::DegreeSelect(ResetableArraySet const &vertexSet) 
 
 void IntervalPhasedLocalSearch::AddToK(int const vertex)
 {
+    ForceIntoK(vertex, false /* don't update U */);
+    return;
+
+    //TODO/DS: Put back optimizations?
 #ifdef DEBUG
     cout << "Adding " << vertex << " to $K$" << endl << flush;
 #endif // DEBUG
@@ -49,6 +53,10 @@ void IntervalPhasedLocalSearch::AddToK(int const vertex)
 #endif //CHECK_CONSISTENCY
 
     if (m_K.Contains(vertex)) return;
+
+    // TODO/DS: Is this the right place for this? should we just force it in and reject everything in conflict?
+    assert(m_pRestricted->canBeAdded(vertex));
+    m_pRestricted->addInterval(vertex, [](vector<int> const &){});
 
     m_K.Insert(vertex);
 #ifndef ALLOW_OVERLAP
@@ -96,8 +104,11 @@ void IntervalPhasedLocalSearch::InitializeFromK()
     m_dKWeight = 0;
     m_NotAdjacentToZero.Clear();
     m_NotAdjacentToOne.Clear();
+    m_pRestricted->clear();
+
 
     for (int const vertex : m_K) {
+        m_pRestricted->addInterval(vertex, [](vector<int> const &){});
         m_dKWeight += m_vVertexWeights[vertex];
     }
 
@@ -116,12 +127,12 @@ void IntervalPhasedLocalSearch::InitializeFromK()
             if (neighborCount > 1) break;
         }
 
-        if (neighborCount == 0) {
+        if (neighborCount == 0 && m_pRestricted->canBeAdded(vertex)) {
             m_NotAdjacentToZero.Insert(vertex);
             m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
         }
 
-        if (neighborCount == 1) { 
+        if (neighborCount == 1 && m_pRestricted->canBeAdded(vertex)) { 
             m_NotAdjacentToOne.Insert(vertex);
             m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
         }
@@ -147,18 +158,22 @@ void IntervalPhasedLocalSearch::InitializeFromK2(bool const updateU)
     m_ScratchSpace.Clear();
     m_NotAdjacentToZero.Clear();
     m_NotAdjacentToOne.Clear();
+    m_pRestricted->clear();
 
     m_bCheckZero = false;
     m_bCheckOne  = false;
 
     if (m_K.Size() == 1) {
-    int const vertexInK(*m_K.begin());
-    m_dKWeight = m_vVertexWeights[vertexInK];
+        int const vertexInK(*m_K.begin());
+        m_pRestricted->addInterval(vertexInK, [](vector<int> const &) {});
+        m_dKWeight = m_vVertexWeights[vertexInK];
 #ifdef USE_RESETABLE
         if (!updateU) {
             // all neighbors of vertex are in C_1
             for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
-                m_NotAdjacentToOne.Insert(neighbor);
+                if (m_pRestricted->canBeAdded(neighbor)) {
+                    m_NotAdjacentToOne.Insert(neighbor);
+                }
             }
 
             // put in *all* elements, quickly
@@ -167,12 +182,18 @@ void IntervalPhasedLocalSearch::InitializeFromK2(bool const updateU)
             // remove neighbors. *much* faster than inserting non-neighbors
             // for sparse graphs
             m_NotAdjacentToZero.DiffInPlace(m_vAdjacencyArray[vertexInK]);
+            for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
+                if (!m_pRestricted->canBeAdded(vertex)) {
+                    m_NotAdjacentToZero.Remove(vertex);
+                }
+            }
             return;
         }
 #endif // USE_RESETABLE
 
         // all neighbors of vertex are in C_1
         for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
+            if (!m_pRestricted->canBeAdded(neighbor)) continue;
             m_NotAdjacentToOne.Insert(neighbor);
             m_bCheckOne = m_bCheckOne || !m_U.Contains(neighbor);
         }
@@ -181,6 +202,7 @@ void IntervalPhasedLocalSearch::InitializeFromK2(bool const updateU)
         for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
             if (m_NotAdjacentToOne.Contains(vertex)) continue;
             if (vertexInK==vertex) continue;
+            if (!m_pRestricted->canBeAdded(vertex)) continue;
             m_NotAdjacentToZero.Insert(vertex);
             m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
         }
@@ -194,6 +216,7 @@ void IntervalPhasedLocalSearch::InitializeFromK2(bool const updateU)
     // update weights, follow neighbors, count them
     // insert into levels sets C_0 and C_1
     for (int const vertex : m_K) {
+        m_pRestricted->addInterval(vertex, [](vector<int> const &) {});
         m_dKWeight += m_vVertexWeights[vertex];
 
         m_NotAdjacentToZero.Remove(vertex);
@@ -209,7 +232,7 @@ void IntervalPhasedLocalSearch::InitializeFromK2(bool const updateU)
 
     for (int const vertex : m_ScratchSpace) {
         int const neighborCount(m_vScratchCounters[vertex]);
-        if (neighborCount == 1) { 
+        if (neighborCount == 1 && m_pRestricted->canBeAdded(vertex)) { 
             m_NotAdjacentToOne.Insert(vertex);
             m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
         }
@@ -219,6 +242,11 @@ void IntervalPhasedLocalSearch::InitializeFromK2(bool const updateU)
 
     // would be nice, if we weren't updating U too.
     m_NotAdjacentToZero.DiffInPlace(m_ScratchSpace);
+    for (int vertex = 0; vertex < m_vAdjacencyArray.size(); vertex++) {
+        if (m_NotAdjacentToZero.Contains(vertex) && !m_pRestricted->canBeAdded(vertex)) {
+            m_NotAdjacentToZero.Remove(vertex);
+        }
+    }
     m_bCheckZero = !DiffIsEmpty(m_NotAdjacentToZero, m_U);
 
     m_ScratchSpace.Clear();
@@ -231,74 +259,6 @@ void IntervalPhasedLocalSearch::InitializeFromK2(bool const updateU)
 #endif // CHECK_CONSISTENCY
 
 }
-////    assert(!m_K.Empty());
-////    //Empty items that dependent on independent set, so they can be initialized.
-////    m_dKWeight = 0;
-////    m_ScratchSpace.Clear();
-////    m_NotAdjacentToZero.Clear();
-////    m_NotAdjacentToOne.Clear();
-////
-////    m_bCheckZero = false;
-////    m_bCheckOne  = false;
-////
-////    if (m_K.Size() == 1) {
-////        int const vertexInK(*m_K.begin());
-////        m_dKWeight = m_vVertexWeights[vertexInK];
-////        // all neighbors of vertex are in C_1
-////        for (int const neighbor : m_vAdjacencyArray[vertexInK]) {
-////            m_NotAdjacentToOne.Insert(neighbor);
-////            m_bCheckOne = m_bCheckOne || !m_U.Contains(neighbor);
-////        }
-////
-////        // all others are in C_0
-////        for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
-////            if (m_NotAdjacentToOne.Contains(vertex)) continue;
-////            if (vertexinK==vertex) continue;
-////            m_NotAdjacentToZero.Insert(vertex);
-////            m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
-////        }
-////
-////        return;
-////    }
-////
-////    // update weights, follow neighbors, count them
-////    // insert into levels sets C_0 and C_1
-////    for (int const vertex : m_K) {
-////        m_dKWeight += m_vVertexWeights[vertex];
-////
-////        for (int const neighbor : m_vAdjacencyArray[vertex]) {
-////#ifndef ALLOW_OVERLAP
-////            if (m_K.Contains(neighbor)) continue;
-////#endif // ALLOW_OVERLAP
-////            m_ScratchSpace.Insert(neighbor);
-////            m_vScratchCounters[neighbor]++; 
-////        }
-////    }
-////
-////    for (int const vertex : m_ScratchSpace) {
-////        int const neighborCount(m_vScratchCounters[vertex]);
-////        if (neighborCount == 1) {
-////            m_NotAdjacentToOne.Insert(vertex);
-////            m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
-////        } 
-////////        else if (neighborCount == m_K.Size()-1) { 
-////////            m_NotAdjacentToOne.Insert(vertex);
-////////            m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
-////////        }
-////
-////        m_vScratchCounters[vertex] = 0;
-////    }
-////
-////    // TODO/DS: Still need to fill in C_0. ...basically all other vertices than m_ScratchSpace
-////
-////    m_ScratchSpace.Clear();
-////
-////#ifdef CHECK_CONSISTENCY
-////    if (!IsConsistent()) {
-////        cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
-////    }
-////#endif // CHECK_CONSISTENCY
-////}
 
 bool IntervalPhasedLocalSearch::IsConsistent() const
 {
@@ -316,8 +276,19 @@ bool IntervalPhasedLocalSearch::IsConsistent() const
         }
 
         if (neighborsInSet != 0) {
-            cout << "Consistency Error!: vertex " << vertex << " has " << neighborsInSet << " neighbors in $K$, but should have " << 0 << endl << flush;
+            cout << "Consistency Error!: vertex " << vertex << " in $K$ has " << neighborsInSet << " neighbors in $K$, but should have " << 0 << endl << flush;
+            bConsistent = false;
         }
+        
+        if (!m_pRestricted->isContained(vertex)) {
+            cout << "Consistency Error!: vertex " << vertex << " in $K$ is not in interval collection." << endl << flush;
+            bConsistent = false;
+        }
+    }
+
+    if (m_K.Size() != m_pRestricted->getNumIntervals()) {
+        cout << "Consistency Error!: $K$ and interval collection have different number of elements." << endl << flush;
+        bConsistent = false;
     }
 
     if (weight != m_dKWeight) {
@@ -365,54 +336,131 @@ bool IntervalPhasedLocalSearch::IsConsistent() const
         if (dontRunCountCheck) continue;
 #endif // ALLOW_OVERLAP
 
-        if (neighborCount != 0 && m_NotAdjacentToZero.Contains(vertex)) {
+        if (!(neighborCount == 0 && m_pRestricted->canBeAdded(vertex)) && m_NotAdjacentToZero.Contains(vertex)) {
             cout << "Consistency Error!: vertex " << vertex << " is in C_0, but does not belong in C_0" << endl << flush;
             bConsistent = false;
         }
 
-        if (neighborCount == 0 && !m_NotAdjacentToZero.Contains(vertex)) {
+        if (neighborCount == 0 && m_pRestricted->canBeAdded(vertex) && !m_NotAdjacentToZero.Contains(vertex)) {
             cout << "Consistency Error!: vertex " << vertex << " is not in C_0, but belongs in C_0" << endl << flush;
             bConsistent = false;
         }
 
-        if (neighborCount != 1 && m_NotAdjacentToOne.Contains(vertex)) {
+        if (!(neighborCount == 1 && m_pRestricted->canBeAdded(vertex)) && m_NotAdjacentToOne.Contains(vertex)) {
             cout << "Consistency Error!: vertex " << vertex << " is in C_1, but does not belong in C_1" << endl << flush;
             bConsistent = false;
         }
 
-        if (neighborCount == 1 && !m_NotAdjacentToOne.Contains(vertex)) {
+        if (neighborCount == 1 && m_pRestricted->canBeAdded(vertex) && !m_NotAdjacentToOne.Contains(vertex)) {
             cout << "Consistency Error!: vertex " << vertex << " is not in C_1, but belongs in C_1" << endl << flush;
             bConsistent = false;
         }
     }
 
+    //One final check for k-restricted (copied from HILS code)
+    std::vector<std::pair<int,int>> events;
+    for (int const i : m_K) {
+////        int i = solution_[idx];
+        std::pair<int,int> const interval = intervals[i];
+        events.push_back(std::make_pair(interval.first,i+1));
+        events.push_back(std::make_pair(interval.second,-i-1));
+    }
+
+    vector<int> vertices;
+    vertices.reserve(m_K.Size());
+    for (int vertex : m_K) {
+        vertices.push_back(vertex);
+    }
+    std::sort(vertices.begin(), vertices.end());
+
+    for (size_t index = 0; index < vertices.size()-1; index++) {
+        if (vertices[index] == vertices[index+1]) {
+            std::cout << "Duplicate vertex found!" << vertices[index] << std::endl << std::flush;
+        }
+    }
+
+    cout << "Checking " << events.size() << " events for interval correctness" << endl << flush;
+    std::sort(events.begin(),events.end(),
+              [](std::pair<int,int> & e1, std::pair<int,int> & e2) {
+                  if (e1.first == e2.first) {
+                      return e1.second < e2.second;
+                  }   
+                  return e1.first < e2.first;
+              }); 
+    int k = 0;
+    for (std::pair<int,int> event : events) {
+        if (event.second < 0) { 
+            k--;
+        }else{
+            k++;
+        }   
+        assert(k <= (int) m_uRestrictedSize);
+    }
+
     return bConsistent;
 }
 
+
+// Post-Condition: vertex is in $K$, $k$ is a k-restricted independent set
+//                 all and only intervals in $K$ are in the interval collection
+//                 and C_0, C_1 are its level sets.
 void IntervalPhasedLocalSearch::ForceIntoK(int const vertex, bool const updateU)
 {
-////    AddToKFromOne(vertex);
-
-    // first restrict to neighborhood of $v$
+    // first restrict to (non?)neighborhood of $v$
     vector<int> intersectSet;
     m_K.DiffInPlace(m_vAdjacencyArray[vertex], intersectSet);
 
-    if (updateU) {
-        for (int const intersectVertex : intersectSet) {
+    for (int const intersectVertex : intersectSet) {
+        if (updateU) {
             m_U.Insert(intersectVertex);
         }
+        assert(m_pRestricted->isContained(intersectVertex));
+        m_pRestricted->removeInterval(intersectVertex, [](vector<int> const &){});
+    }
+
+    vector<int> kRestrictedViolators;
+    // TODO/DS: Insert vertex into intervals, and kick out intervals 
+    // violating k-restrictedness
+
+    // TODO/DS: Ensure that each interval only added once, and then removed from ScratchSpace
+    m_pRestricted->processIntervalsInViolation(vertex, [this,&kRestrictedViolators](int const intervalInViolation) {
+                                                            if (this->m_K.Contains(intervalInViolation) && 
+                                                                !m_ScratchSpace.Contains(intervalInViolation)) {
+                                                                m_ScratchSpace.Insert(intervalInViolation);
+                                                                kRestrictedViolators.push_back(intervalInViolation);
+                                                            }
+                                                        });
+
+    for (int const intervalInViolation: kRestrictedViolators) {
+        assert(m_ScratchSpace.Contains(intervalInViolation));
+        assert(m_pRestricted->isContained(intervalInViolation));
+        m_K.Remove(intervalInViolation);
+        m_ScratchSpace.Remove(intervalInViolation);
+        m_NotAdjacentToZero.Insert(intervalInViolation);
+        m_pRestricted->removeInterval(intervalInViolation, [](vector<int> const &){});
+
     }
 
     // then add v and update helper sets.
     m_K.Insert(vertex);
+    assert(m_pRestricted->canBeAdded(vertex));
+    m_pRestricted->addInterval(vertex, [](vector<int> const &){});
+
     InitializeFromK2(updateU);
+
+#ifdef CHECK_CONSISTENCY
+    if (!IsConsistent()) {
+        cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
+    }
+#endif // CHECK_CONSISTENCY
 }
 
-// TODO/DS: finish and test. Not currently working, some vertices on in C_1
-// that shouldn't be there.
 void IntervalPhasedLocalSearch::AddToKFromOne(int const vertex)
 {
+    ForceIntoK(vertex, false /* don't update U */);
+    return;
 
+    //TODO/DS: Put back optimizations?
 #ifdef CHECK_CONSISTENCY
     if (!IsConsistent()) {
         cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
@@ -433,7 +481,18 @@ void IntervalPhasedLocalSearch::AddToKFromOne(int const vertex)
     int const removedVertex(removedSet[0]);
     m_NotAdjacentToOne.Remove(vertex);
     m_K.Insert(vertex);
+
+    // update interval data structure
+    assert(!m_pRestricted->isContained(vertex));
+    assert(m_pRestricted->canBeAdded(vertex));
+    m_pRestricted->addInterval(vertex, [](vector<int> const &){});
+
+    assert(m_pRestricted->isContained(removedVertex));
+    m_pRestricted->removeInterval(removedVertex, [](vector<int> const &){});
+
+
     m_U.Insert(removedVertex);
+
 
     m_dKWeight += m_vVertexWeights[vertex];
     m_dKWeight -= m_vVertexWeights[removedVertex];
@@ -493,7 +552,6 @@ void IntervalPhasedLocalSearch::AddToKFromOne(int const vertex)
         }
     }
 
-    ////TODO/DS: Update CheckZero and CheckOne
     m_bCheckZero = !DiffIsEmpty(m_NotAdjacentToZero, m_U);
     m_bCheckOne  = !DiffIsEmpty(m_NotAdjacentToOne,  m_U);
 

@@ -62,6 +62,17 @@ public:
 
     }
 
+    void processIntervalsInViolation(int i, std::function<void (int const )> processInterval) {
+        const Interval & interval = intervals[i];
+        for(int j = interval.firstAtomicSegment; j < interval.lastAtomicSegment; ++j){
+            if(segments[j].selectedIntervals == k){
+                for (int const interval : segments[j].intervals) {
+                    processInterval(interval);
+                }
+            }
+        }
+    }
+
     bool canBeAdded(int i){
 
         if(contained[i]){return false;}
@@ -72,6 +83,10 @@ public:
             }
         }
         return true;
+    }
+
+    bool isContained(int const intervalId) const {
+        return contained[intervalId];
     }
 
     // check if can swap one interval in by swapping one interval out.
@@ -85,6 +100,23 @@ public:
 ////        }
 ////    }
 
+    size_t getNumIntervals() const {
+        size_t uNumIntervals(0);
+        for (size_t intervalId = 0; intervalId < contained.size(); intervalId++) {
+            if (contained[intervalId]) {
+                uNumIntervals++;
+            }
+        }
+        return uNumIntervals;
+    }
+
+    void clear() {
+        for (size_t intervalId = 0; intervalId < contained.size(); intervalId++) {
+            if (contained[intervalId]) {
+                removeInterval(intervalId, [](std::vector<int> const &){});
+            }
+        }
+    }
 
     int k;
 

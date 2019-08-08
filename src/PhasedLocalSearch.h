@@ -72,6 +72,27 @@ public:
 
     virtual void ForceIntoK(int const vertex, bool const updateU) = 0;
 
+    virtual bool IsAdjacentToZeroCandidate() const {
+        return !m_NotAdjacentToZero.Empty();
+    }
+
+    virtual bool IsAdjacentToOneCandidate() const {
+        return !m_NotAdjacentToOne.Empty();
+    }
+
+    bool SolutionIsValid() {
+        // swap in best solution and initialize data structures
+        ResetableArraySet SavedK = m_K;
+        m_K = m_BestK;
+        InitializeFromK();
+
+        // swap out solution and initialize data structures
+        bool const valid(IsConsistent());
+        m_K = SavedK;
+        InitializeFromK();
+        return valid;
+    }
+
 protected:
     std::string m_sName;
 

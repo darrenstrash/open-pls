@@ -33,11 +33,13 @@ class IntervalPhasedLocalSearch : public PhasedLocalSearch
         assert(m_pRestricted == nullptr);
         assert(m_uRestrictedSize != std::numeric_limits<size_t>::max());
         m_pRestricted = new ConstraintKRestricted(m_uRestrictedSize, vIntervals);
+        intervals = vIntervals;
     }
 
     protected:
     size_t m_uRestrictedSize;
     ConstraintKRestricted *m_pRestricted;
+    std::vector<std::pair<int,int>> intervals;
 
 };
 

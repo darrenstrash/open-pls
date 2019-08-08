@@ -334,7 +334,7 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
         bool bNoSelectionWasMade(false);
 ////        while ((!m_NotAdjacentToZero.Empty() || !DiffIsEmpty(m_NotAdjacentToOne, m_U)) && !bNoSelectionWasMade) {
 ////        while (((!m_NotAdjacentToZero.Empty() && m_bCheckZero) || (!m_NotAdjacentToOne.Empty() && m_bCheckOne)) && !bNoSelectionWasMade) {
-        while ((!m_NotAdjacentToZero.Empty() || (!m_NotAdjacentToOne.Empty() && m_bCheckOne)) && !bNoSelectionWasMade) {
+        while ((IsAdjacentToZeroCandidate() || (IsAdjacentToOneCandidate() && m_bCheckOne)) && !bNoSelectionWasMade) {
 ////        while (!m_NotAdjacentToZero.Empty() || (!m_NotAdjacentToOne.Empty() && m_bCheckOne)) {
 #ifdef DEBUG
             bool const bDiffNotEmpty2(!DiffIsEmpty(m_NotAdjacentToOne, m_U));
@@ -365,7 +365,7 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
 
             // select from C_0
 ////            while (!DiffIsEmpty(m_NotAdjacentToZero, m_U)) {
-            while (!m_NotAdjacentToZero.Empty() && m_bCheckZero) {
+            while (IsAdjacentToZeroCandidate() && m_bCheckZero) {
                 bNoSelectionWasMade = false;
 
                 int const vertex(SelectFromZero());
@@ -398,7 +398,7 @@ bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selection
 
             // select from C_1 \ U
 ////            if (!DiffIsEmpty(m_NotAdjacentToOne, m_U)) {
-            if (!m_NotAdjacentToOne.Empty() && m_bCheckOne) {
+            if (IsAdjacentToOneCandidate() && m_bCheckOne) {
 
                 if (clock() - m_StartTime > m_TimeOut) {
                     return false;

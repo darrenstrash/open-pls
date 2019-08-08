@@ -1,6 +1,7 @@
 // local includes
 #include "CliquePhasedLocalSearch.h"
 #include "IndependentSetPhasedLocalSearch.h"
+#include "IntervalPhasedLocalSearch.h"
 ////#include "PhasedLocalSearch.h"
 #include "Algorithm.h"
 #include "Tools.h"
@@ -17,12 +18,14 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <limits>
+#include <utility> // for pair
 
+// includes from C
 #include <cassert>
 #include <cstdlib>
 #include <ctime>
-////#include <climits>
-#include <limits>
+
 
 #define str(x) xstr(x)
 #define xstr(x) #x
@@ -136,7 +139,10 @@ bool ReadSolution(string const &solutionFile, vector<bool> &vSolution)
 }
 
 
-bool ReadWeights(string const &inputFileName, vector<double> &vVertexWeights)
+bool ReadWeights(string                const &inputFileName, 
+                 vector<double>              &vVertexWeights, 
+                 vector<pair<int,int>>       &vIntervals, 
+                 bool                  const  bReadIntervals)
 {
     string const weightFileName(inputFileName + ".weights");
     ifstream instream(weightFileName.c_str());
@@ -144,22 +150,43 @@ bool ReadWeights(string const &inputFileName, vector<double> &vVertexWeights)
     int vertex(-1);
     double weight(-1.0); // endvertices, to read edges.
     size_t uNumRead(0);
-    while (instream.good() && !instream.eof()) {
+    cout << "#Reading weights file." << endl << flush;
+    while (instream.good() && !instream.eof() && uNumRead != vVertexWeights.size()) {
         string line;
         std::getline(instream, line);
         stringstream strm(line);
-////        bool debug(true); ////u == 40656 || u == 40653);
-////if (debug)        cout << (u+1) << " : " << endl << flush;
-////        if (debug)        cout << "Read     Line: " << line << endl << flush;
-////if (debug)        cout << "Actually Read: ";
         if (!line.empty() && strm.good() && !strm.eof()) {
             strm >> vertex >> weight;
-            assert(vertex > -1 && vertex < vVertexWeights.size());
+            cout << "#Reading weight  for vertex " << vertex << " : " << weight << endl << flush;
+            if (vertex < 0 || vertex >= vVertexWeights.size()) {
+                cout << "#Error, vertex id " << vertex << " is invalid. Must be in [0," << vVertexWeights.size()-1 << "]." << endl << flush;
+                exit(1);
+            }
+
             vVertexWeights[vertex] = weight;
-////            if (debug)        cout << "Inserted     : " << vertex << "->" << weight<< endl << flush;
             uNumRead++;
-////if (debug)        cout << "Actually Read: ";
+
+            if (bReadIntervals) {
+                cout << "#Reading interval for vertex " << vertex << endl << flush;
+                double intervalBegin = -1, intervalEnd = -1;
+                strm >> intervalBegin;
+                if (strm.good()) {
+                    strm >> intervalEnd;
+                    if (!strm.eof()) {
+                        cout << "#Error reading interval for vertex " << vertex << endl << flush;
+                        exit(1);
+                    }
+                    if (vertex < 0 || vertex >= vIntervals.size()) {
+                        cout << "#Error storing interval for vertex " << vertex << endl << flush;
+                        exit(1);
+                    }
+                    vIntervals[vertex] = make_pair<int,int>(static_cast<int>(intervalBegin*100), static_cast<int>(intervalEnd*100));
+                    cout << "#Setting interval for vertex " << vertex << " to [" << vIntervals[vertex].first << "," << vIntervals[vertex].second << "]" << endl << flush;
+                }
+            }
         }
+
+        cout << "#Finished reading vertex weights" << (bReadIntervals ? " and intervals " : "") << endl << flush;
     }
 
 #ifdef DEBUG
@@ -194,6 +221,7 @@ int main(int argc, char** argv)
     size_t const uMaxSelections(mapCommandLineArgs.find("--max-selections") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--max-selections"]) : 100000000);
     double const dTargetWeight(mapCommandLineArgs.find("--target-weight") != mapCommandLineArgs.end() ? std::stod(mapCommandLineArgs["--target-weight"]) : numeric_limits<double>::max());
     size_t const uRandomSeed(mapCommandLineArgs.find("--random-seed") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--random-seed"]) : 0);
+    size_t const restricted_size(mapCommandLineArgs.find("--k-restricted") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--k-restricted"]) : numeric_limits<size_t>::max());
 ////    size_t const uTimeoutInMilliseconds(mapCommandLineArgs.find("--timeout-in-ms") != mapCommandLineArgs.end() ? std::stoi(mapCommandLineArgs["--timeout-in-ms"]) : 5000)
 
     cout << "#command :";
@@ -268,10 +296,17 @@ int main(int argc, char** argv)
     }
 
     vector<double> vVertexWeights(adjacencyArray.size(),1);
+    vector<pair<int,int>> vVertexIntervals(adjacencyArray.size(), make_pair<int,int>(-1,-1));
+
+    if (restricted_size != numeric_limits<size_t>::max() && (!bWeighted || !bUseWeightFile)) {
+        cout << "Error, restricted mode `--k' requires a weights and a weight file for intervals" << endl << flush;
+        exit(1);
+    }
 
     if (bWeighted) {
         if (bUseWeightFile) {
-            if (!ReadWeights(inputFile, vVertexWeights)) {
+            bool const bReadIntervals(restricted_size != numeric_limits<size_t>::max());
+            if (!ReadWeights(inputFile, vVertexWeights, vVertexIntervals, bReadIntervals)) {
                 cout << "ERROR! Did not read all vertices in .weights file" << endl << flush;
             }
         } else {
@@ -346,6 +381,7 @@ int main(int argc, char** argv)
                 cout << " " << vertex;
             }
             cout << endl << flush;
+            cout << "solution-valid  : " << (pPLS->SolutionIsValid()? "YES" : "NO") << endl << flush;
         }
 
     } else if (!bNoReduce) {
@@ -382,7 +418,14 @@ int main(int argc, char** argv)
         }
         clock_t const endReductions(clock());
 
-        pPLS = new IndependentSetPhasedLocalSearch(subgraph, vNewWeights);
+////        cout << "DJS: Size limit is " << restricted_size << endl << flush;
+        if (restricted_size == numeric_limits<size_t>::max()) {
+            pPLS = new IndependentSetPhasedLocalSearch(subgraph, vNewWeights);
+        } else {
+            IntervalPhasedLocalSearch *pIPLS = new IntervalPhasedLocalSearch(adjacencyArray, vVertexWeights, restricted_size);
+            pIPLS->SetIntervals(vVertexIntervals);
+            pPLS = pIPLS;
+        }
 
         pPLS->SetMaxSelections(uMaxSelections);
         if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
@@ -439,11 +482,19 @@ int main(int argc, char** argv)
                 cout << " " << vertex;
             }
             cout << endl << flush;
+            cout << "solution-valid  : " << (pPLS->SolutionIsValid()? "YES" : "NO") << endl << flush;
         }
     } else {
         cliqueAlgorithm = false;
 
-        pPLS = new IndependentSetPhasedLocalSearch(adjacencyArray, vVertexWeights);
+////        cout << "DJS: Size limit is " << restricted_size << endl << flush;
+        if (restricted_size == numeric_limits<size_t>::max()) {
+            pPLS = new IndependentSetPhasedLocalSearch(adjacencyArray, vVertexWeights);
+        } else {
+            IntervalPhasedLocalSearch *pIPLS = new IntervalPhasedLocalSearch(adjacencyArray, vVertexWeights, restricted_size);
+            pIPLS->SetIntervals(vVertexIntervals);
+            pPLS = pIPLS;
+        }
 
         pPLS->SetMaxSelections(uMaxSelections);
         if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
@@ -479,6 +530,7 @@ int main(int argc, char** argv)
             cout << pPLS->GetBestWeight() << endl << flush;
 
             cout << "target          : " << pPLS->GetTargetWeight() << endl << flush;
+            cout << "k-restricted:   : " << restricted_size << endl << flush;
             cout << "time(s)         : " << Tools::GetTimeInSeconds(pPLS->GetTimeToBestWeight(), false) << endl << flush;
             cout << "timeout         : " << pPLS->GetTimeoutInSeconds() << endl << flush;
             cout << "penalty-delay   : " << pPLS->GetPenaltyDelay() << endl << flush;
@@ -490,6 +542,7 @@ int main(int argc, char** argv)
                 cout << " " << vertex;
             }
             cout << endl << flush;
+            cout << "solution-valid  : " << (pPLS->SolutionIsValid()? "YES" : "NO") << endl << flush;
         }
     }
 
