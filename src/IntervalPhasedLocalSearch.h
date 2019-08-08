@@ -5,6 +5,7 @@
 #include "constraintkrestricted.h"
 
 #include <vector>
+#include <limits>
 
 class IntervalPhasedLocalSearch : public PhasedLocalSearch
 {
