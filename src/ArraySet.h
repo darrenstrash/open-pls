@@ -34,6 +34,14 @@ public:
         }
     }
 
+    void InitializeFromVector(std::vector<int> const &vItems)
+    {
+        for (int const vertex : vItems) {
+            Insert(vertex);
+        }
+    }
+
+
     void PrintSummary() const
     {
         std::cout << "Array[" << m_iBegin << ":" << m_iEnd << "] : ";

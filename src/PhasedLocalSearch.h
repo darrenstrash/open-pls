@@ -40,6 +40,8 @@ public:
 
     void SetTargetSize(size_t const uTargetSize);
 
+    void SetInitialSolution(std::vector<int> const &vInitVertices);
+
     void SetMaxSelections(size_t const uMaxSelections);
 
     bool DiffIsEmpty(ResetableArraySet const A, ResetableArraySet const B) const;
@@ -55,6 +57,9 @@ public:
     void SetTimeOutInMilliseconds(size_t const timeout);
     void   SetTargetWeight(double const targetWeight);
     double GetTargetWeight() { return m_dTargetWeight; }
+
+    void   SetSizeLimit(size_t const uSizeLimit) { m_uSizeLimit = uSizeLimit; }
+    size_t GetSizeLimit() const { return m_uSizeLimit; }
 
     size_t GetSelections() const { return m_uSelections; }
     double GetBestWeight() const { return m_dBestWeight; }
@@ -87,6 +92,7 @@ protected:
     size_t                               m_uIterationsSinceLastPenaltyUpdate;
 
     size_t                               m_uTargetSize;
+    size_t                               m_uSizeLimit;
     double                               m_dTargetWeight;
     size_t                               m_uMaxSelections;
     size_t                               m_uSelections;

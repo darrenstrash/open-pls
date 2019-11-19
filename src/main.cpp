@@ -37,18 +37,13 @@ using namespace std;
 void ProcessCommandLineArgs(int const argc, char** argv, map<string,string> &mapCommandLineArgs)
 {
     for (int i = 1; i < argc; ++i) {
-////        cout << "Processing argument " << i << endl;
         string const argument(argv[i]);
-////        cout << "    Argument is " << argument << endl;
         size_t const positionOfEquals(argument.find_first_of("="));
-////        cout << "    Position of = " << positionOfEquals << endl;
         if (positionOfEquals != string::npos) {
             string const key  (argument.substr(0,positionOfEquals));
             string const value(argument.substr(positionOfEquals+1));
-////            cout << "    Parsed1: " << key << "=" << value << endl;
             mapCommandLineArgs[key] = value;
         } else {
-////            cout << "    Parsed2: " << argument << endl;
             mapCommandLineArgs[argument] = "";
         }
     }
@@ -135,6 +130,27 @@ bool ReadSolution(string const &solutionFile, vector<bool> &vSolution)
     return true;
 }
 
+bool ReadInitSolution(string      const &initFile, 
+                      vector<int>       &vInitVertices, 
+                      bool        const  bOneBasedIndexing)
+{
+    ifstream instream(initFile);
+
+    if (!instream) {
+        cerr << "ERROR opening file " << initFile << endl;
+        exit(1);
+    }
+
+    int vertex(-1);
+    instream >> vertex;
+    while (instream) {
+        vInitVertices.push_back(bOneBasedIndexing ? (vertex-1) : vertex);
+        instream >> vertex;
+    }
+
+    return true;
+}
+
 
 bool ReadWeights(string const &inputFileName, vector<double> &vVertexWeights)
 {
@@ -184,6 +200,7 @@ int main(int argc, char** argv)
     bool   const bUseWeightFile(mapCommandLineArgs.find("--use-weight-file") != mapCommandLineArgs.end());
     string const inputFile((mapCommandLineArgs.find("--input-file") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--input-file"] : "");
     string const solutionFile((mapCommandLineArgs.find("--solution-file") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--solution-file"] : "");
+    string const initFile((mapCommandLineArgs.find("--init-file") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--init-file"] : "");
     string const sAlgorithm((mapCommandLineArgs.find("--algorithm") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--algorithm"] : "clique");
     string const sExperimentName((mapCommandLineArgs.find("--experiment") != mapCommandLineArgs.end()) ? mapCommandLineArgs["--experiment"] : "");
     bool   const bPrintHeader(mapCommandLineArgs.find("--header") != mapCommandLineArgs.end());
@@ -243,10 +260,13 @@ int main(int argc, char** argv)
     int n; // number of vertices
     int m; // 2x number of edges
 
+    bool bOneBasedIndexing = false;
+
     vector<list<int>> adjacencyList;
     if (inputFile.find(".graph") != string::npos) {
         if (!bTableMode) cout << "#Reading .graph file format. " << endl << flush;
         adjacencyList = readInGraphAdjListEdgesPerLine(n, m, inputFile);
+        bOneBasedIndexing = true;
     } else {
         if (!bTableMode) cout << "#Reading .edges file format. " << endl << flush;
         adjacencyList = readInGraphAdjList(n, m, inputFile);
@@ -299,6 +319,15 @@ int main(int argc, char** argv)
         exit(0);
     }
 
+    vector<int> vInitVertices;
+    if (!initFile.empty()) {
+        if (!bNoReduce) {
+            cerr << "Reductions are not supported with an initial solution at this time." << endl;
+            exit(1);
+        }
+        ReadInitSolution(initFile, vInitVertices, bOneBasedIndexing);
+    }
+
     bool cliqueAlgorithm(true);
     PhasedLocalSearch *pPLS(nullptr);
     if (sAlgorithm=="clique") {
@@ -309,6 +338,9 @@ int main(int argc, char** argv)
         if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
         pPLS->SetTargetWeight(dTargetWeight);
         pPLS->SetQuiet(bQuiet);
+        if (!vInitVertices.empty()) {
+            pPLS->SetInitialSolution(vInitVertices);
+        }
         pAlgorithm = pPLS;
 
         bool const bAlgorithmStatus(pAlgorithm->Run());
@@ -343,7 +375,7 @@ int main(int argc, char** argv)
             cout << "max-selections : " << pPLS->GetMaxSelections() << endl << flush;
             cout << "best-solution  :";
             for (int const vertex : pPLS->GetBestK()) {
-                cout << " " << vertex;
+                cout << " " << (bOneBasedIndexing ? (vertex + 1): vertex);
             }
             cout << endl << flush;
         }
@@ -391,7 +423,6 @@ int main(int argc, char** argv)
         pAlgorithm = pPLS;
         bool bAlgorithmStatus(true);
 
-
         // if the remaining graph is not empty, continue w/ local search
         if (uRemainingGraphSize != 0) {
             bAlgorithmStatus = pAlgorithm->Run();
@@ -436,7 +467,7 @@ int main(int argc, char** argv)
             cout << "max-selections  : " << pPLS->GetMaxSelections() << endl << flush;
             cout << "best-solution   :";
             for (int const vertex : vIndependentSetVertices) {
-                cout << " " << vertex;
+                cout << " " << (bOneBasedIndexing ? (vertex + 1) : vertex);
             }
             cout << endl << flush;
         }
@@ -449,6 +480,9 @@ int main(int argc, char** argv)
         if (bTimeoutSet) pPLS->SetTimeOutInMilliseconds(dTimeout*1000);
         pPLS->SetTargetWeight(dTargetWeight);
         pPLS->SetQuiet(bQuiet);
+        if (!vInitVertices.empty()) {
+            pPLS->SetInitialSolution(vInitVertices);
+        }
         pAlgorithm = pPLS;
         bool const bAlgorithmStatus = pAlgorithm->Run();
 
@@ -487,7 +521,7 @@ int main(int argc, char** argv)
             cout << "max-selections  : " << pPLS->GetMaxSelections() << endl << flush;
             cout << "best-solution   :";
             for (int const vertex : pPLS->GetBestK()) {
-                cout << " " << vertex;
+                cout << " " << (bOneBasedIndexing ? (vertex + 1) : vertex);
             }
             cout << endl << flush;
         }

@@ -1,9 +1,6 @@
-#ifndef IS_PHASED_LOCAL_SEARCH
-#define IS_PHASED_LOCAL_SEARCH
-
 #include "IndependentSetPhasedLocalSearch.h"
 
-#include <climits>
+#include <limits>
 
 ////#define ALLOW_OVERLAP
 ////#define CHECK_CONSISTENCY 
@@ -19,7 +16,7 @@ IndependentSetPhasedLocalSearch::IndependentSetPhasedLocalSearch(vector<vector<i
 
 int IndependentSetPhasedLocalSearch::DegreeSelect(ResetableArraySet const &vertexSet) const
 {
-    size_t minDegree(ULONG_MAX);
+    size_t minDegree(numeric_limits<size_t>::max());
     m_ScratchSpace.Clear();
     for (int const vertex : vertexSet) {
         if (m_vAdjacencyArray[vertex].size() < minDegree) {
@@ -502,5 +499,3 @@ void IndependentSetPhasedLocalSearch::AddToKFromOne(int const vertex)
     }
 #endif // CHECK_CONSISTENCY
 }
-
-#endif // IS_PHASED_LOCAL_SEARCH

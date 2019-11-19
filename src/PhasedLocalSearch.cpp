@@ -27,6 +27,7 @@ PhasedLocalSearch::PhasedLocalSearch(vector<vector<int>> const &vAdjacencyArray,
 , m_uIterationsSinceLastPenaltyUpdate(0)
 
 , m_uTargetSize(vAdjacencyArray.size())
+, m_uSizeLimit(numeric_limits<size_t>::max())
 // initial weight, TODO/DS: change.
 , m_dTargetWeight(numeric_limits<double>::max())
 , m_uMaxSelections(100000000)
@@ -256,58 +257,52 @@ bool PhasedLocalSearch::DiffIsEmpty(ResetableArraySet const A, ResetableArraySet
     return (uIntersectionCount == A.Size());
 }
 
-void PhasedLocalSearch::InitializeFromK()
-{
-    //Empty items that dependent on independent set, so they can be initialized.
-    m_dKWeight = 0;
-    m_NotAdjacentToZero.Clear();
-    m_NotAdjacentToOne.Clear();
-
-    for (int const vertex : m_K) {
-        m_dKWeight += m_vVertexWeights[vertex];
-    }
-
-    m_bCheckZero = false;
-    m_bCheckOne  = false;
-
-    // check all-neighbors and all-but-one-neighbors
-    for (int vertex = 0; vertex < m_vAdjacencyArray.size(); ++vertex) {
-        // C_0 and C_1 don't contain vertices from K
-#ifndef ALLOW_OVERLAP
-        if (m_K.Contains(vertex)) continue;
-#endif // ALLOW_OVERLAP
-        size_t neighborCount(0);
-        for (int const neighbor : m_vAdjacencyArray[vertex]) {
-            if (m_K.Contains(neighbor)) neighborCount++;
-        }
-
-        if (neighborCount == m_K.Size()) {
-            m_NotAdjacentToZero.Insert(vertex);
-            m_bCheckZero = m_bCheckZero || !m_U.Contains(vertex);
-        }
-
-        if (neighborCount == m_K.Size()-1) { 
-            m_NotAdjacentToOne.Insert(vertex);
-            m_bCheckOne = m_bCheckOne || !m_U.Contains(vertex);
-        }
-    }
-
-#ifdef CHECK_CONSISTENCY
-    if (!IsConsistent()) {
-        cout << "Line " << __LINE__ << ": Consistency check failed" << endl << flush;
-    }
-#endif // CHECK_CONSISTENCY
-}
-
 void PhasedLocalSearch::UpdateStatistics()
 {
+    if (m_dKWeight < m_dBestWeight) return;
+
+    vector<int> vVertices;
+
+    if (m_K.Size() > m_uSizeLimit) {
+        vVertices.assign(m_K.begin(), m_K.end());
+
+        std::sort(vVertices.begin(), 
+                vVertices.end(), 
+                [this] (int a, int b) 
+                { 
+                    return  this->m_vVertexWeights[a] > 
+                            this->m_vVertexWeights[b];
+                });
+
+////        cout << "DJS: vertex:weight -> ";
+////        for (int const vertex : vVertices) {
+////            cout << vertex << ":" << m_vVertexWeights[vertex] << "  ";
+////        }
+////        cout << endl << flush;
+
+        vVertices.resize(m_uSizeLimit);
+////        cout << "DJS: Resizing to " << m_uSizeLimit << " elements!" << endl << flush;
+        m_dKWeight = 0;
+        for (int const vertex : vVertices) {
+            m_dKWeight += m_vVertexWeights[vertex];
+        }
+    }
+
     if (m_dKWeight > m_dBestWeight) {
         m_TimeToReachBestWeight = clock() - m_StartTime;
         m_uSelectionsToBestWeight = m_uSelections;
-        m_BestK = m_K;
+
+        if (m_K.Size() > m_uSizeLimit) {
+            m_BestK.Clear();
+            for (int const vertex : vVertices) {
+                m_BestK.Insert(vertex);
+            }
+        } else {
+            m_BestK = m_K;
+        }
         m_dBestWeight = m_dKWeight;
         if (!m_bQuiet)
-            cout << "#(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best MWIS weight=" << m_dBestWeight << " has size   " << m_K.Size() << endl << flush;
+            cout << "#(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best MWIS weight=" << m_dBestWeight << " has size   " << m_BestK.Size() << endl << flush;
     }
 
 ////    if (m_K.Size() > m_uBestSize) {
@@ -317,7 +312,6 @@ void PhasedLocalSearch::UpdateStatistics()
 ////            cout << "(" << Tools::GetTimeInSeconds(m_TimeToReachBestWeight)<< ":" << m_uSelections << "): Best WIS size   =" << m_dBestWeight << " has weight " << m_dKWeight << endl << flush;
 ////    }
 }
-
 
 bool PhasedLocalSearch::Phase(size_t uIterations, SelectionPhase const selectionPhase)
 {
@@ -497,6 +491,14 @@ bool PhasedLocalSearch::Run()
 void PhasedLocalSearch::SetTargetSize(size_t const uTargetSize)
 {
     m_uTargetSize = uTargetSize;
+}
+
+void PhasedLocalSearch::SetInitialSolution(vector<int> const& vInitVertices) {
+    m_K.InitializeFromVector(vInitVertices);
+    InitializeFromK();
+    UpdateStatistics();
+    cout << "Initial solution has " << m_K.Size() << " vertices, and weight ";
+    cout << m_dKWeight << endl;
 }
 
 void PhasedLocalSearch::SetMaxSelections(size_t const uMaxSelections)
