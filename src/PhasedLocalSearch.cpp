@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <limits>
+#include <algorithm>
 
 ////#define ALLOW_OVERLAP
 ////#define CHECK_CONSISTENCY
