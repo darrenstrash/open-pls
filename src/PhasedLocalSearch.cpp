@@ -303,6 +303,10 @@ void PhasedLocalSearch::InitializeFromK()
 
 void PhasedLocalSearch::UpdateStatistics()
 {
+    if (clock() - m_StartTime > m_TimeOut) {
+        return;
+    }
+
     if (m_dKWeight > m_dBestWeight) {
         m_TimeToReachBestWeight = clock() - m_StartTime;
         m_uSelectionsToBestWeight = m_uSelections;
@@ -458,6 +462,8 @@ bool PhasedLocalSearch::Run()
     m_RandomK.Insert(randomVertex);
     m_DegreeK.Insert(randomVertex);
     m_bCheckZero = true;
+
+    UpdateStatistics();
 
     bool foundSolution(false);
     while (m_uSelections < m_uMaxSelections) {

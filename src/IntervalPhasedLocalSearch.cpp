@@ -4,7 +4,7 @@
 #include <limits>
 
 ////#define ALLOW_OVERLAP
-#define CHECK_CONSISTENCY 
+////#define CHECK_CONSISTENCY 
 ////#define DEBUG
 
 using namespace std;
@@ -373,9 +373,11 @@ bool IntervalPhasedLocalSearch::IsConsistent() const
     }
     std::sort(vertices.begin(), vertices.end());
 
-    for (size_t index = 0; index < vertices.size()-1; index++) {
-        if (vertices[index] == vertices[index+1]) {
-            std::cout << "Duplicate vertex found!" << vertices[index] << std::endl << std::flush;
+    if (vertices.size() > 1) {
+        for (size_t index = 0; index < vertices.size()-1; index++) {
+            if (vertices[index] == vertices[index+1]) {
+                std::cout << "Duplicate vertex found!" << vertices[index] << std::endl << std::flush;
+            }
         }
     }
 
